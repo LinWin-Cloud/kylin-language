@@ -4,6 +4,7 @@ import com.kylin.Exception.RuntimeError;
 import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,11 +12,12 @@ public class MainRuntime {
 
     public static HashMap<String,Value> value = new HashMap<>();
     public static HashMap<String,String> function = new HashMap<>();
+    public static HashMap<String,ExecFunction> execFunctionHashMap = new HashMap<>();
     public static int codeLine = 0;
 
     public static void run() {
         int size = Main.code.size();
-        for (int codeLine = 0 ; codeLine < size ; codeLine++) {
+        for (codeLine = 0 ; codeLine < size ; codeLine++) {
             String source_code = Main.code.get(codeLine);
             MainRuntime.exec(source_code,size);
         }
@@ -63,11 +65,10 @@ public class MainRuntime {
                 NewValue.name = name;
                 NewValue.value = value;
                 //System.out.println(name+" "+value+";");
-
                 MainRuntime.value.put(name,NewValue);
             }
             catch (Exception exception){
-                sendSyntaxError("Defined variable error.",codeLine+1);
+                sendSyntaxError("Defined variable error: "+exception.getMessage(),codeLine+1);
             }
             return;
         }
@@ -103,10 +104,32 @@ public class MainRuntime {
                 exceptionCatch.ExceptionValue = CatchValue;
                 Main.ExceptionCode.add(exceptionCatch);
 
+                for (String i : exceptionCatch.TryCode) {
+                    try {
+                        MainRuntime.exec(i,size);
+                    }
+                    catch (Exception exception){
+                        String[] KeyCode = {".message",".line",".path"};
+                        String[] ValueCode = {exception.getMessage(),String.valueOf(codeLine),Main.resource.getAbsolutePath()};
 
+                        for (int a = 0 ; a < KeyCode.length ; a++) {
+                            Value v = new Value();
+                            v.name = exceptionCatch.ExceptionValue + KeyCode;
+                            v.value = exceptionCatch.ExceptionValue + ValueCode;
+
+                            MainRuntime.value.put(v.name,v);
+                        }
+                        for (String j : CatchCode) {
+                            MainRuntime.exec(j,size);
+                        }
+                        break;
+                    }
+                }
+                return;
             }catch (Exception exception){
-                MainRuntime.sendRuntimeError("Syntax Error",codeLine);
+                MainRuntime.sendRuntimeError(exception.getMessage(),codeLine);
             }
+            return;
         }
         else {
             BaseRuntime.exec(source_code,codeLine+1);
