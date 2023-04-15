@@ -12,7 +12,7 @@ public class MainRuntime {
 
     public static HashMap<String,Value> value = new HashMap<>();
     public static HashMap<String,String> function = new HashMap<>();
-    public static HashMap<String,ExecFunction> execFunctionHashMap = new HashMap<>();
+    public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
     public static int codeLine = 0;
 
     public static void run(){
@@ -54,8 +54,9 @@ public class MainRuntime {
                 func.FunctionCode = FunctionCode;
                 func.FunctionName = FunctionName;
                 for (String i : InputValue){
-                    func.FunctionValue.put(i.trim(),null);
+                    func.FunctionValue.add(("$"+i).trim());
                 }
+                MainRuntime.execFunctionHashMap.put(func.FunctionName,func);
             }catch (Exception exception){
                 sendSyntaxError("Defined function error.",codeLine+1);
             }

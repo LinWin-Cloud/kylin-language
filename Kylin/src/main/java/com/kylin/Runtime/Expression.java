@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import javax.script.*;
 
 public class Expression {
-    public static String getExpression(String input, int line) {
+    public static String getExpression(String input, int line) throws Exception {
         input = input.trim();
 
         String[] split = input.split("(?=\\+)|(?=\\*)|(?=/)|(?=-)| ");
@@ -20,11 +20,15 @@ public class Expression {
             String s = split[i].trim();
 
             Value value = MainRuntime.value.get(s);
-            if (value == null) {
-                stringBuffer.append(s);
+            Function function = MainRuntime.execFunctionHashMap.get(s);
+            if (value != null) {
+                stringBuffer.append(value.value);
+            }
+            if (function != null) {
+                stringBuffer.append(function.exec());
             }
             else {
-                stringBuffer.append(value.value);
+                stringBuffer.append(s);
             }
         }
         String code = stringBuffer.toString();
