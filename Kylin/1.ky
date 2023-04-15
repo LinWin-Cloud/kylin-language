@@ -1,4 +1,14 @@
 
-var a = 1000
+var a = 1000 - 1
+var b = 999 * $a + "\\_hello\\_world" + ";"
+var c = 111
 
-out(1000 1)
+let d = 1
+
+var e = "hello world"
+
+try
+    out($b)
+error(e)
+    out(e.message)
+end
