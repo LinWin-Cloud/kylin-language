@@ -20,6 +20,10 @@ public class BaseRuntime {
             catch (Exception exception) {
                 MainRuntime.sendSyntaxError("Syntax Error: "+exception,line);
             }
+            return;
+        }
+        if (code.equals("")) {
+            return;
         }
         else {
             MainRuntime.sendRuntimeError("Unknown code: "+code,line);

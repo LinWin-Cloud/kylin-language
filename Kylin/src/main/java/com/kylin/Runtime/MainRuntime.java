@@ -107,7 +107,7 @@ public class MainRuntime {
                         for (int j = codeLine+1 ; j < size ; j++) {
                             String Catch = Main.code.get(j);
                             if (Catch.equals("end")) {
-                                codeLine = j - 1;
+                                codeLine = j + 1;
                                 break CatchCodeFor;
                             }else {
                                 CatchCode.add(Catch);
@@ -170,5 +170,6 @@ public class MainRuntime {
         runtimeError.setLine(line);
         runtimeError.setTime();
         runtimeError.setMessage(message);
+        System.out.println(runtimeError.getError());
     }
 }

@@ -6,55 +6,42 @@ import com.kylin.Main;
 import java.util.*;
 import java.math.BigDecimal;
 
+import javax.script.*;
+
 public class Expression {
     public static String getExpression(String input, int line) {
         input = input.trim();
-        String[] parts = input.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-        StringBuilder sb = new StringBuilder();
-        double result = Double.NaN;
+        String[] split = input.split("(?=\\+)|(?=\\*)|(?=/)|(?=-)| ");
+        StringBuffer stringBuffer = new StringBuffer("");
 
-        for (String part : parts) {
-            if (isNumber(part)) {
-                if (Double.isNaN(result)) {
-                    result = Double.parseDouble(part);
-                } else {
-                    result = calculate(result, Double.parseDouble(part), '+', line);
-                }
-            } else {
-                sb.append(part);
+        for (int i = 0 ; i < split.length ; i++)
+        {
+            String s = split[i].trim();
+
+            Value value = MainRuntime.value.get(s);
+            if (value == null) {
+                stringBuffer.append(s);
+            }
+            else {
+                stringBuffer.append(value.value);
             }
         }
+        String code = stringBuffer.toString();
+        code = code.replace("\\\\_"," ");
 
-        if (Double.isNaN(result)) {
-            return sb.toString();
-        } else {
-            return calculate(result, 0, '+', line) + sb.toString();
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("javascript");
+        try
+        {
+            engine.eval("var tmp = "+code);
+            Object object = engine.get("tmp");
+            return object.toString();
         }
-    }
-
-    private static boolean isNumber(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private static double calculate(double num1, double num2, char operator, int line) {
-        switch (operator) {
-            case '+':
-                return num1 + num2;
-            case '-':
-                return num1 - num2;
-            case '*':
-                return num1 * num2;
-            case '/':
-                return num1 / num2;
-            default:
-                MainRuntime.sendSyntaxError("Unsupported operators", line);
-                return 0.0;
+        catch (Exception exception){
+            MainRuntime.sendRuntimeError(exception.getMessage(),line);
+            System.exit(1);
+            return null;
         }
     }
 }
