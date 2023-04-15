@@ -7,34 +7,54 @@ import java.util.*;
 import java.math.BigDecimal;
 
 public class Expression {
-    public static String getExpression(String input,int line) {
+    public static String getExpression(String input, int line) {
         input = input.trim();
-        String[] InputSplit = input.split("(?=\\+)|(?=-)|(?=/)|(?=\\*)| ");
-        List<String> list = new ArrayList<>();
+        String[] parts = input.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-        for (int i = 0 ; i < InputSplit.length ; i++) {
-            String n = InputSplit[i].trim();
-            if (n.equals(" ")) {
-                continue;
-            }
-            if (n.equals("")) {
-                continue;
-            }
-            else {
-                Value value = MainRuntime.value.get(n);
-                if (value == null) {
-                    list.add(n);
+        StringBuilder sb = new StringBuilder();
+        double result = Double.NaN;
+
+        for (String part : parts) {
+            if (isNumber(part)) {
+                if (Double.isNaN(result)) {
+                    result = Double.parseDouble(part);
+                } else {
+                    result = calculate(result, Double.parseDouble(part), '+', line);
                 }
-                else {
-                    list.add(value.value);
-                }
+            } else {
+                sb.append(part);
             }
         }
-        for (int i = 0 ; i < list.size() ; i++) {
-            String FirstProject = list.get(i);
-            String charset = list.get(i+1);
-            String SecondProject = list.get(i+2);
-            
+
+        if (Double.isNaN(result)) {
+            return sb.toString();
+        } else {
+            return calculate(result, 0, '+', line) + sb.toString();
+        }
+    }
+
+    private static boolean isNumber(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static double calculate(double num1, double num2, char operator, int line) {
+        switch (operator) {
+            case '+':
+                return num1 + num2;
+            case '-':
+                return num1 - num2;
+            case '*':
+                return num1 * num2;
+            case '/':
+                return num1 / num2;
+            default:
+                MainRuntime.sendSyntaxError("Unsupported operators", line);
+                return 0.0;
         }
     }
 }
