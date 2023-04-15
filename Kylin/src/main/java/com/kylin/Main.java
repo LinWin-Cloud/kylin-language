@@ -44,6 +44,7 @@ public class Main {
             }
             MainRuntime.run();
         }
+
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");
             System.exit(1);
