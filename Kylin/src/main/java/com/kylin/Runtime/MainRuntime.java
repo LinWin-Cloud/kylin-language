@@ -69,7 +69,7 @@ public class MainRuntime {
                 NewValue.name = "$"+name;
                 NewValue.value = value;
                 //System.out.println(name+" "+value+";");
-                MainRuntime.value.put(name,NewValue);
+                MainRuntime.value.put(NewValue.name,NewValue);
             }
             catch (Exception exception){
                 sendSyntaxError("Defined variable error: "+exception.getMessage(),codeLine+1);
@@ -84,7 +84,7 @@ public class MainRuntime {
                 NewValue.name = "$"+name;
                 NewValue.value = Expression.getExpression(value,codeLine);
                 //System.out.println(name+" "+value+";");
-                MainRuntime.value.put(name,NewValue);
+                MainRuntime.value.put(NewValue.name,NewValue);
             }
             catch (Exception exception){
                 sendSyntaxError("Defined variable error: "+exception.getMessage(),codeLine+1);

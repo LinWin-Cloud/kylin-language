@@ -18,7 +18,7 @@ public class BaseRuntime {
                 }
             }
             catch (Exception exception) {
-                MainRuntime.sendSyntaxError("Syntax Error",line);
+                MainRuntime.sendSyntaxError("Syntax Error: "+exception,line);
             }
         }
         else {
