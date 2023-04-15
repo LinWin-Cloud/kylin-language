@@ -15,14 +15,18 @@ public class MainRuntime {
     public static HashMap<String,ExecFunction> execFunctionHashMap = new HashMap<>();
     public static int codeLine = 0;
 
-    public static void run() {
+    public static void run(){
         int size = Main.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
             String source_code = Main.code.get(codeLine);
-            MainRuntime.exec(source_code,size);
+            try {
+                MainRuntime.exec(source_code,size);
+            }catch (Exception exception){
+                MainRuntime.sendRuntimeError(exception.getMessage(),codeLine);
+            }
         }
     }
-    public static void exec(String source_code,int size) {
+    public static void exec(String source_code,int size) throws Exception {
         String[] words = source_code.split(" ");
         if (words[0].startsWith("//")) {
             return;
@@ -62,8 +66,23 @@ public class MainRuntime {
                 String name = words[1];
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
                 Value NewValue = new Value();
-                NewValue.name = name;
+                NewValue.name = "$"+name;
                 NewValue.value = value;
+                //System.out.println(name+" "+value+";");
+                MainRuntime.value.put(name,NewValue);
+            }
+            catch (Exception exception){
+                sendSyntaxError("Defined variable error: "+exception.getMessage(),codeLine+1);
+            }
+            return;
+        }
+        if (words[0].startsWith("var")) {
+            try {
+                String name = words[1];
+                String value = source_code.substring(source_code.indexOf("=")+1).trim();
+                Value NewValue = new Value();
+                NewValue.name = "$"+name;
+                NewValue.value = Expression.getExpression(value,codeLine);
                 //System.out.println(name+" "+value+";");
                 MainRuntime.value.put(name,NewValue);
             }

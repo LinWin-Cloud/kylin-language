@@ -13,6 +13,15 @@ public class Expression {
         try {
             String tmp = input.replaceAll("\\s","");
             List<String> tokens = tokenize(tmp);
+            for (int i = 0 ; i < tokens.size() ; i++) {
+                Value value = MainRuntime.value.get(tokens.get(i).trim());
+                if (value == null) {
+                    continue;
+                }
+                else {
+                    tokens.set(i , value.value);
+                }
+            }
             BigDecimal result = calculate(tokens,line);
             return String.valueOf(result);
         }
