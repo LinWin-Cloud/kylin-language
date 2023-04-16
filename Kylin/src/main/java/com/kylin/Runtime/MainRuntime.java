@@ -33,13 +33,15 @@ public class MainRuntime {
         }
         if (words[0].startsWith("func")) {
             try {
+                int start , end;
                 String FunctionName = source_code.substring(5,source_code.indexOf("(")).trim();
-                String FunctionContent = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")")-1);
+                String FunctionContent = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
                 String[] InputValue = FunctionContent.split(",");
 
                 ArrayList<String> FunctionCode = new ArrayList<>();
 
                 //System.out.println("function start: "+codeLine);
+                start = codeLine;
                 for (int i = codeLine ; codeLine < size ; i++) {
                     String line = Main.code.get(i).trim();
 
@@ -50,12 +52,15 @@ public class MainRuntime {
                     }
                     FunctionCode.add(line);
                 }
+                end = codeLine;
                 Function func = new Function();
                 func.FunctionCode = FunctionCode;
                 func.FunctionName = FunctionName;
+                func.start = start;
+                func.end = end;
                 for (String i : InputValue){
                     Value v = new Value();
-                    v.name = i.trim();
+                    v.name = "$"+i.trim();
                     func.FunctionValue.add(v);
                 }
                 MainRuntime.execFunctionHashMap.put(func.FunctionName,func);

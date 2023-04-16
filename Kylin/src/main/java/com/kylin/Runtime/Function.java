@@ -18,7 +18,7 @@ public class Function {
         StringBuffer stringBuffer = new StringBuffer("");
         for (int i = 0 ; i < inValue.length ; i++) {
             String j = inValue[i].trim();
-            String getInput = Expression.getExpression(j.substring(j.indexOf("(")+1,j.lastIndexOf(")")),start);
+            String getInput = Expression.getExpression(j,start);
             Value value = FunctionValue.get(i);
             value.value = getInput;
             FunctionValue.set(i,value);
@@ -26,21 +26,30 @@ public class Function {
 
         for (int i = 0 ; i < FunctionValue.size() ; i++) {
             Value value = FunctionValue.get(i);
+            //System.out.println(value.name);
             MainRuntime.value.put(value.name,value);
         }
 
         String Result = "";
-        for (int i = start ; i < Main.code.size() ; i++) {
-            String code = Main.code.get(i);
-            MainRuntime.exec(code,i);
-            if (i == end) {
-                break;
-            }
+        for (String code : this.FunctionCode) {
+            start++;
+            MainRuntime.exec(code,start);
             if (code.startsWith("return ")) {
-                Result = Expression.getExpression(code.substring(7),i);
+                Result = Expression.getExpression(code.substring(7),start);
                 break;
             }
         }
+
+        /**
+         * Remove the local value
+         *
+         */
+
+        for (int i = 0 ; i < FunctionValue.size() ; i++) {
+            Value value = FunctionValue.get(i);
+            MainRuntime.value.remove(value.name);
+        }
+
         return Result;
     }
 }

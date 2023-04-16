@@ -4,16 +4,9 @@ import com.kylin.Exception.RuntimeError;
 
 public class BaseRuntime {
     public static void exec(String code,int line) throws Exception {
-
-        try {
-            Function function = MainRuntime.execFunctionHashMap.get(code.substring(0,code.indexOf("(")));
-            if (function != null) {
-                String inCode= code.substring(code.indexOf("(")+1,code.lastIndexOf(")"));
-                function.exec(inCode);
-                return;
-            }
+        boolean b = isFunction(code);
+        if (b) {
             return;
-        }catch (Exception exception){
         }
 
         if (code.startsWith("out")) {
@@ -29,8 +22,8 @@ public class BaseRuntime {
                     System.out.println(value.value);
                 }
             }
-            catch (Exception exception) {
-                MainRuntime.sendSyntaxError("Syntax Error: "+exception,line);
+            catch (Exception exception1) {
+                MainRuntime.sendSyntaxError("Syntax Error: "+exception1.getMessage(),line);
             }
             return;
         }
@@ -40,6 +33,27 @@ public class BaseRuntime {
         else {
             MainRuntime.sendRuntimeError("Unknown code: "+code,line);
             return;
+        }
+    }
+    public static boolean isFunction(String code) {
+        try {
+            //System.out.println(code);
+            String name = code.substring(0,code.indexOf("(")).replace(" ","");
+            //System.out.println(name);
+            String input = code.substring(code.indexOf("(")+1,code.indexOf(")"));
+            //System.out.println(input+";");
+            Function function = MainRuntime.execFunctionHashMap.get(name);
+            //System.out.println(MainRuntime.execFunctionHashMap.toString()+"    "+name+";");
+            if (function != null) {
+                function.exec(input);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }catch (Exception exception) {
+            //exception.printStackTrace();
+            return false;
         }
     }
 }
