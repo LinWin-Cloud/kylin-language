@@ -12,3 +12,9 @@ try
 error(e)
     out(e.message)
 end
+
+func a(a)
+    out("hello world")
+
+end
+a(1)
