@@ -15,7 +15,6 @@ public class Function {
     public int end;
     public String exec(String input) throws Exception {
         String[] inValue = input.split(",");
-        StringBuffer stringBuffer = new StringBuffer("");
         for (int i = 0 ; i < inValue.length ; i++) {
             String j = inValue[i].trim();
             String getInput = Expression.getExpression(j,start);
@@ -26,7 +25,7 @@ public class Function {
 
         for (int i = 0 ; i < FunctionValue.size() ; i++) {
             Value value = FunctionValue.get(i);
-            //System.out.println(value.name);
+            //System.out.println(value.name+" "+value.value);
             MainRuntime.value.put(value.name,value);
         }
 

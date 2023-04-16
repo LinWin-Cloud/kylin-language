@@ -4,16 +4,19 @@ import com.kylin.Exception.RuntimeError;
 import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
 
+import javax.script.*;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainRuntime {
 
-    public static HashMap<String,Value> value = new HashMap<>();
     public static HashMap<String,String> function = new HashMap<>();
     public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
     public static int codeLine = 0;
+    public static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    public static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
 
     public static void run(){
         int size = Main.code.size();
@@ -86,13 +89,7 @@ public class MainRuntime {
         }
         if (words[0].startsWith("var")) {
             try {
-                String name = words[1];
-                String value = source_code.substring(source_code.indexOf("=")+1).trim();
-                Value NewValue = new Value();
-                NewValue.name = "$"+name;
-                NewValue.value = Expression.getExpression(value,codeLine);
-                //System.out.println(name+" "+value+";");
-                MainRuntime.value.put(NewValue.name,NewValue);
+                scriptEngine.eval(source_code);
             }
             catch (Exception exception){
                 sendSyntaxError("Defined variable error: "+exception.getMessage(),codeLine+1);
