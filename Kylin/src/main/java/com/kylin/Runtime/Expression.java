@@ -23,12 +23,16 @@ public class Expression {
             Function function = MainRuntime.execFunctionHashMap.get(s);
             if (value != null) {
                 stringBuffer.append(value.value);
+                continue;
             }
             if (function != null) {
-                stringBuffer.append(function.exec());
+                System.out.println(s);
+                stringBuffer.append(function.exec(s));
+                continue;
             }
             else {
                 stringBuffer.append(s);
+                continue;
             }
         }
         String code = stringBuffer.toString();

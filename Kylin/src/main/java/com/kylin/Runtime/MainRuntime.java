@@ -33,7 +33,7 @@ public class MainRuntime {
         }
         if (words[0].startsWith("func")) {
             try {
-                String FunctionName = words[1];
+                String FunctionName = source_code.substring(5,source_code.indexOf("(")).trim();
                 String FunctionContent = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")")-1);
                 String[] InputValue = FunctionContent.split(",");
 
@@ -54,7 +54,9 @@ public class MainRuntime {
                 func.FunctionCode = FunctionCode;
                 func.FunctionName = FunctionName;
                 for (String i : InputValue){
-                    func.FunctionValue.add(("$"+i).trim());
+                    Value v = new Value();
+                    v.name = i.trim();
+                    func.FunctionValue.add(v);
                 }
                 MainRuntime.execFunctionHashMap.put(func.FunctionName,func);
             }catch (Exception exception){
