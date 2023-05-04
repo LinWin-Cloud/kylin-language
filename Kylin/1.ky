@@ -1,20 +1,2 @@
 
-var a = 1000 - 1
-var b = 999 * $a + "\\_hello\\_world" + ";"
-var c = 111
-
-let d = 1
-
-var e = "hello world"
-
-try
-    out($b)
-error(e)
-    out(e.message)
-end
-
-func a(a)
-    out("hello world")
-
-end
-a(1)
+int test_value = 1 + 1 + 2
