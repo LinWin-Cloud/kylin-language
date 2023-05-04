@@ -17,21 +17,26 @@ public class Main {
     public static HashMap<Integer, RuntimeError> Exception = new HashMap<>();
     public static ArrayList<ExceptionCatch> ExceptionCode = new ArrayList<>();
 
-    public static void main(String[] args) {
-        if (args.length == 0) {
+    public static void main(String[] args)
+    {
+        if (args.length == 0)
+        {
             System.out.println("kylin [resource file] ");
             System.exit(1);
         }
         resource = new File(args[0]);
-        if (!resource.exists()) {
+        if (!resource.exists())
+        {
             System.out.println("[ERROR] Cannot find target file: "+resource.getAbsolutePath()+".");
             System.exit(1);
         }
-        if (resource.exists() && resource.isDirectory()) {
+        if (resource.exists() && resource.isDirectory())
+        {
             System.out.println("[ERROR] Cannot start a directory.");
             System.exit(1);
         }
-        try {
+        try
+        {
             FileReader fileReader = new FileReader(resource);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while (true) {
@@ -44,7 +49,6 @@ public class Main {
             }
             MainRuntime.run();
         }
-
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");
             System.exit(1);
