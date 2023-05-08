@@ -5,7 +5,7 @@ import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
 import program.value.Value;
 
-import javax.script.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,16 +35,17 @@ public class MainRuntime {
         if (words[0].startsWith("//")) {
             return;
         }
-        if (words[0].equals("int")) {
+        if (words[0].equals("var")) {
             try {
                 String name = words[1];
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
-                int IntValue = Integer.parseInt(value);
-                Value var_int = new Value();
-                var_int.setContent(IntValue);
-                var_int.setName(new_var+name);
+                value = Expression.getExString(value , MainRuntime.codeLine);
 
-                MainRuntime.ValueMap.put(name,var_int);
+                Value v = new Value();
+                v.setName(name);
+                v.setContent(value);
+
+                MainRuntime.ValueMap.put(name,v);
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);

@@ -1,2 +1,4 @@
 
-int test_value = 1 + 1 + 2
+var test_value = "hello world"
+
+out(test_value)
