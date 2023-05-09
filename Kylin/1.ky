@@ -1,4 +1,3 @@
 
-var test_value = "hello world"
 
 out(test_value)
