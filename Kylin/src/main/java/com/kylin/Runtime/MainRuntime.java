@@ -11,23 +11,24 @@ import java.util.HashMap;
 
 public class MainRuntime {
 
-    public static HashMap<String,String> function = new HashMap<>();
+    public HashMap<String,String> function = new HashMap<>();
     //public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
-    public static HashMap<String , Value> ValueMap = new HashMap<>();
+    public HashMap<String , Value> ValueMap = new HashMap<>();
+    public String name;
     public static int codeLine = 0;
 
-    public static void run(){
+    public void run(){
         int size = Main.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
             String source_code = Main.code.get(codeLine);
             try {
-                MainRuntime.exec(source_code,"");
+                exec(source_code,"");
             }catch (Exception exception){
                 MainRuntime.sendRuntimeError(exception.getMessage(),codeLine);
             }
         }
     }
-    public static void exec(String source_code,String new_var) throws Exception {
+    public void exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
         if (words == null) {
             return;
@@ -39,13 +40,14 @@ public class MainRuntime {
             try {
                 String name = words[1];
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
-                value = Expression.getExString(value , MainRuntime.codeLine);
-
+                //System.out.println(value);
+                value = Expression.getExString(value , MainRuntime.codeLine , this);
+                System.out.println(value);
                 Value v = new Value();
                 v.setName(name);
                 v.setContent(value);
 
-                MainRuntime.ValueMap.put(name,v);
+                ValueMap.put(name,v);
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);

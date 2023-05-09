@@ -47,7 +47,9 @@ public class Main {
                 line = line.trim();
                 code.add(line);
             }
-            MainRuntime.run();
+            MainRuntime mainRuntime = new MainRuntime();
+            mainRuntime.name = resource.getName();
+            mainRuntime.run();
         }
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");

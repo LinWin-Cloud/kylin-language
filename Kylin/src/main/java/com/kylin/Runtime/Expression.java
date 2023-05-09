@@ -2,47 +2,40 @@ package com.kylin.Runtime;
 
 public class Expression 
 {
-    public static String getExString(String content , int line) 
+    public static String getExString(String content , int line,MainRuntime mainRuntime)
     {
         try
         {
             /**
              * Split all the token.
              */
-            String output = "";
+            StringBuffer stringBuffer = new StringBuffer("");
             String[] tokens = content.split(" ");
-            for (int i = 1; i < tokens.length; i++) {
-                String token = tokens[i];
-                System.out.println(token);
-                if (token.startsWith("\"")) {
-                    // 字符串类型
-                    output += token.substring(1, token.length() - 1);
-                } else if (MainRuntime.ValueMap.containsKey(token)) {
-                    // 变量类型
-                    output += MainRuntime.ValueMap.get(token);
-                } else if (token.equals("+")) {
-                    // 运算符
-                    Object left = output.substring(0, output.length() - 1);
-                    String rightToken = tokens[i + 1];
-                    Object right;
-                    if (rightToken.startsWith("\"")) {
-                        // 字符串类型
-                        right = rightToken.substring(1, rightToken.length() - 1);
-                    } else {
-                        // 整数类型
-                        right = Integer.parseInt(rightToken);
-                    }
-                    output = left.toString() + right.toString() + " ";
-                    i += 2;
-                } else {
-                    // 整数类型
-                    output += token;
+            boolean isStr = false;
+            for (int i = 0; i < tokens.length; i++) {
+                String token = tokens[i].trim();
+                //System.out.println(token);
+                if (isStr && token.endsWith("\"")) {
+                    isStr = false;
+                    stringBuffer.append(token, 0, token.length() - 1);
+                    continue;
                 }
-                if (i < tokens.length - 1) {
-                    output += " ";
+                else if(token.startsWith("\"")) {
+                    isStr = true;
+                    stringBuffer.append(token.substring(1));
+                    stringBuffer.append(" ");
+                    continue;
+                }
+                else if (mainRuntime.ValueMap.containsKey(token)) {
+                    stringBuffer.append(mainRuntime.ValueMap.get(token));
+                    continue;
+                }
+                else {
+                    stringBuffer.append(token);
+                    continue;
                 }
             }
-            return output;
+            return stringBuffer.toString();
         }
         catch (Exception exception)
         {
