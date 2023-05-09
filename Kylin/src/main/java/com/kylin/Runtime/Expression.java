@@ -27,7 +27,7 @@ public class Expression
                     continue;
                 }
                 else if (mainRuntime.ValueMap.containsKey(token)) {
-                    stringBuffer.append(mainRuntime.ValueMap.get(token));
+                    stringBuffer.append(mainRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
                 else {

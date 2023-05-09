@@ -30,9 +30,6 @@ public class MainRuntime {
     }
     public void exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
-        if (words == null) {
-            return;
-        }
         if (words[0].startsWith("//")) {
             return;
         }
@@ -42,10 +39,12 @@ public class MainRuntime {
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
                 //System.out.println(value);
                 value = Expression.getExString(value , MainRuntime.codeLine , this);
-                System.out.println(value);
                 Value v = new Value();
                 v.setName(name);
                 v.setContent(value);
+                v.setPublic(true);
+
+                System.out.println(v.getContent());
 
                 ValueMap.put(name,v);
             }
