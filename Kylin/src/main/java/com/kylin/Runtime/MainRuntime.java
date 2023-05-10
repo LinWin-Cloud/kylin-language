@@ -42,7 +42,13 @@ public class MainRuntime {
                 String name = words[1];
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
                 //System.out.println(value);
-                value = Expression.getExString(value , MainRuntime.codeLine , this);
+                if (value.startsWith("[") && value.endsWith("]"))
+                {
+
+                }
+                else{
+                    value = Expression.getExString(value , MainRuntime.codeLine , this);
+                }
                 Value v = new Value();
                 v.setName(name);
                 v.setContent(value);
