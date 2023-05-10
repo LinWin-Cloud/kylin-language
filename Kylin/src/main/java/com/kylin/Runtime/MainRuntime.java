@@ -4,6 +4,7 @@ import com.kylin.Exception.RuntimeError;
 import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
 import program.value.Value;
+import program.vm.BaseRuntime;
 
 
 import java.util.ArrayList;
@@ -20,7 +21,10 @@ public class MainRuntime {
     public void run(){
         int size = Main.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
-            String source_code = Main.code.get(codeLine);
+            String source_code = Main.code.get(codeLine).trim();
+            if (source_code.equals("")) {
+                continue;
+            }
             try {
                 exec(source_code,"");
             }catch (Exception exception){
@@ -43,14 +47,16 @@ public class MainRuntime {
                 v.setName(name);
                 v.setContent(value);
                 v.setPublic(true);
-
-                System.out.println(v.getContent());
-
                 ValueMap.put(name,v);
+                System.out.println(value);
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);
             }
+        }
+        else {
+            BaseRuntime baseRuntime = new BaseRuntime();
+            baseRuntime.run(source_code , codeLine , this);
         }
     }
     public static void sendSyntaxError(String message,int line) {

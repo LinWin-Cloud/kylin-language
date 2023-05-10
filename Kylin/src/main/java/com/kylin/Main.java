@@ -49,7 +49,7 @@ public class Main {
             }
             MainRuntime mainRuntime = new MainRuntime();
             mainRuntime.name = resource.getName();
-            mainRuntime.run();var a = 114514
+            mainRuntime.run();
         }
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");
