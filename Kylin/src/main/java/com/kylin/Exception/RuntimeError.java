@@ -25,6 +25,6 @@ public class RuntimeError {
     }
 
     public String getError() {
-        return "\n    kylin.exception.RuntimeError: "+message+"\n    Time: "+time+"\n    Path: "+file+"\n    At Line: "+line;
+        return "\nkylin.exception.RuntimeError: "+message+"\n    Time: "+time+"\n    Path: "+file+"\n    At Line: "+line;
     }
 }

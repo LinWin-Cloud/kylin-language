@@ -25,6 +25,6 @@ public class SyntaxError {
     }
 
     public String getError() {
-        return "\n    kylin.exception.SyntaxError: "+message+"\n    Time: "+time+"\n    Path: "+file+"\n    At Line: "+line;
+        return "\nkylin.exception.SyntaxError: "+message+"\n    Time: "+time+"\n    Path: "+file+"\n    At Line: "+line;
     }
 }
