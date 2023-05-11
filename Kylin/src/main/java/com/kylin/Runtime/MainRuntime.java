@@ -9,11 +9,13 @@ import program.vm.BaseRuntime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainRuntime {
 
     public HashMap<String,String> function = new HashMap<>();
     //public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
+    public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
     public HashMap<String , Value> ValueMap = new HashMap<>();
     public String name;
     public static int codeLine = 0;
@@ -44,7 +46,8 @@ public class MainRuntime {
                 //System.out.println(value);
                 if (value.startsWith("[") && value.endsWith("]"))
                 {
-
+                    ListExpression listExpression = new ListExpression();
+                    listExpression.def_list_expression(name, value.substring(1, value.length() -1) , codeLine , this);
                 }
                 else{
                     value = Expression.getExString(value , MainRuntime.codeLine , this);
@@ -54,7 +57,7 @@ public class MainRuntime {
                 v.setContent(value);
                 v.setPublic(true);
                 ValueMap.put(name,v);
-                System.out.println(name+" "+value);
+                //System.out.println(name+" "+value);
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);
