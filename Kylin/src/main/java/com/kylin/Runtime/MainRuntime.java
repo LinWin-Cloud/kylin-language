@@ -57,7 +57,7 @@ public class MainRuntime {
                 v.setContent(value);
                 v.setPublic(true);
                 ValueMap.put(name,v);
-                //System.out.println(name+" "+value);
+                System.out.println(name+" "+value);
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);

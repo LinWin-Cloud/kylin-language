@@ -18,7 +18,7 @@ public class Expression
              */
             StringBuffer stringBuffer = new StringBuffer();
             boolean isStr = false;
-            String[] tokens = content.split("(?<=<\\s)(.*?)(?=\\s>)");
+            String[] tokens = content.split("[<>]");
 
             for (int i = 0 ; i < tokens.length ;i++)
             {
@@ -39,26 +39,7 @@ public class Expression
                 }
                 else if (token.startsWith("<") && token.endsWith(">"))
                 {
-                    //System.out.println(token);
-                    //Calculator calculator = new Calculator();
-                    String input = token.substring(1, token.length() -1);
-                    input = input.replaceAll("\\s+", "");
-                    StringBuffer sBuffer = new StringBuffer();
-                    for (String s : input.split("\\s*(?<=[\\+\\-\\*/])|(?=[\\+\\-\\*/])\\s*"))
-                    {
-                        if (mainRuntime.ValueMap.containsKey(s.trim()))
-                        {
-                            //System.out.println(mainRuntime.ValueMap.get(s.trim()).getContent());
-                            sBuffer.append(mainRuntime.ValueMap.get(s.trim()).getContent());
-                            continue;
-                        }
-                        sBuffer.append(s);
-                    }
-                    input = sBuffer.toString();
-                    //System.out.println(input);
-                
-                    List<String> postfix = Calculator.toPostfix(input);
-                    stringBuffer.append(Calculator.calculate(postfix));
+
                     continue;
                 } 
                 else if (mainRuntime.ValueMap.containsKey(token))
@@ -67,7 +48,32 @@ public class Expression
                     continue;
                 }
                 else {
-                    stringBuffer.append(token);
+                    try {
+                        //System.out.println(token);
+                        //Calculator calculator = new Calculator();
+                        String input = token;
+                        //String input = token.substring(1, token.length() -1);
+                        input = input.replaceAll("\\s+", "");
+                        StringBuffer sBuffer = new StringBuffer();
+                        for (String s : input.split("\\s*(?<=[\\+\\-\\*/])|(?=[\\+\\-\\*/])\\s*"))
+                        {
+                            if (mainRuntime.ValueMap.containsKey(s.trim()))
+                            {
+                                //System.out.println(mainRuntime.ValueMap.get(s.trim()).getContent());
+                                sBuffer.append(mainRuntime.ValueMap.get(s.trim()).getContent());
+                                continue;
+                            }
+                            sBuffer.append(s);
+                        }
+                        input = sBuffer.toString();
+                        //System.out.println(input);
+
+                        List<String> postfix = Calculator.toPostfix(input);
+                        stringBuffer.append(Calculator.calculate(postfix));
+                    }
+                    catch (Exception exception){
+                        stringBuffer.append(token);
+                    }
                 }
             }
             return stringBuffer.toString();
