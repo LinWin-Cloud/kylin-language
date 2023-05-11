@@ -1,6 +1,4 @@
-var a = 12
-var b = <2 * (10 + 2)>
 
-var a = [a , "hello"]
-
-// commit
+var a = 2
+var b = "Math: " <2 * (1+1)> " ."
+var c = ["hello","world","kylin"]
