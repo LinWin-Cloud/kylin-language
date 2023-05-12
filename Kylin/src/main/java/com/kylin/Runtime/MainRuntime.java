@@ -16,14 +16,16 @@ public class MainRuntime {
     public HashMap<String,String> function = new HashMap<>();
     //public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
     public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
+    public HashMap<String, String> ImportantCharset = new HashMap<>();
     public HashMap<String , Value> ValueMap = new HashMap<>();
     public String name;
-    public static int codeLine = 0;
+    public ArrayList<String> code = new ArrayList<>();
+    public int codeLine = 0;
 
     public void run(){
-        int size = Main.code.size();
+        int size = this.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
-            String source_code = Main.code.get(codeLine).trim();
+            String source_code = this.code.get(codeLine).trim();
             if (source_code.equals("")) {
                 continue;
             }
@@ -36,10 +38,24 @@ public class MainRuntime {
     }
     public void exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
+        String e = this.ImportantCharset.get(words[0]);
+
         if (words[0].startsWith("//")) {
             return;
         }
-        if (words[0].equals("var")) {
+        if (words[0].equals("#defined")) {
+            try
+            {
+                String key = words[1];
+                String value = words[2];
+                this.ImportantCharset.put(value,key);
+                return;
+            }
+            catch (Exception exception){
+                MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
+            }
+        }
+        if (words[0].equals("var") || (e != null && e.equals("var"))) {
             try {
                 String name = words[1];
                 String value = source_code.substring(source_code.indexOf("=")+1).trim();
@@ -50,18 +66,22 @@ public class MainRuntime {
                     listExpression.def_list_expression(name, value.substring(1, value.length() -1) , codeLine , this);
                 }
                 else{
-                    value = Expression.getExString(value , MainRuntime.codeLine , this);
+                    value = Expression.getExString(value , codeLine , this);
                 }
                 Value v = new Value();
                 v.setName(name);
                 v.setContent(value);
                 v.setPublic(true);
                 ValueMap.put(name,v);
-                System.out.println(name+" "+value);
+                //System.out.println(name+" "+value);
             }
             catch (Exception exception) {
-                sendRuntimeError("Define integer numeric errors",MainRuntime.codeLine);
+                sendRuntimeError("Define integer numeric errors",codeLine);
             }
+        }
+        if (words[0].equals("javascript:"))
+        {
+            for (int i = codeLine + 1; Main.code.)
         }
         else {
             BaseRuntime baseRuntime = new BaseRuntime();

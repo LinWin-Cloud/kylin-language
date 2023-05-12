@@ -7,10 +7,9 @@ public class BaseRuntime {
     public String run(String code , int line , MainRuntime mainRuntime) {
         try
         {
-            String[] token = code.split(" ");
             if (code.startsWith("out")) {
                 String print = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")"));
-                print = Expression.getExString(print , line , mainRuntime);
+                print = Expression.getExString(print,line,mainRuntime);
                 System.out.println(print);
                 return "";
             }

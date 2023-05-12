@@ -69,7 +69,11 @@ public class Expression
                         //System.out.println(input);
 
                         List<String> postfix = Calculator.toPostfix(input);
-                        stringBuffer.append(Calculator.calculate(postfix));
+                        try{
+                            stringBuffer.append(Expression.doubleToInt(Calculator.calculate(postfix)));
+                        }catch (Exception exception){
+                            stringBuffer.append(Calculator.calculate(postfix));
+                        }
                     }
                     catch (Exception exception){
                         stringBuffer.append(token);
@@ -84,6 +88,12 @@ public class Expression
             MainRuntime.sendSyntaxError(exception.getMessage() , line);
             return null;
         }
+    }
+    public static int doubleToInt(double d) throws IllegalArgumentException {
+        if (Math.abs(d - Math.round(d)) > 0) {
+            throw new IllegalArgumentException("Double value has precision loss");
+        }
+        return (int) d;
     }
 }
 class Calculator {

@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 public class Main {
     public static File resource;
-    public static ArrayList<String> code = new ArrayList<>();
     public static HashMap<Integer, RuntimeError> Exception = new HashMap<>();
     public static ArrayList<ExceptionCatch> ExceptionCode = new ArrayList<>();
 
@@ -39,15 +38,15 @@ public class Main {
         {
             FileReader fileReader = new FileReader(resource);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
+            MainRuntime mainRuntime = new MainRuntime();
             while (true) {
                 String line = bufferedReader.readLine();
                 if (line == null) {
                     break;
                 }
                 line = line.trim();
-                code.add(line);
+                mainRuntime.code.add(line);
             }
-            MainRuntime mainRuntime = new MainRuntime();
             mainRuntime.name = resource.getName();
             mainRuntime.run();
         }
