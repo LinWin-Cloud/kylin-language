@@ -7,8 +7,14 @@ import program.value.Value;
 import program.vm.BaseRuntime;
 
 
+import javax.script.*;
+import java.io.BufferedReader;
+import java.io.PipedReader;
+import java.io.PipedWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainRuntime {
@@ -74,6 +80,7 @@ public class MainRuntime {
                 v.setPublic(true);
                 ValueMap.put(name,v);
                 //System.out.println(name+" "+value);
+                return;
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",codeLine);
@@ -81,7 +88,36 @@ public class MainRuntime {
         }
         if (words[0].equals("javascript:"))
         {
-            for (int i = codeLine + 1; Main.code.)
+            try {
+                ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
+                List<String> stringList = new ArrayList<>();
+
+                for (int i = codeLine + 1; i < this.code.size() ;i++)
+                {
+                    String js = this.code.get(i).trim();
+                    if (js.equals("end_js")) {
+                        codeLine = i;
+                        break;
+                    }
+                    stringList.add(js);
+                }
+                for (int i = 0 ; i < stringList.size() ;i++)
+                {
+                    String js = stringList.get(i).trim();
+                    if (js.equals("exit")) {
+                        break;
+                    }
+                    Object obj = scriptEngine.eval(js);
+                    if (obj != null) {
+                        System.out.println(obj.toString());
+                    }
+                }
+            }
+            catch (Exception exception){
+                MainRuntime.sendRuntimeError("Javascript Engine: "+exception.getMessage(),codeLine);
+            }
+            return;
         }
         else {
             BaseRuntime baseRuntime = new BaseRuntime();

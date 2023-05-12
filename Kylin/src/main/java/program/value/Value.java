@@ -4,6 +4,7 @@ public class Value {
     private String name;
     private Object content;
     private boolean IsPublic = true;
+    private String type;
 
     public void setName(String name) {
         this.name = name;
@@ -16,6 +17,13 @@ public class Value {
         return this.name;
     }
 
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+    public String getType() {
+        return this.type;
+    }
     public Object getContent() {
         return this.content;
     }
