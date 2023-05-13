@@ -3,6 +3,7 @@ package com.kylin.Runtime;
 import com.kylin.Exception.RuntimeError;
 import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
+import program.value.ExecFunction;
 import program.value.Value;
 import program.vm.BaseLib;
 import program.vm.BaseRuntime;
@@ -18,13 +19,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MainRuntime {
 
     public HashMap<String,String> function = new HashMap<>();
-    //public static HashMap<String,Function> execFunctionHashMap = new HashMap<>();
+    public HashMap<String,ExecFunction> execFunctionHashMap = new HashMap<>();
     public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
     public HashMap<String, String> ImportantCharset = new HashMap<>();
     public HashMap<String , Value> ValueMap = new HashMap<>();
     public String name;
     public ArrayList<String> code = new ArrayList<>();
     public int codeLine = 0;
+    public boolean isFunction = false;
 
     public void run(){
         int size = this.code.size();
@@ -140,9 +142,30 @@ public class MainRuntime {
             try {
                 String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
                 String[] splitFunctionTitle = source_code.split(regex);
-                String functionName = splitFunctionTitle[1];
+                String functionName_content = splitFunctionTitle[1];
                 boolean isPublic = splitFunctionTitle[3].toLowerCase().equals("public");
-                System.out.println(functionName+" "+isPublic);
+
+                String[] input = functionName_content.substring(functionName_content.indexOf("(")+1,functionName_content.lastIndexOf(")")).split(",");
+                String FunctionName = functionName_content.substring(0,functionName_content.indexOf("(")).replace(" ","");
+
+                ExecFunction execFunction = new ExecFunction();
+                execFunction.setMainRuntime(this);
+                execFunction.setPublic(isPublic);
+                execFunction.setInput(input);
+                execFunction.setName(FunctionName);
+
+                List<String> codeList = new ArrayList<>();
+                for (int i = codeLine + 1 ; i < this.code.size() ;i++)
+                {
+                    String code = this.code.get(i).trim();
+                    if (code.equals("end_func")) {
+                        codeLine = i;
+                        break;
+                    }
+                    codeList.add(code);
+                }
+                execFunction.code = codeList;
+                this.execFunctionHashMap.put(FunctionName , execFunction);
                 return;
             }
             catch (Exception exception){
