@@ -3,13 +3,16 @@ package program.value;
 import com.kylin.Main;
 import com.kylin.Runtime.MainRuntime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExecFunction {
     private MainRuntime mainRuntime;
     private String name;
     private boolean Public = false;
-    private String[] input;
+    public String[] inputList;
+    public HashMap<String,Object> input = new HashMap<>();
     public List<String> code;
     public void setMainRuntime(MainRuntime mainRuntime)
     {
@@ -17,10 +20,6 @@ public class ExecFunction {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    public void setInput(String[] input)
-    {
-        this.input = input;
     }
     public void setPublic(boolean isPublic) {
         this.Public = isPublic;
@@ -34,10 +33,20 @@ public class ExecFunction {
     public boolean isPublic() {
         return this.Public;
     }
-    public String[] getInput() {
-        return this.input;
-    }
     public void setCode(List<String> code) {
         this.code = code;
+    }
+    public String RunFunction() {
+        try
+        {
+            MainRuntime runtime = new MainRuntime();
+            runtime.isFunction = true;
+            runtime.code = new ArrayList<>(this.code);
+            runtime.name = this.name;
+            return null;
+        }catch (Exception exception) {
+            MainRuntime.sendRuntimeError(exception.getMessage(), mainRuntime.codeLine);
+            return null;
+        }
     }
 }

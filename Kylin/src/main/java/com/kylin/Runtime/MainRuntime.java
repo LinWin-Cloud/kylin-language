@@ -12,6 +12,7 @@ import program.vm.BaseRuntime;
 import javax.script.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -27,28 +28,30 @@ public class MainRuntime {
     public ArrayList<String> code = new ArrayList<>();
     public int codeLine = 0;
     public boolean isFunction = false;
+    public String result;
 
     public void run(){
         int size = this.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
             String source_code = this.code.get(codeLine).trim();
+            //System.out.println(name+" "+source_code);
             if (source_code.equals("")) {
                 continue;
             }
             try {
-                exec(source_code,"");
+                this.exec(source_code,"");
             }catch (Exception exception){
                 MainRuntime.sendRuntimeError(exception.getMessage(),codeLine);
             }
         }
     }
-    public void exec(String source_code,String new_var) throws Exception {
+    public String exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
         String e = this.ImportantCharset.get(words[0].trim());
         //System.out.println(this.ImportantCharset);
 
         if (words[0].startsWith("//")) {
-            return;
+            return "";
         }
         if (words[0].equals("#defined") || (e != null && e.equals("#defined"))) {
             try
@@ -56,7 +59,7 @@ public class MainRuntime {
                 String key = words[1];
                 String value = words[2];
                 this.ImportantCharset.put(value,key);
-                return;
+                return "";
             }
             catch (Exception exception){
                 MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
@@ -81,7 +84,7 @@ public class MainRuntime {
                 v.setPublic(true);
                 ValueMap.put(name,v);
                 //System.out.println(name+" "+value);
-                return;
+                return "";
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",codeLine);
@@ -90,7 +93,7 @@ public class MainRuntime {
         if (words[0].equals("javascript:"))
         {
             BaseLib.javascript(this.code , codeLine,this);
-            return;
+            return "";
         }
         if (source_code.startsWith("#head")) {
             try {
@@ -126,7 +129,7 @@ public class MainRuntime {
                         }
                         bufferedReader.close();
                         fileReader.close();
-                        return;
+                        return "";
                     }
                 }
                 else {
@@ -151,7 +154,7 @@ public class MainRuntime {
                 ExecFunction execFunction = new ExecFunction();
                 execFunction.setMainRuntime(this);
                 execFunction.setPublic(isPublic);
-                execFunction.setInput(input);
+                execFunction.inputList = input;
                 execFunction.setName(FunctionName);
 
                 List<String> codeList = new ArrayList<>();
@@ -166,15 +169,49 @@ public class MainRuntime {
                 }
                 execFunction.code = codeList;
                 this.execFunctionHashMap.put(FunctionName , execFunction);
-                return;
+                return "";
             }
             catch (Exception exception){
                 MainRuntime.sendSyntaxError(source_code,codeLine);
             }
         }
         else {
-            BaseRuntime baseRuntime = new BaseRuntime();
-            baseRuntime.run(source_code , codeLine , this);
+            try {
+                String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
+                if (this.execFunctionHashMap.containsKey(UseFunction))
+                {
+                    try {
+                        String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
+                        ListExpression listExpression = new ListExpression();
+                        String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
+                        ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
+
+                        //System.out.println(Arrays.toString(execFunction.inputList));
+                        //System.out.println(Arrays.toString(inputContent));
+                        for (int i = 0 ; i < execFunction.inputList.length ;i++)
+                        {
+                            execFunction.input.put(execFunction.inputList[i] , inputContent[i]);
+                        }
+                        execFunction.RunFunction();
+                    }catch (Exception exception) {
+                        exception.printStackTrace();
+                        MainRuntime.sendSyntaxError("ERR: "+exception.getMessage(),codeLine);
+                    }
+                }
+            }
+            catch (Exception exception) {
+                BaseRuntime baseRuntime = new BaseRuntime();
+                baseRuntime.run(source_code , codeLine , this);
+            }
+        }
+        return "";
+    }
+    public String getResult() {
+        if (isFunction) {
+            return this.result;
+        }
+        else {
+            return "";
         }
     }
     public static void sendSyntaxError(String message,int line) {
