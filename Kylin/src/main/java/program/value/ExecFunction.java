@@ -3,6 +3,7 @@ package program.value;
 import com.kylin.Main;
 import com.kylin.Runtime.MainRuntime;
 
+import java.io.FilterOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ public class ExecFunction {
     private String name;
     private boolean Public = false;
     public String[] inputList;
-    public HashMap<String,Object> input = new HashMap<>();
+    public HashMap<String,Value> input = new HashMap<>();
     public List<String> code;
     public void setMainRuntime(MainRuntime mainRuntime)
     {
@@ -43,7 +44,9 @@ public class ExecFunction {
             runtime.isFunction = true;
             runtime.code = new ArrayList<>(this.code);
             runtime.name = this.name;
-            return null;
+            runtime.ValueMap = this.input;
+            runtime.run();
+            return runtime.result;
         }catch (Exception exception) {
             MainRuntime.sendRuntimeError(exception.getMessage(), mainRuntime.codeLine);
             return null;

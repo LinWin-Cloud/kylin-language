@@ -38,6 +38,15 @@ public class MainRuntime {
             if (source_code.equals("")) {
                 continue;
             }
+            if (isFunction && source_code.startsWith("return "))
+            {
+                try{
+                    this.result = source_code.substring(7);
+                    continue;
+                }catch (Exception exception){
+                    MainRuntime.sendSyntaxError(source_code,codeLine);
+                }
+            }
             try {
                 this.exec(source_code,"");
             }catch (Exception exception){
@@ -45,13 +54,14 @@ public class MainRuntime {
             }
         }
     }
-    public String exec(String source_code,String new_var) throws Exception {
+    public void exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
         String e = this.ImportantCharset.get(words[0].trim());
         //System.out.println(this.ImportantCharset);
+        //System.out.println(source_code);
 
         if (words[0].startsWith("//")) {
-            return "";
+            return;
         }
         if (words[0].equals("#defined") || (e != null && e.equals("#defined"))) {
             try
@@ -59,7 +69,7 @@ public class MainRuntime {
                 String key = words[1];
                 String value = words[2];
                 this.ImportantCharset.put(value,key);
-                return "";
+                return;
             }
             catch (Exception exception){
                 MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
@@ -84,7 +94,7 @@ public class MainRuntime {
                 v.setPublic(true);
                 ValueMap.put(name,v);
                 //System.out.println(name+" "+value);
-                return "";
+                return;
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",codeLine);
@@ -93,7 +103,7 @@ public class MainRuntime {
         if (words[0].equals("javascript:"))
         {
             BaseLib.javascript(this.code , codeLine,this);
-            return "";
+            return;
         }
         if (source_code.startsWith("#head")) {
             try {
@@ -129,7 +139,7 @@ public class MainRuntime {
                         }
                         bufferedReader.close();
                         fileReader.close();
-                        return "";
+                        return;
                     }
                 }
                 else {
@@ -145,7 +155,7 @@ public class MainRuntime {
             try {
                 String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
                 String[] splitFunctionTitle = source_code.split(regex);
-                String functionName_content = splitFunctionTitle[1];
+                String functionName_content = splitFunctionTitle[1].replace(" ","");
                 boolean isPublic = splitFunctionTitle[3].toLowerCase().equals("public");
 
                 String[] input = functionName_content.substring(functionName_content.indexOf("(")+1,functionName_content.lastIndexOf(")")).split(",");
@@ -169,7 +179,7 @@ public class MainRuntime {
                 }
                 execFunction.code = codeList;
                 this.execFunctionHashMap.put(FunctionName , execFunction);
-                return "";
+                return;
             }
             catch (Exception exception){
                 MainRuntime.sendSyntaxError(source_code,codeLine);
@@ -178,25 +188,31 @@ public class MainRuntime {
         else {
             try {
                 String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
+                //System.out.println(UseFunction);
                 if (this.execFunctionHashMap.containsKey(UseFunction))
                 {
-                    try {
-                        String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
-                        ListExpression listExpression = new ListExpression();
-                        String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
-                        ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
+                    String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
+                    ListExpression listExpression = new ListExpression();
+                    String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
+                    ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
 
-                        //System.out.println(Arrays.toString(execFunction.inputList));
-                        //System.out.println(Arrays.toString(inputContent));
-                        for (int i = 0 ; i < execFunction.inputList.length ;i++)
-                        {
-                            execFunction.input.put(execFunction.inputList[i] , inputContent[i]);
-                        }
-                        execFunction.RunFunction();
-                    }catch (Exception exception) {
-                        exception.printStackTrace();
-                        MainRuntime.sendSyntaxError("ERR: "+exception.getMessage(),codeLine);
+                    //System.out.println(Arrays.toString(execFunction.inputList));
+                    //System.out.println(Arrays.toString(inputContent));
+                    for (int i = 0 ; i < execFunction.inputList.length ;i++)
+                    {
+                        Value value = new Value();
+                        value.setPublic(false);
+                        value.setName(execFunction.inputList[i]);
+                        value.setContent(inputContent[i]);
+                        execFunction.input.put(execFunction.inputList[i] , value);
                     }
+                    //System.out.println("hello world");
+                    execFunction.RunFunction();
+                    return;
+                }
+                else {
+                    BaseRuntime baseRuntime = new BaseRuntime();
+                    baseRuntime.run(source_code , codeLine , this);
                 }
             }
             catch (Exception exception) {
@@ -204,7 +220,7 @@ public class MainRuntime {
                 baseRuntime.run(source_code , codeLine , this);
             }
         }
-        return "";
+        return;
     }
     public String getResult() {
         if (isFunction) {

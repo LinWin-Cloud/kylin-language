@@ -34,11 +34,13 @@ public class ListExpression {
             List<String> stringList = new ArrayList<>();
 
             for (String i : token) {
+                i = i .trim();
                 if (mainRuntime.ValueMap.containsKey(i)) {
-                    stringList.add(mainRuntime.ValueMap.get(i).getContent().toString());
+                    String content = mainRuntime.ValueMap.get(i).getContent().toString();
+                    stringList.add(content);
                     continue;
                 }
-                stringList.add(i);
+                stringList.add(Expression.getExString(i , line, mainRuntime));
             }
             return stringList.toArray(new String[stringList.size()]);
         }
