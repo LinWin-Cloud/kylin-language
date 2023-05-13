@@ -4,3 +4,4 @@
 #defined else 另外
 #defined elif 当另外
 #defined #defined #定义
+#defined func 方法
