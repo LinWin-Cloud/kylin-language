@@ -135,6 +135,20 @@ public class MainRuntime {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
         }
+        if (words[0].equals("func") || (e != null && e.equals("func")))
+        {
+            try {
+                String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
+                String[] splitFunctionTitle = source_code.split(regex);
+                String functionName = splitFunctionTitle[1];
+                boolean isPublic = splitFunctionTitle[3].toLowerCase().equals("public");
+                System.out.println(functionName+" "+isPublic);
+                return;
+            }
+            catch (Exception exception){
+                MainRuntime.sendSyntaxError(source_code,codeLine);
+            }
+        }
         else {
             BaseRuntime baseRuntime = new BaseRuntime();
             baseRuntime.run(source_code , codeLine , this);
