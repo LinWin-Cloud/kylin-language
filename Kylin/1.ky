@@ -1,7 +1,4 @@
-#head<{head}/chinese.kyh>
-变量 b = "hello world"
-out(b)
 
-func main() -> public:
+func main() -> public
     out("hello world")
 end_func
