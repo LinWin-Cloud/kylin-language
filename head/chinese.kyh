@@ -1,6 +1,6 @@
-#defined var 定义
+#defined var 变量
 #defined if 当
-#defined out 输出
 #defined import 引入
 #defined else 另外
 #defined elif 当另外
+#defined #defined #定义
