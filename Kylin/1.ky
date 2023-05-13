@@ -2,3 +2,5 @@
 func main() -> public
     out("hello world")
 end_func
+
+main()
