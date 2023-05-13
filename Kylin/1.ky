@@ -1,13 +1,3 @@
-#defined var let
-
-var a = 2
-var b = "Math: " <2.1 * (1+1)> " . " <1+1>
-var c = ["hello","world","kylin"]
-let d = "hello world"
-
-out("hello world")
 javascript:
-    var a = "javascript on kylin";
-    print(a)
-    print(new Date())
+    print("hello world")
 end_js
