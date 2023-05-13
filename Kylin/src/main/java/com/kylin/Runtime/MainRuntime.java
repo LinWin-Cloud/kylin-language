@@ -4,6 +4,7 @@ import com.kylin.Exception.RuntimeError;
 import com.kylin.Exception.SyntaxError;
 import com.kylin.Main;
 import program.value.Value;
+import program.vm.BaseLib;
 import program.vm.BaseRuntime;
 
 
@@ -88,35 +89,7 @@ public class MainRuntime {
         }
         if (words[0].equals("javascript:"))
         {
-            try {
-                ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-                ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
-                List<String> stringList = new ArrayList<>();
-
-                for (int i = codeLine + 1; i < this.code.size() ;i++)
-                {
-                    String js = this.code.get(i).trim();
-                    if (js.equals("end_js")) {
-                        codeLine = i;
-                        break;
-                    }
-                    stringList.add(js);
-                }
-                for (int i = 0 ; i < stringList.size() ;i++)
-                {
-                    String js = stringList.get(i).trim();
-                    if (js.equals("exit")) {
-                        break;
-                    }
-                    Object obj = scriptEngine.eval(js);
-                    if (obj != null) {
-                        System.out.println(obj.toString());
-                    }
-                }
-            }
-            catch (Exception exception){
-                MainRuntime.sendRuntimeError("Javascript Engine: "+exception.getMessage(),codeLine);
-            }
+            BaseLib.javascript(this.code , codeLine,this);
             return;
         }
         else {

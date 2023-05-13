@@ -14,12 +14,13 @@ public class BaseRuntime {
                 return "";
             }
             else {
-                MainRuntime.sendRuntimeError("ERR: "+code , line);
+                MainRuntime.sendRuntimeError("[ERR] "+code , line+1);
+                System.exit(1);
                 return null;
             }
         }
         catch (Exception exception) {
-            MainRuntime.sendRuntimeError(exception.getMessage() , line);
+            MainRuntime.sendRuntimeError(exception.getMessage() , line+1);
             return null;
         }
     }
