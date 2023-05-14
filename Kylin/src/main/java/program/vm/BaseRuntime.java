@@ -3,6 +3,9 @@ package program.vm;
 import com.kylin.Runtime.Expression;
 import com.kylin.Runtime.MainRuntime;
 
+import java.io.InputStream;
+import java.io.PrintStream;
+
 public class BaseRuntime {
     public String run(String code , int line , MainRuntime mainRuntime) {
         try

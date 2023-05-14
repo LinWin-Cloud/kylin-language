@@ -1,8 +1,5 @@
+//out("hello world")
 
-
-func main(input) -> public
-    out(input)
-    return 1
-end_func
-
-main("hello world")
+javascript:
+	print("hello world")
+end_js

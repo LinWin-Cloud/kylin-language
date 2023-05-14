@@ -48,7 +48,10 @@ public class Main {
                 mainRuntime.code.add(line);
             }
             mainRuntime.name = resource.getName();
+            long start = System.currentTimeMillis();
             mainRuntime.run();
+            long end = System.currentTimeMillis();
+            System.out.println(end-start + " ms");
         }
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");
