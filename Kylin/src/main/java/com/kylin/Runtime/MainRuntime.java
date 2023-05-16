@@ -19,7 +19,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainRuntime {
 
-    public HashMap<String,String> function = new HashMap<>();
     public HashMap<String,ExecFunction> execFunctionHashMap = new HashMap<>();
     public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
     public HashMap<String, String> ImportantCharset = new HashMap<>();
@@ -30,6 +29,10 @@ public class MainRuntime {
     public boolean isFunction = false;
     public String result;
 
+    public MainRuntime()
+    {
+
+    }
     public void run(){
         int size = this.code.size();
         for (codeLine = 0 ; codeLine < size ; codeLine++) {

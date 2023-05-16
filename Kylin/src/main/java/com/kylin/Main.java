@@ -14,8 +14,6 @@ import java.util.Scanner;
 
 public class Main {
     public static File resource;
-    public static HashMap<Integer, RuntimeError> Exception = new HashMap<>();
-    public static ArrayList<ExceptionCatch> ExceptionCode = new ArrayList<>();
 
     public static void main(String[] args)
     {
@@ -27,10 +25,10 @@ public class Main {
         if (args[0].equals("-console")) {
             MainRuntime mainRuntime = new MainRuntime();
             mainRuntime.name = "main";
+            Scanner scanner = new Scanner(System.in);
             while (true) {
                 System.out.print("Kylin> ");
-                Scanner scanner = new Scanner(System.in);
-                String code = scanner.nextLine().trim();
+                String code = scanner.nextLine();
                 if (code.equals("exit")) {
                     break;
                 }
@@ -39,8 +37,8 @@ public class Main {
                 }catch (Exception exception) {
                     System.out.println(exception.getMessage());
                 }
-                scanner.close();
             }
+            System.exit(0);
         }
         resource = new File(args[0]);
         if (!resource.exists())
