@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
     public static File resource;
@@ -22,6 +23,24 @@ public class Main {
         {
             System.out.println("kylin [resource file] ");
             System.exit(1);
+        }
+        if (args[0].equals("-console")) {
+            MainRuntime mainRuntime = new MainRuntime();
+            mainRuntime.name = "main";
+            while (true) {
+                System.out.print("Kylin> ");
+                Scanner scanner = new Scanner(System.in);
+                String code = scanner.nextLine().trim();
+                if (code.equals("exit")) {
+                    break;
+                }
+                try {
+                    mainRuntime.exec(code,"");
+                }catch (Exception exception) {
+                    System.out.println(exception.getMessage());
+                }
+                scanner.close();
+            }
         }
         resource = new File(args[0]);
         if (!resource.exists())
