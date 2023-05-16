@@ -1,5 +1,6 @@
-//out("hello world")
 
-javascript:
-	print("hello world")
-end_js
+func add(x,y) -> public
+    return x+y
+end_func
+
+out(add(1,1))
