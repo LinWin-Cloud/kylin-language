@@ -1,8 +1,12 @@
+#defined var 变量
 
-func add(x,y) -> public
-    return x+y
+变量 test_1 = 1
+变量 test_2 = 1
+
+out("Result: "+<2 * (test_1+test_2)>)
+
+func runCommand(shell) -> public
+	shell(shell)
 end_func
 
-
-
-shell("echo hello world")
+runCommand("echo hello world")
