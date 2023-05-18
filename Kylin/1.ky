@@ -1,16 +1,17 @@
 
-func 12890312938129321903812903812939012830298310() -> private
+
+try
+    out("hello world")
     try
-        write("test","1")
+        try
+            out(2)
+        catch (b)
+            out(b.message)
+        end_catch
+        out(1)
     catch(a)
         out(a.message)
-    end_try
-end_func
-
-func 12903819238901283091283901283901283091239012() -> private
-    try
-        12890312938129321903812903812939012830298310()
-    catch (e)
-        out(e.message)
-    end_try
-end_func
+    end_catch
+catch(e)
+    out(e.message)
+end_catch
