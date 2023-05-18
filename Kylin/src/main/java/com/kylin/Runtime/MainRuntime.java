@@ -188,9 +188,12 @@ public class MainRuntime {
         if (source_code.equals("try")) {
             try
             {
-                String name = this.MakeTryCatch(this.codeLine,"n");
-                System.out.println(this.execFunctionHashMap.keySet());
-                this.execFunctionHashMap.get(name).RunFunction();
+                TryCatch tryCatch = new TryCatch();
+                this.MakeTryCatch(this.codeLine,tryCatch);
+
+                for (int i = tryCatch.codeList.size(); i-- > 0; ) {
+
+                }
             }catch (Exception exception) {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
@@ -257,7 +260,7 @@ public class MainRuntime {
         runtimeError.setMessage(message);
         System.out.println(runtimeError.getError());
     }
-    private String MakeTryCatch(int line,String s) {
+    private String MakeTryCatch(int line,TryCatch tryCatch) {
         ArrayList<String> exceptionCode = new ArrayList<>();
         for (int i = line + 1;
              i < this.code.size();
@@ -265,7 +268,7 @@ public class MainRuntime {
         {
             String code = this.code.get(i).trim();
             if (code.equals("try")) {
-                String func = this.MakeTryCatch(i , String.valueOf(new Random().nextInt(10)));
+                String func = this.MakeTryCatch(i , tryCatch);
                 i = codeLine;
                 exceptionCode.add(func+"()");
                 continue;
@@ -277,7 +280,7 @@ public class MainRuntime {
             }
             exceptionCode.add(code);
         }
-        //System.out.println(exceptionCode.toString());
+        System.out.println(exceptionCode.toString());
         ExecFunction execFunction = new ExecFunction();
         execFunction.code = exceptionCode;
         String name = String.valueOf(new Random().nextLong());
@@ -286,6 +289,10 @@ public class MainRuntime {
         execFunction.lastRuntime = this.name;
         execFunction.setMainRuntime(this);
         this.execFunctionHashMap.put(name , execFunction);
+        tryCatch.codeList.add(execFunction);
         return name;
     }
+}
+class TryCatch {
+    public ArrayList<ExecFunction> codeList = new ArrayList<>();
 }

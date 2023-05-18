@@ -40,7 +40,7 @@ public class BaseRuntime {
                 return String.valueOf(process.waitFor());
             }
             else {
-                MainRuntime.sendRuntimeError("[ERR] "+code , line+1);
+                MainRuntime.sendRuntimeError("[Unknown] "+code , line+1);
                 System.exit(1);
                 return null;
             }
