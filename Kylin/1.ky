@@ -1,11 +1,16 @@
-try
+
+func 12890312938129321903812903812939012830298310() -> private
     try
         write("test","1")
     catch(a)
         out(a.message)
     end_try
+end_func
 
-    write("1.txt","hello world")
-catch (e)
-    out(e.message)
-end_try
+func 12903819238901283091283901283901283091239012() -> private
+    try
+        12890312938129321903812903812939012830298310()
+    catch (e)
+        out(e.message)
+    end_try
+end_func
