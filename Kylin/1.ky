@@ -1,12 +1,2 @@
-#defined var 变量
 
-var test_1 = 1
-var test_2 = 1
-
-out(<test_1+test_2 * 2>)
-
-func runCommand(shellCommand) -> public
-	shell(shellCommand)
-end_func
-
-runCommand("echo hello world")
+shell("echo hello world")
