@@ -188,6 +188,31 @@ public class MainRuntime {
                 MainRuntime.sendSyntaxError(source_code,codeLine);
             }
         }
+        if (source_code.equals("try")) {
+            try
+            {
+                ArrayList<String> exceptionCode = new ArrayList<>();
+                int showNumber = 0;
+                for (int i = codeLine + 1 ; i < this.code.size() ;i++)
+                {
+                    String code = this.code.get(i).trim();
+                    if (code.equals("try")) {
+                        showNumber += 1;
+                        continue;
+                    }
+                    if (code.equals("end_try")) {
+                        showNumber -= 1;
+                    }
+                }
+                if (showNumber == 0) {
+                    
+                }else {
+                    MainRuntime.sendSyntaxError("Syntax Error" , codeLine);
+                }
+            }catch (Exception exception) {
+                MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
+            }
+        }
         else {
             try {
                 String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
