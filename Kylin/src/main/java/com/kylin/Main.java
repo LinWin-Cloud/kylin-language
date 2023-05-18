@@ -68,7 +68,7 @@ public class Main {
             long start = System.currentTimeMillis();
             mainRuntime.run();
             long end = System.currentTimeMillis();
-            System.out.println(end-start + " ms");
+            //System.out.println(end-start + " ms");
         }
         catch (Exception exception) {
             System.out.println("[ERROR] Read target file error.");

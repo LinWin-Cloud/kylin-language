@@ -28,14 +28,9 @@ public class BaseRuntime {
             }
             if (code.startsWith("shell")) {
                 String execCommand = Expression.getExString(subContent , line, mainRuntime);
-                boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+                //boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
                 Process process;
-                if (isWindows) {
-                    process = Runtime.getRuntime().exec("cmd /c "+execCommand);
-                }
-                else {
-                    process = Runtime.getRuntime().exec("/bin/sh -c "+execCommand);
-                }
+                process = Runtime.getRuntime().exec(execCommand);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String GetLine;
                 while ((GetLine = reader.readLine()) != null) {
