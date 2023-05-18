@@ -1,2 +1,11 @@
+try
+    try
+        write("test","1")
+    catch(a)
+        out(a.message)
+    end_try
 
-shell("echo hello world")
+    write("1.txt","hello world")
+catch (e)
+    out(e.message)
+end_try
