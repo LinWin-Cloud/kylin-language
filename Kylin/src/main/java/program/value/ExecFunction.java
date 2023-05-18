@@ -11,6 +11,7 @@ import java.util.List;
 public class ExecFunction {
     private MainRuntime mainRuntime;
     private String name;
+    public String lastRuntime = null;
     private boolean Public = false;
     public String[] inputList;
     public HashMap<String,Value> input = new HashMap<>();
@@ -40,7 +41,9 @@ public class ExecFunction {
     public String RunFunction() {
         try
         {
-            MainRuntime runtime = new MainRuntime();
+            MainRuntime runtime = new MainRuntime(this.name);
+            runtime.execFunctionHashMap = mainRuntime.execFunctionHashMap;
+            runtime.ValueMap = mainRuntime.ValueMap;
             runtime.isFunction = true;
             runtime.code = new ArrayList<>(this.code);
             runtime.name = this.name;

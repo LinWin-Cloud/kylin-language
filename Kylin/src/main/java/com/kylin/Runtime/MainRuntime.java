@@ -11,10 +11,7 @@ import program.vm.BaseRuntime;
 
 import javax.script.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainRuntime {
@@ -31,7 +28,7 @@ public class MainRuntime {
 
     public MainRuntime(String name)
     {
-
+        Main.runtimeMap.put(name , this);
     }
     public void run(){
         int size = this.code.size();
@@ -191,7 +188,9 @@ public class MainRuntime {
         if (source_code.equals("try")) {
             try
             {
-                this.MakeTryCatch();
+                String name = this.MakeTryCatch(this.codeLine,"n");
+                System.out.println(this.execFunctionHashMap.keySet());
+                this.execFunctionHashMap.get(name).RunFunction();
             }catch (Exception exception) {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
@@ -258,13 +257,35 @@ public class MainRuntime {
         runtimeError.setMessage(message);
         System.out.println(runtimeError.getError());
     }
-    private void MakeTryCatch() {
+    private String MakeTryCatch(int line,String s) {
         ArrayList<String> exceptionCode = new ArrayList<>();
-        for (int i = this.codeLine;
+        for (int i = line + 1;
              i < this.code.size();
              i++)
         {
-
+            String code = this.code.get(i).trim();
+            if (code.equals("try")) {
+                String func = this.MakeTryCatch(i , String.valueOf(new Random().nextInt(10)));
+                i = codeLine;
+                exceptionCode.add(func+"()");
+                continue;
+            }
+            if (code.equals("end_catch"))
+            {
+                this.codeLine = i;
+                break;
+            }
+            exceptionCode.add(code);
         }
+        //System.out.println(exceptionCode.toString());
+        ExecFunction execFunction = new ExecFunction();
+        execFunction.code = exceptionCode;
+        String name = String.valueOf(new Random().nextLong());
+        execFunction.setName(name);
+        execFunction.setPublic(false);
+        execFunction.lastRuntime = this.name;
+        execFunction.setMainRuntime(this);
+        this.execFunctionHashMap.put(name , execFunction);
+        return name;
     }
 }
