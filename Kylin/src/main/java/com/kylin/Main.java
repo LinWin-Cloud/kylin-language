@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 public class Main {
     public static File resource;
+    public static HashMap<String , MainRuntime> runtimeMap = new HashMap<>();
 
     public static void main(String[] args)
     {
@@ -23,7 +24,7 @@ public class Main {
             System.exit(1);
         }
         if (args[0].equals("-console")) {
-            MainRuntime mainRuntime = new MainRuntime();
+            MainRuntime mainRuntime = new MainRuntime("main");
             mainRuntime.name = "main";
             Scanner scanner = new Scanner(System.in);
             while (true) {
@@ -55,7 +56,7 @@ public class Main {
         {
             FileReader fileReader = new FileReader(resource);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            MainRuntime mainRuntime = new MainRuntime();
+            MainRuntime mainRuntime = new MainRuntime(resource.getName());
             while (true) {
                 String line = bufferedReader.readLine();
                 if (line == null) {

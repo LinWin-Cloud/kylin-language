@@ -29,7 +29,7 @@ public class MainRuntime {
     public boolean isFunction = false;
     public String result;
 
-    public MainRuntime()
+    public MainRuntime(String name)
     {
 
     }
@@ -191,24 +191,7 @@ public class MainRuntime {
         if (source_code.equals("try")) {
             try
             {
-                ArrayList<String> exceptionCode = new ArrayList<>();
-                int showNumber = 0;
-                for (int i = codeLine + 1 ; i < this.code.size() ;i++)
-                {
-                    String code = this.code.get(i).trim();
-                    if (code.equals("try")) {
-                        showNumber += 1;
-                        continue;
-                    }
-                    if (code.equals("end_try")) {
-                        showNumber -= 1;
-                    }
-                }
-                if (showNumber == 0) {
-                    
-                }else {
-                    MainRuntime.sendSyntaxError("Syntax Error" , codeLine);
-                }
+                this.MakeTryCatch();
             }catch (Exception exception) {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
@@ -274,5 +257,14 @@ public class MainRuntime {
         runtimeError.setTime();
         runtimeError.setMessage(message);
         System.out.println(runtimeError.getError());
+    }
+    private void MakeTryCatch() {
+        ArrayList<String> exceptionCode = new ArrayList<>();
+        for (int i = this.codeLine;
+             i < this.code.size();
+             i++)
+        {
+
+        }
     }
 }
