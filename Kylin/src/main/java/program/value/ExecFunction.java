@@ -64,7 +64,8 @@ public class ExecFunction {
             runtime.run();
             return runtime.result;
         }catch (Exception exception) {
-            MainRuntime.sendRuntimeError(exception.getMessage(), mainRuntime.codeLine);
+            //exception.printStackTrace();
+            MainRuntime.sendRuntimeError("ERR: "+exception.getMessage(), mainRuntime.codeLine);
             return null;
         }
     }

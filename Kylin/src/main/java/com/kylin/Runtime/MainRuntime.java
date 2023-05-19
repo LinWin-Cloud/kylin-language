@@ -26,6 +26,7 @@ public class MainRuntime {
     public boolean isFunction = false;
     public String result;
     public boolean isException = false;
+    private boolean inTry = false;
 
     public MainRuntime(String name)
     {
@@ -191,14 +192,31 @@ public class MainRuntime {
             try
             {
                 //System.out.println(this.execFunctionHashMap.keySet());
-                TryCatch tryCatch = new TryCatch();
-                this.MakeTryCatch(this.codeLine,tryCatch);
-                //System.out.println(this.execFunctionHashMap.keySet());
-
-                for (int i = tryCatch.codeList.size(); i-- > 0; ) {
-                    ExecFunction execFunction = tryCatch.codeList.get(i);
-                    execFunction.RunFunction();
+                this.inTry = true;
+                int number = 0;
+                ArrayList<String> exceptionCode = new ArrayList<>();
+                for (int i = this.codeLine ; i < this.code.size() ;i++)
+                {
+                    //System.out.println(this.code.get(i));
+                    String TryCatchCode = this.code.get(i);
+                    if (TryCatchCode.equals("try")) {
+                        number += 1;
+                        exceptionCode.add(TryCatchCode);
+                        continue;
+                    }
+                    if (TryCatchCode.equals("end_catch")) {
+                        exceptionCode.add(TryCatchCode);
+                        number -= 1;
+                        continue;
+                    }
+                    if (number == 0) {
+                        break;
+                    }
+                    exceptionCode.add(TryCatchCode);
+                    this.codeLine = i + 1;
                 }
+                System.out.println(exceptionCode.toString());
+                return;
             }catch (Exception exception) {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
@@ -214,8 +232,6 @@ public class MainRuntime {
                     String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
                     ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
 
-                    //System.out.println(Arrays.toString(execFunction.inputList));
-                    //System.out.println(Arrays.toString(inputContent));
                     for (int i = 0 ; i < execFunction.inputList.length ;i++)
                     {
                         Value value = new Value();
@@ -234,7 +250,6 @@ public class MainRuntime {
                 }
             }
             catch (Exception exception) {
-                exception.printStackTrace();
                 BaseRuntime baseRuntime = new BaseRuntime();
                 baseRuntime.run(source_code , codeLine , this);
             }
@@ -289,19 +304,15 @@ public class MainRuntime {
                 value.setContent("");
                 value.setType("string");
                 execFunction.runtime.ValueMap.put(value.getName(),value);
-                for (int j = i + 1 ; j < this.code.size() ;j++)
+                for (int j = i + 1; j < this.code.size() ; j++)
                 {
-                    String catchCode = this.code.get(j).trim();
-                    //System.out.println(catchCode);
-                    if (catchCode.equals("try")) {
-                        this.MakeTryCatch(j,tryCatch);
-                        continue;
-                    }
-                    if (catchCode.equals("end_catch")) {
+                    String CatchCode = this.code.get(j).trim();
+                    if (CatchCode.equals("end_catch")) {
                         i = j;
+                        this.codeLine = i;
                         break;
                     }
-                    tryCatch.catchCode.add(catchCode);
+                    tryCatch.catchCode.add(CatchCode);
                 }
                 continue;
             }
@@ -312,8 +323,6 @@ public class MainRuntime {
             }
             exceptionCode.add(code);
         }
-        //System.out.println(tryCatch.codeList.toString());
-        //System.out.println(tryCatch.catchCode.toString());
         execFunction.code = exceptionCode;
         String name = String.valueOf(new Random().nextLong());
         execFunction.setPublic(false);
@@ -321,6 +330,8 @@ public class MainRuntime {
         execFunction.inputList = new String[0];
         this.execFunctionHashMap.put(name , execFunction);
         tryCatch.codeList.add(execFunction);
+        //System.out.println(exceptionCode.toString());
+        //System.out.println(tryCatch.catchCode.toString());
         return name;
     }
 }

@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 public class BaseRuntime {
     public String run(String code , int line , MainRuntime mainRuntime) {
+        System.out.println(code);
         try
         {
             String subContent = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")"));
@@ -46,7 +47,8 @@ public class BaseRuntime {
             }
         }
         catch (Exception exception) {
-            MainRuntime.sendRuntimeError(exception.getMessage() , line+1);
+            exception.printStackTrace();
+            MainRuntime.sendRuntimeError("ERR: "+exception.getMessage() , line+1);
             return null;
         }
     }
