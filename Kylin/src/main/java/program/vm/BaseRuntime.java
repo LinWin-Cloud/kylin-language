@@ -42,7 +42,7 @@ public class BaseRuntime {
             else {
                 MainRuntime.sendRuntimeError("[Unknown] "+code , line+1);
                 System.exit(1);
-                return null;
+                return "Exec code error.";
             }
         }
         catch (Exception exception) {

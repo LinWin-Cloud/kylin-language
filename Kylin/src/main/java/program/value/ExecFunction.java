@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExecFunction {
-    private MainRuntime mainRuntime;
+    public MainRuntime mainRuntime;
     private String name;
     public String lastRuntime = null;
     private boolean Public = false;
@@ -38,16 +38,29 @@ public class ExecFunction {
     public void setCode(List<String> code) {
         this.code = code;
     }
+
+    public MainRuntime runtime;
+
+    public ExecFunction()
+    {
+        runtime = new MainRuntime(null);
+    }
     public String RunFunction() {
         try
         {
-            MainRuntime runtime = new MainRuntime(this.name);
+            runtime.name = name;
             runtime.execFunctionHashMap = mainRuntime.execFunctionHashMap;
-            runtime.ValueMap = mainRuntime.ValueMap;
             runtime.isFunction = true;
             runtime.code = new ArrayList<>(this.code);
             runtime.name = this.name;
             runtime.ValueMap = this.input;
+            for (Value value : mainRuntime.ValueMap.values()) {
+                runtime.ValueMap.put(value.getName() , value);
+            }
+            for (ExecFunction function: mainRuntime.execFunctionHashMap.values())
+            {
+                runtime.execFunctionHashMap.put(function.getName() , function);
+            }
             runtime.run();
             return runtime.result;
         }catch (Exception exception) {
