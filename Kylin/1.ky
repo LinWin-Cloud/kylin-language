@@ -1,17 +1,6 @@
 
 try
     out("hello world")
-    try
-        out("1 2 3")
-        try
-            out(2)
-        catch (b)
-            out(b.message)
-        end_catch
-        out(1)
-    catch(a)
-        out(a.message)
-    end_catch
 catch(e)
     out(e.message)
 end_catch

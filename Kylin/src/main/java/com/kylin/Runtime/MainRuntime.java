@@ -289,6 +289,20 @@ public class MainRuntime {
                 value.setContent("");
                 value.setType("string");
                 execFunction.runtime.ValueMap.put(value.getName(),value);
+                for (int j = i + 1 ; j < this.code.size() ;j++)
+                {
+                    String catchCode = this.code.get(j).trim();
+                    //System.out.println(catchCode);
+                    if (catchCode.equals("try")) {
+                        this.MakeTryCatch(j,tryCatch);
+                        continue;
+                    }
+                    if (catchCode.equals("end_catch")) {
+                        i = j;
+                        break;
+                    }
+                    tryCatch.catchCode.add(catchCode);
+                }
                 continue;
             }
             if (code.equals("end_catch"))
@@ -298,7 +312,8 @@ public class MainRuntime {
             }
             exceptionCode.add(code);
         }
-        // System.out.println(exceptionCode.toString());
+        //System.out.println(tryCatch.codeList.toString());
+        //System.out.println(tryCatch.catchCode.toString());
         execFunction.code = exceptionCode;
         String name = String.valueOf(new Random().nextLong());
         execFunction.setPublic(false);
@@ -310,5 +325,6 @@ public class MainRuntime {
     }
 }
 class TryCatch {
+    public ArrayList<String> catchCode = new ArrayList<>();
     public ArrayList<ExecFunction> codeList = new ArrayList<>();
 }
