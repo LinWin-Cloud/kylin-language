@@ -1,11 +1,6 @@
 
 try
     out(1)
-    try
-        out(2)
-    catch (a)
-        out(3)
-    end_catch
 catch(e)
     out(e.message)
 end_catch

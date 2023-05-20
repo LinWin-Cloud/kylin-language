@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class BaseRuntime {
     public String run(String code , int line , MainRuntime mainRuntime) {
-        System.out.println(code);
+        //System.out.println(code);
         try
         {
             String subContent = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")"));

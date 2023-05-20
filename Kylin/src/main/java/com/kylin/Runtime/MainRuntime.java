@@ -193,29 +193,41 @@ public class MainRuntime {
             {
                 //System.out.println(this.execFunctionHashMap.keySet());
                 this.inTry = true;
-                int number = 0;
                 ArrayList<String> exceptionCode = new ArrayList<>();
-                for (int i = this.codeLine ; i < this.code.size() ;i++)
+                ArrayList<String> CatchCode = new ArrayList<>();
+                for (int i = this.codeLine + 1 ; i < this.code.size() ;i++)
                 {
                     //System.out.println(this.code.get(i));
                     String TryCatchCode = this.code.get(i);
-                    if (TryCatchCode.equals("try")) {
-                        number += 1;
-                        exceptionCode.add(TryCatchCode);
-                        continue;
-                    }
-                    if (TryCatchCode.equals("end_catch")) {
-                        exceptionCode.add(TryCatchCode);
-                        number -= 1;
-                        continue;
-                    }
-                    if (number == 0) {
+                    if (TryCatchCode.startsWith("catch")) {
+                        String catchValue = TryCatchCode.substring(
+                                TryCatchCode.indexOf("(")+1,
+                                TryCatchCode.lastIndexOf(")")).trim();
+                        Value value = new Value();
+                        value.setName(catchValue+".message");
+                        value.setContent("kylin.runtime.exception");
+                        value.setType("string");
+                        value.setPublic(false);
+                        codeLine = i + 1;
                         break;
                     }
                     exceptionCode.add(TryCatchCode);
-                    this.codeLine = i + 1;
                 }
-                System.out.println(exceptionCode.toString());
+                for (int i = codeLine ;i < this.code.size() ;i++)
+                {
+                    String catchCode = code.get(i);
+                    if (catchCode.equals("end_catch")) {
+                        codeLine = i;
+                        break;
+                    }
+                    CatchCode.add(catchCode);
+                }
+                try {
+                    
+                }
+                catch (Exception exception) {
+
+                }
                 return;
             }catch (Exception exception) {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
@@ -286,52 +298,6 @@ public class MainRuntime {
         ExecFunction execFunction = new ExecFunction();
         execFunction.setName(name);
         execFunction.setMainRuntime(this);
-        for (int i = line + 1;
-             i < this.code.size();
-             i++)
-        {
-            String code = this.code.get(i).trim();
-            if (code.equals("try")) {
-                String func = this.MakeTryCatch(i , tryCatch);
-                i = codeLine;
-                exceptionCode.add(func+"()");
-                continue;
-            }
-            if (code.startsWith("catch")) {
-                String getExceptionValue = code.substring(code.indexOf("(")+1,code.lastIndexOf(")")).trim();
-                Value value = new Value();
-                value.setName(getExceptionValue+".message");
-                value.setContent("");
-                value.setType("string");
-                execFunction.runtime.ValueMap.put(value.getName(),value);
-                for (int j = i + 1; j < this.code.size() ; j++)
-                {
-                    String CatchCode = this.code.get(j).trim();
-                    if (CatchCode.equals("end_catch")) {
-                        i = j;
-                        this.codeLine = i;
-                        break;
-                    }
-                    tryCatch.catchCode.add(CatchCode);
-                }
-                continue;
-            }
-            if (code.equals("end_catch"))
-            {
-                this.codeLine = i;
-                break;
-            }
-            exceptionCode.add(code);
-        }
-        execFunction.code = exceptionCode;
-        String name = String.valueOf(new Random().nextLong());
-        execFunction.setPublic(false);
-        execFunction.lastRuntime = this.name;
-        execFunction.inputList = new String[0];
-        this.execFunctionHashMap.put(name , execFunction);
-        tryCatch.codeList.add(execFunction);
-        //System.out.println(exceptionCode.toString());
-        //System.out.println(tryCatch.catchCode.toString());
         return name;
     }
 }
