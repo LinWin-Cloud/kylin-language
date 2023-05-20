@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BaseRuntime {
-    public String run(String code , int line , MainRuntime mainRuntime) {
+    public String run(String code , int line , MainRuntime mainRuntime)
+    throws Exception{
         //System.out.println(code);
+        if (code.startsWith("write")) {
+
+        }
         try
         {
             String subContent = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")"));

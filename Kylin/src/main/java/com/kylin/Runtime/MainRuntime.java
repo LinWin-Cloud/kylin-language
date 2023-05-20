@@ -262,15 +262,14 @@ public class MainRuntime {
                     execFunction.RunFunction();
                     return;
                 }
-                else {
-                    BaseRuntime baseRuntime = new BaseRuntime();
-                    baseRuntime.run(source_code , codeLine , this);
-                }
             }
             catch (Exception exception) {
                 BaseRuntime baseRuntime = new BaseRuntime();
                 baseRuntime.run(source_code , codeLine , this);
+                return;
             }
+            BaseRuntime baseRuntime = new BaseRuntime();
+            baseRuntime.run(source_code , codeLine , this);
         }
         return;
     }
