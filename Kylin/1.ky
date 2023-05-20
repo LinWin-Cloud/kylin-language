@@ -1,5 +1,6 @@
-try
-    write("/sdfsdafds/1.tx1231232321t","hello world" , true)
-catch(e)
-    out(e.message)
-end_catch
+func math() -> public
+    return 1 + 1
+end_func
+
+var a = "1 + 1 = " <> math()
+out(a)
