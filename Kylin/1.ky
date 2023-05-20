@@ -1,6 +1,5 @@
-func math() -> public
-    return 1 + 1
+func math(a) -> public
+    return a
 end_func
 
-var a = "1 + 1 = " <> math()
-out(a)
+out(math("hello world"))

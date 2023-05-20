@@ -168,6 +168,7 @@ public class MainRuntime {
                 execFunction.inputList = input;
                 execFunction.setName(FunctionName);
                 execFunction.setMainRuntime(this);
+                execFunction.runtime.ValueMap.putAll(this.ValueMap);
 
                 List<String> codeList = new ArrayList<>();
                 for (int i = codeLine + 1 ; i < this.code.size() ;i++)

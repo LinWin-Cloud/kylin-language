@@ -1,6 +1,7 @@
 package com.kylin.Runtime;
 
 import program.value.ExecFunction;
+import program.value.Value;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,11 @@ public class Expression
                 if (token.startsWith("\"") && token.endsWith("\"")) {
                     stringBuffer.append(token, 1, token.length() -1);
                 }
+                else if (mainRuntime.ValueMap.containsKey(token))
+                {
+                    stringBuffer.append(mainRuntime.ValueMap.get(token).getContent());
+                    continue;
+                }
                 else if (token.startsWith("\"")) {
                     isStr = true;
                     stringBuffer.append(token.substring(1));
@@ -44,8 +50,18 @@ public class Expression
                     String func = token.substring(0,token.indexOf("(")).trim();
                     if (mainRuntime.execFunctionHashMap.containsKey(func))
                     {
+                        String input = token.substring(token.indexOf("(")+1,token.lastIndexOf(")")).trim();
+                        String[] inputToken = new ListExpression().get_list_expression(input , line, mainRuntime);
                         ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
+                        execFunction.inputList = inputToken;
                         String result = execFunction.RunFunction();
+                        for (int j = 0 ; j < execFunction.inputList.length ; j++) {
+                            Value value = new Value();
+                            value.setContent(inputToken[j]);
+                            value.setName(execFunction.inputList[j]);
+                            value.setPublic();
+                            execFunction.input.put(value.getName() , value);
+                        }
                         stringBuffer.append(result);
                     }
                     else {
@@ -57,11 +73,6 @@ public class Expression
                 else if (token.startsWith("<") && token.endsWith(">"))
                 {
 
-                    continue;
-                } 
-                else if (mainRuntime.ValueMap.containsKey(token))
-                {
-                    stringBuffer.append(mainRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
                 else {
