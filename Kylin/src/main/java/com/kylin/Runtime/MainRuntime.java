@@ -195,6 +195,8 @@ public class MainRuntime {
                 this.inTry = true;
                 ArrayList<String> exceptionCode = new ArrayList<>();
                 ArrayList<String> CatchCode = new ArrayList<>();
+                MainRuntime exceptionRuntime = new MainRuntime(String.valueOf(new Random().nextLong()));
+                exceptionRuntime.isException = true;
                 for (int i = this.codeLine + 1 ; i < this.code.size() ;i++)
                 {
                     //System.out.println(this.code.get(i));
@@ -222,11 +224,15 @@ public class MainRuntime {
                     }
                     CatchCode.add(catchCode);
                 }
+                exceptionRuntime.code = exceptionCode;
+                exceptionRuntime.ValueMap.putAll(this.ValueMap);
+                exceptionRuntime.execFunctionHashMap.putAll(this.execFunctionHashMap);
                 try {
-                    
+                    exceptionRuntime.run();
                 }
                 catch (Exception exception) {
-
+                    exceptionRuntime.code = CatchCode;
+                    exceptionRuntime.run();
                 }
                 return;
             }catch (Exception exception) {
