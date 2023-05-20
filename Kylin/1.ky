@@ -1,6 +1,9 @@
 
-try
-    out(1)
-catch(e)
-    out(e.message)
-end_catch
+var b = 1
+func a() -> public
+    out(" hello world")
+    gc()
+    a()
+end_func
+
+a()
