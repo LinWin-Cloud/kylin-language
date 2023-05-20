@@ -72,7 +72,7 @@ public class Main {
             //System.out.println(end-start + " ms");
         }
         catch (Exception exception) {
-            System.out.println("[ERROR] Read target file error.");
+            MainRuntime.sendRuntimeError(exception.getMessage(),0);
             System.exit(1);
         }
     }

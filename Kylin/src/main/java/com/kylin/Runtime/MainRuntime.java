@@ -196,16 +196,21 @@ public class MainRuntime {
                 ArrayList<String> CatchCode = new ArrayList<>();
                 MainRuntime exceptionRuntime = new MainRuntime(String.valueOf(new Random().nextLong()));
                 exceptionRuntime.isException = true;
+                String catchValue = null;
                 for (int i = this.codeLine + 1 ; i < this.code.size() ;i++)
                 {
                     //System.out.println(this.code.get(i));
                     String TryCatchCode = this.code.get(i);
                     if (TryCatchCode.startsWith("catch")) {
-                        String catchValue = TryCatchCode.substring(
+                        catchValue = TryCatchCode.substring(
                                 TryCatchCode.indexOf("(")+1,
                                 TryCatchCode.lastIndexOf(")")).trim();
-                        exceptionRuntime.exceptionMessage = "kylin.runtime.exception";
-                        exceptionRuntime.exceptionCode = catchValue;
+                        Value value = new Value();
+                        value.setType("string");
+                        value.setPublic(false);
+                        value.setName(catchValue+".message");
+                        value.setContent("kylin.runtime.exception");
+                        exceptionRuntime.ValueMap.put(value.getName() , value);
                         codeLine = i + 1;
                         break;
                     }
@@ -228,6 +233,7 @@ public class MainRuntime {
                     exceptionRuntime.run();
                 }
                 catch (Exception exception) {
+                    exceptionRuntime.ValueMap.get(catchValue+".message").setContent(exception.getMessage());
                     exceptionRuntime.code = CatchCode;
                     exceptionRuntime.run();
                 }

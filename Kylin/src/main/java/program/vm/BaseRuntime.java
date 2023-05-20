@@ -16,14 +16,18 @@ public class BaseRuntime {
                 code.indexOf("(") + 1,
                 code.lastIndexOf(")"));
         if (code.startsWith("write")) {
-            String[] getInput = getFunctionInput(code,line,mainRuntime);
-            String path = getInput[0];
-            String content = getInput[1];
-            String isW = getInput[2];
-            FileWriter fileWriter = new FileWriter(path , isW.toLowerCase().equals("true"));
-            fileWriter.write(content);
-            fileWriter.flush();
-            fileWriter.close();
+            try{
+                String[] getInput = getFunctionInput(code,line,mainRuntime);
+                String path = getInput[0];
+                String content = getInput[1];
+                String isW = getInput[2];
+                FileWriter fileWriter = new FileWriter(path , isW.toLowerCase().equals("true"));
+                fileWriter.write(content);
+                fileWriter.flush();
+                fileWriter.close();
+            }catch (Exception exception){
+                throw new Exception(exception.getMessage());
+            }
             return code;
         }
         try
