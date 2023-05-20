@@ -57,7 +57,7 @@ public class ExecFunction {
             runtime.ValueMap.putAll(mainRuntime.ValueMap);
             runtime.execFunctionHashMap.putAll(mainRuntime.execFunctionHashMap);
             runtime.run();
-            return runtime.result;
+            return runtime.getResult();
         }catch (Exception exception) {
             //exception.printStackTrace();
             MainRuntime.sendRuntimeError("ERR: "+exception.getMessage(), mainRuntime.codeLine);

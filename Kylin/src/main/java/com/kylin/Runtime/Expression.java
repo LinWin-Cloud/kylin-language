@@ -1,5 +1,7 @@
 package com.kylin.Runtime;
 
+import program.value.ExecFunction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +37,21 @@ public class Expression
                 else if (isStr && token.endsWith("\"")) {
                     isStr = false;
                     stringBuffer.append(token, 0, token.length() - 1);
+                    continue;
+                }
+                else if (token.contains("(") && token.endsWith(")"))
+                {
+                    String func = token.substring(0,token.indexOf("(")).trim();
+                    if (mainRuntime.execFunctionHashMap.containsKey(func))
+                    {
+                        ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
+                        String result = execFunction.RunFunction();
+                        stringBuffer.append(result);
+                    }
+                    else {
+                        MainRuntime.sendRuntimeError("Can not find target function: "+func,line);
+                        System.exit(1);
+                    }
                     continue;
                 }
                 else if (token.startsWith("<") && token.endsWith(">"))

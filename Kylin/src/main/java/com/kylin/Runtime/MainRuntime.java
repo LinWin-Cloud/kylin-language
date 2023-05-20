@@ -46,7 +46,7 @@ public class MainRuntime {
             if (isFunction && source_code.startsWith("return "))
             {
                 try{
-                    this.result = source_code.substring(7);
+                    this.result = Expression.getExString(source_code.substring(7) , codeLine , this);
                     continue;
                 }catch (Exception exception){
                     MainRuntime.sendSyntaxError(source_code,codeLine);
