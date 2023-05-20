@@ -25,8 +25,11 @@ public class MainRuntime {
     public int codeLine = 0;
     public boolean isFunction = false;
     public String result;
+    public String exceptionCode;
+    public String exceptionMessage;
     public boolean isException = false;
     private boolean inTry = false;
+    public ArrayList<String> CatchCode;
 
     public MainRuntime(String name)
     {
@@ -49,11 +52,7 @@ public class MainRuntime {
                     MainRuntime.sendSyntaxError(source_code,codeLine);
                 }
             }
-            try {
-                this.exec(source_code,"");
-            }catch (Exception exception){
-                MainRuntime.sendRuntimeError(exception.getMessage(),codeLine);
-            }
+            this.exec(source_code,"");
         }
     }
     public void exec(String source_code,String new_var) throws Exception {
@@ -205,11 +204,8 @@ public class MainRuntime {
                         String catchValue = TryCatchCode.substring(
                                 TryCatchCode.indexOf("(")+1,
                                 TryCatchCode.lastIndexOf(")")).trim();
-                        Value value = new Value();
-                        value.setName(catchValue+".message");
-                        value.setContent("kylin.runtime.exception");
-                        value.setType("string");
-                        value.setPublic(false);
+                        exceptionRuntime.exceptionMessage = "kylin.runtime.exception";
+                        exceptionRuntime.exceptionCode = catchValue;
                         codeLine = i + 1;
                         break;
                     }
@@ -227,6 +223,7 @@ public class MainRuntime {
                 exceptionRuntime.code = exceptionCode;
                 exceptionRuntime.ValueMap.putAll(this.ValueMap);
                 exceptionRuntime.execFunctionHashMap.putAll(this.execFunctionHashMap);
+                exceptionRuntime.CatchCode = CatchCode;
                 try {
                     exceptionRuntime.run();
                 }
