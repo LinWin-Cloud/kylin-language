@@ -45,7 +45,7 @@ public class ExecFunction {
     {
         runtime = new MainRuntime(null);
     }
-    public String RunFunction() {
+    public String RunFunction() throws Exception {
         try
         {
             runtime.name = name;

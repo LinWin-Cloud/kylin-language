@@ -12,12 +12,23 @@ public class BaseRuntime {
     public String run(String code , int line , MainRuntime mainRuntime)
     throws Exception{
         //System.out.println(code);
+        String subContent = code.substring(
+                code.indexOf("(") + 1,
+                code.lastIndexOf(")"));
         if (code.startsWith("write")) {
-
+            String[] getInput = getFunctionInput(code,line,mainRuntime);
+            String path = getInput[0];
+            String content = getInput[1];
+            String isW = getInput[2];
+            FileWriter fileWriter = new FileWriter(path , isW.toLowerCase().equals("true"));
+            fileWriter.write(content);
+            fileWriter.flush();
+            fileWriter.close();
+            return code;
         }
         try
         {
-            String subContent = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")"));
+
             if (code.startsWith("out")) {
                 String print = subContent;
                 print = Expression.getExString(print,line,mainRuntime);

@@ -249,26 +249,20 @@ public class MainRuntime {
         return;
     }
     private boolean isUseFunction(String source_code) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }
         try {
             String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
             //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
             if (this.execFunctionHashMap.containsKey(UseFunction))
             {
-                String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
-                ListExpression listExpression = new ListExpression();
-                String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
-                ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
+                if (isException) {
 
-                for (int i = 0 ; i < execFunction.inputList.length ;i++)
-                {
-                    Value value = new Value();
-                    value.setPublic(false);
-                    value.setName(execFunction.inputList[i]);
-                    value.setContent(inputContent[i]);
-                    execFunction.input.put(execFunction.inputList[i] , value);
                 }
-                //System.out.println("hello world");
-                execFunction.RunFunction();
                 return true;
             }
             else {
@@ -278,6 +272,23 @@ public class MainRuntime {
         catch (Exception exception) {
             return false;
         }
+    }
+    private void FuncRun(String source_code) {
+        String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
+        ListExpression listExpression = new ListExpression();
+        String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
+        ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
+
+        for (int i = 0 ; i < execFunction.inputList.length ;i++)
+        {
+            Value value = new Value();
+            value.setPublic(false);
+            value.setName(execFunction.inputList[i]);
+            value.setContent(inputContent[i]);
+            execFunction.input.put(execFunction.inputList[i] , value);
+        }
+        //System.out.println("hello world");
+        execFunction.RunFunction();
     }
     public String getResult() {
         if (isFunction) {
