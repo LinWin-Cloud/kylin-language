@@ -32,7 +32,7 @@ public class MainRuntime {
     {
         Main.runtimeMap.put(name , this);
     }
-    public void run(){
+    public void run() throws Exception{
         int size = this.code.size();
         //System.out.println(this.name+"    "+this.execFunctionHashMap.keySet());
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
@@ -249,20 +249,12 @@ public class MainRuntime {
         return;
     }
     private boolean isUseFunction(String source_code) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }
         try {
             String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
             //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
             if (this.execFunctionHashMap.containsKey(UseFunction))
             {
-                if (isException) {
-
-                }
+                FuncRun(source_code , UseFunction);
                 return true;
             }
             else {
@@ -273,7 +265,7 @@ public class MainRuntime {
             return false;
         }
     }
-    private void FuncRun(String source_code) {
+    private void FuncRun(String source_code , String UseFunction) throws Exception {
         String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
         ListExpression listExpression = new ListExpression();
         String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
