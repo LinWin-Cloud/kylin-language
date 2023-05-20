@@ -240,38 +240,44 @@ public class MainRuntime {
             }
         }
         else {
-            try {
-                String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
-                //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
-                if (this.execFunctionHashMap.containsKey(UseFunction))
-                {
-                    String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
-                    ListExpression listExpression = new ListExpression();
-                    String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
-                    ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
-
-                    for (int i = 0 ; i < execFunction.inputList.length ;i++)
-                    {
-                        Value value = new Value();
-                        value.setPublic(false);
-                        value.setName(execFunction.inputList[i]);
-                        value.setContent(inputContent[i]);
-                        execFunction.input.put(execFunction.inputList[i] , value);
-                    }
-                    //System.out.println("hello world");
-                    execFunction.RunFunction();
-                    return;
-                }
-            }
-            catch (Exception exception) {
+            if (!isUseFunction(source_code)) {
                 BaseRuntime baseRuntime = new BaseRuntime();
-                baseRuntime.run(source_code , codeLine , this);
-                return;
+                baseRuntime.run(source_code, codeLine, this);
             }
-            BaseRuntime baseRuntime = new BaseRuntime();
-            baseRuntime.run(source_code , codeLine , this);
+            return;
         }
         return;
+    }
+    private boolean isUseFunction(String source_code) {
+        try {
+            String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
+            //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
+            if (this.execFunctionHashMap.containsKey(UseFunction))
+            {
+                String getInput = source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")"));
+                ListExpression listExpression = new ListExpression();
+                String[] inputContent = listExpression.get_list_expression(getInput,codeLine , this);
+                ExecFunction execFunction = this.execFunctionHashMap.get(UseFunction);
+
+                for (int i = 0 ; i < execFunction.inputList.length ;i++)
+                {
+                    Value value = new Value();
+                    value.setPublic(false);
+                    value.setName(execFunction.inputList[i]);
+                    value.setContent(inputContent[i]);
+                    execFunction.input.put(execFunction.inputList[i] , value);
+                }
+                //System.out.println("hello world");
+                execFunction.RunFunction();
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception exception) {
+            return false;
+        }
     }
     public String getResult() {
         if (isFunction) {

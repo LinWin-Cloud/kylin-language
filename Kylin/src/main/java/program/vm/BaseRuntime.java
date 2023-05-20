@@ -44,6 +44,10 @@ public class BaseRuntime {
                 reader.close();
                 return String.valueOf(process.waitFor());
             }
+            if (code.equals("gc()")) {
+                System.gc();
+                return "Run gc()";
+            }
             else {
                 MainRuntime.sendRuntimeError("[Unknown] "+code , line+1);
                 System.exit(1);

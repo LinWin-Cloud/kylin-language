@@ -54,13 +54,8 @@ public class ExecFunction {
             runtime.code = new ArrayList<>(this.code);
             runtime.name = this.name;
             runtime.ValueMap = this.input;
-            for (Value value : mainRuntime.ValueMap.values()) {
-                runtime.ValueMap.put(value.getName() , value);
-            }
-            for (ExecFunction function: mainRuntime.execFunctionHashMap.values())
-            {
-                runtime.execFunctionHashMap.put(function.getName() , function);
-            }
+            runtime.ValueMap.putAll(mainRuntime.ValueMap);
+            runtime.execFunctionHashMap.putAll(mainRuntime.execFunctionHashMap);
             runtime.run();
             return runtime.result;
         }catch (Exception exception) {
