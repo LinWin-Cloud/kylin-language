@@ -1,5 +1,5 @@
 try
-    write("/1231231231223/1","hello world" , true)
+    write("/sdfsdafds/1.tx1231232321t","hello world" , true)
 catch(e)
     out(e.message)
 end_catch
