@@ -38,7 +38,6 @@ public class MainRuntime {
     }
     public void run() throws Exception{
         int size = this.code.size();
-        //System.out.println(this.name+"    "+this.execFunctionHashMap.keySet());
         for (codeLine = 0 ; codeLine < size ; codeLine++) {
             String source_code = this.code.get(codeLine).trim();
             if (source_code.equals("")) {
@@ -58,9 +57,7 @@ public class MainRuntime {
     }
     public void exec(String source_code,String new_var) throws Exception {
         String[] words = source_code.split(" ");
-        String e = this.ImportantCharset.get(words[0].trim());
-        //System.out.println(this.ImportantCharset);
-        //System.out.println(source_code);
+        String e = ImportantCharset.get(words[0].trim());
 
         if (words[0].startsWith("//")) {
             return;
@@ -70,7 +67,7 @@ public class MainRuntime {
             {
                 String key = words[1];
                 String value = words[2];
-                this.ImportantCharset.put(value,key);
+                ImportantCharset.put(value,key);
                 return;
             }
             catch (Exception exception){
@@ -85,7 +82,7 @@ public class MainRuntime {
                 if (value.startsWith("[") && value.endsWith("]"))
                 {
                     ListExpression listExpression = new ListExpression();
-                    listExpression.def_list_expression(name, value.substring(1, value.length() -1) , codeLine , this);
+                    listExpression.def_list_expression(name, value.substring(1, value.length() -1) , Main.runtimeMap.get(name).codeLine , this);
                 }
                 else{
                     value = Expression.getExString(value , codeLine , this);
@@ -104,7 +101,7 @@ public class MainRuntime {
         }
         if (words[0].equals("javascript:"))
         {
-            BaseLib.javascript(this.code , codeLine,this);
+            BaseLib.javascript(code , codeLine,this);
             return;
         }
         if (source_code.startsWith("#head")) {
@@ -135,7 +132,7 @@ public class MainRuntime {
                                     this.ImportantCharset.put(value,key);
                                 }
                                 catch (Exception exception){
-                                    MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
+                                    MainRuntime.sendSyntaxError(exception.getMessage() ,Main.runtimeMap.get(name).codeLine);
                                 }
                             }
                         }
@@ -169,7 +166,8 @@ public class MainRuntime {
                 execFunction.inputList = input;
                 execFunction.setName(FunctionName);
                 execFunction.setMainRuntime(this);
-                execFunction.runtime.ValueMap.putAll(this.ValueMap);
+                execFunction.lastRuntime = this.name;
+                execFunction.setMainRuntime(this);
 
                 List<String> codeList = new ArrayList<>();
                 for (int i = codeLine + 1 ; i < this.code.size() ;i++)

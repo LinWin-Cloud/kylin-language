@@ -50,12 +50,7 @@ public class Expression
                 {
 
                     String func = token.substring(0,token.indexOf("(")).trim();
-                    if (
-                            Main.runtimeMap.get(
-                                    mainRuntime.PublicRuntime)
-                                    .execFunctionHashMap.containsKey(
-                                            func
-                                    ))
+                    if (mainRuntime.execFunctionHashMap.containsKey(func))
                     {
                         String input = token.substring(
                                 token.indexOf("(")+1,
@@ -87,7 +82,6 @@ public class Expression
                 }
                 else if (token.startsWith("<") && token.endsWith(">"))
                 {
-
                     continue;
                 }
                 else {
