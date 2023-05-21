@@ -36,6 +36,11 @@ public class Expression
                     stringBuffer.append(mainRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
+                else if (mainRuntime.PublicRuntime != null && mainRuntime.PublicRuntime.ValueMap.containsKey(token))
+                {
+                    stringBuffer.append(mainRuntime.PublicRuntime.ValueMap.get(token).getContent());
+                    continue;
+                }
                 else if (token.startsWith("\"")) {
                     isStr = true;
                     stringBuffer.append(token.substring(1));
@@ -50,29 +55,29 @@ public class Expression
                 {
 
                     String func = token.substring(0,token.indexOf("(")).trim();
+
                     if (mainRuntime.execFunctionHashMap.containsKey(func))
                     {
-                        String input = token.substring(
-                                token.indexOf("(")+1,
-                                token.lastIndexOf(")")).trim();
-                        String[] inputToken = new ListExpression()
-                                .get_list_expression(
-                                        input,
-                                        line,
-                                        mainRuntime
-                                );
-                        ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
-                        for (int j = 0 ; j < execFunction.inputList.length ; j++) {
-                            //System.out.println(execFunction.inputList[j]);
-                            Value value = new Value();
-                            value.setContent(inputToken[j]);
-                            value.setName(execFunction.inputList[j]);
-                            value.setPublic(false);
-                            value.setType("string");
-                            execFunction.input.put(value.getName() , value);
-                        }
-                        String result = execFunction.RunFunction();
-                        stringBuffer.append(result);
+                        Expression.runFunc(
+                                token,
+                                line,
+                                mainRuntime,
+                                func,
+                                stringBuffer
+                        );
+                        continue;
+                    }
+                    else if (mainRuntime.isFunction &&
+                            mainRuntime.PublicRuntime.execFunctionHashMap.containsKey(func))
+                    {
+                        Expression.runFunc(
+                                token,
+                                line,
+                                mainRuntime.PublicRuntime,
+                                func,
+                                stringBuffer
+                        );
+                        continue;
                     }
                     else {
                         MainRuntime.sendRuntimeError("Can not find target function: "+func,line);
@@ -131,6 +136,35 @@ public class Expression
             throw new IllegalArgumentException("Double value has precision loss");
         }
         return (int) d;
+    }
+    private static void runFunc(String token,
+                                int line,
+                                MainRuntime mainRuntime,
+                                String func,
+                                StringBuffer stringBuffer)
+    throws Exception
+    {
+        String input = token.substring(
+                token.indexOf("(")+1,
+                token.lastIndexOf(")")).trim();
+        String[] inputToken = new ListExpression()
+                .get_list_expression(
+                        input,
+                        line,
+                        mainRuntime
+                );
+        ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
+        for (int j = 0 ; j < execFunction.inputList.length ; j++) {
+            //System.out.println(execFunction.inputList[j]);
+            Value value = new Value();
+            value.setContent(inputToken[j]);
+            value.setName(execFunction.inputList[j]);
+            value.setPublic(false);
+            value.setType("string");
+            execFunction.input.put(value.getName() , value);
+        }
+        String result = execFunction.RunFunction();
+        stringBuffer.append(result);
     }
 }
 class Calculator {

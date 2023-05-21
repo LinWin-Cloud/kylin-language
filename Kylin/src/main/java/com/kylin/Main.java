@@ -14,7 +14,6 @@ import java.util.Scanner;
 
 public class Main {
     public static File resource;
-    public static HashMap<String , MainRuntime> runtimeMap = new HashMap<>();
 
     public static void main(String[] args)
     {

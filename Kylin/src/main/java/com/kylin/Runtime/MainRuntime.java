@@ -20,7 +20,7 @@ public class MainRuntime {
     public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
     public HashMap<String, String> ImportantCharset = new HashMap<>();
     public HashMap<String , Value> ValueMap = new HashMap<>();
-    public String PublicRuntime;
+    public MainRuntime PublicRuntime;
     public String name;
     public ArrayList<String> code = new ArrayList<>();
     public int codeLine = 0;
@@ -34,7 +34,6 @@ public class MainRuntime {
 
     public MainRuntime(String name)
     {
-        Main.runtimeMap.put(name , this);
     }
     public void run() throws Exception{
         int size = this.code.size();
@@ -82,7 +81,7 @@ public class MainRuntime {
                 if (value.startsWith("[") && value.endsWith("]"))
                 {
                     ListExpression listExpression = new ListExpression();
-                    listExpression.def_list_expression(name, value.substring(1, value.length() -1) , Main.runtimeMap.get(name).codeLine , this);
+                    listExpression.def_list_expression(name, value.substring(1, value.length() -1) , codeLine , this);
                 }
                 else{
                     value = Expression.getExString(value , codeLine , this);
@@ -132,7 +131,7 @@ public class MainRuntime {
                                     this.ImportantCharset.put(value,key);
                                 }
                                 catch (Exception exception){
-                                    MainRuntime.sendSyntaxError(exception.getMessage() ,Main.runtimeMap.get(name).codeLine);
+                                    MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
                                 }
                             }
                         }
