@@ -1,5 +1,12 @@
-func math(a,b) -> public
-    return <a + b>
+var c = 1
+
+func a() -> public
+    return <1 + 1>
 end_func
 
-out(math(1,2))
+func main() -> public
+    var c = a()
+    out(c)
+end_func
+main()
+out(c)
