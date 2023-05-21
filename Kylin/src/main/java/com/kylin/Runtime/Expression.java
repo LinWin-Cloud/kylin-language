@@ -53,15 +53,16 @@ public class Expression
                         String input = token.substring(token.indexOf("(")+1,token.lastIndexOf(")")).trim();
                         String[] inputToken = new ListExpression().get_list_expression(input , line, mainRuntime);
                         ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
-                        execFunction.inputList = inputToken;
-                        String result = execFunction.RunFunction();
                         for (int j = 0 ; j < execFunction.inputList.length ; j++) {
+                            //System.out.println(execFunction.inputList[j]);
                             Value value = new Value();
                             value.setContent(inputToken[j]);
                             value.setName(execFunction.inputList[j]);
-                            value.setPublic();
+                            value.setPublic(false);
+                            value.setType("string");
                             execFunction.input.put(value.getName() , value);
                         }
+                        String result = execFunction.RunFunction();
                         stringBuffer.append(result);
                     }
                     else {
