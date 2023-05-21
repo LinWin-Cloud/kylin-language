@@ -1,5 +1,6 @@
 package com.kylin.Runtime;
 
+import com.kylin.Main;
 import program.value.ExecFunction;
 import program.value.Value;
 
@@ -47,11 +48,24 @@ public class Expression
                 }
                 else if (token.contains("(") && token.endsWith(")"))
                 {
+
                     String func = token.substring(0,token.indexOf("(")).trim();
-                    if (mainRuntime.execFunctionHashMap.containsKey(func))
+                    if (
+                            Main.runtimeMap.get(
+                                    mainRuntime.PublicRuntime)
+                                    .execFunctionHashMap.containsKey(
+                                            func
+                                    ))
                     {
-                        String input = token.substring(token.indexOf("(")+1,token.lastIndexOf(")")).trim();
-                        String[] inputToken = new ListExpression().get_list_expression(input , line, mainRuntime);
+                        String input = token.substring(
+                                token.indexOf("(")+1,
+                                token.lastIndexOf(")")).trim();
+                        String[] inputToken = new ListExpression()
+                                .get_list_expression(
+                                        input,
+                                        line,
+                                        mainRuntime
+                                );
                         ExecFunction execFunction = mainRuntime.execFunctionHashMap.get(func);
                         for (int j = 0 ; j < execFunction.inputList.length ; j++) {
                             //System.out.println(execFunction.inputList[j]);

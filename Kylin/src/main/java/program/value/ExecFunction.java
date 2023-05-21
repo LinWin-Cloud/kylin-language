@@ -53,9 +53,8 @@ public class ExecFunction {
             runtime.isFunction = true;
             runtime.code = new ArrayList<>(this.code);
             runtime.name = this.name;
+            runtime.PublicRuntime = this.lastRuntime;
             runtime.ValueMap.putAll(this.input);
-            runtime.ValueMap.putAll(mainRuntime.ValueMap);
-            runtime.execFunctionHashMap.putAll(mainRuntime.execFunctionHashMap);
             runtime.run();
             return runtime.getResult();
         }catch (Exception exception) {

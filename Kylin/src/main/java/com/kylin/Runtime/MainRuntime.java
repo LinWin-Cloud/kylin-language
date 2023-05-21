@@ -20,6 +20,7 @@ public class MainRuntime {
     public HashMap<String, CopyOnWriteArrayList> ListMap = new HashMap<>();
     public HashMap<String, String> ImportantCharset = new HashMap<>();
     public HashMap<String , Value> ValueMap = new HashMap<>();
+    public String PublicRuntime;
     public String name;
     public ArrayList<String> code = new ArrayList<>();
     public int codeLine = 0;
