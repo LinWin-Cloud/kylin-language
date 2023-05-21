@@ -1,3 +1,5 @@
 func math(a,b) -> public
     return <a + b>
 end_func
+
+out(math(1,2))
