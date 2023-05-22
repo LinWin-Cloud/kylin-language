@@ -103,6 +103,11 @@ public class MainRuntime {
             BaseLib.javascript(code , codeLine,this);
             return;
         }
+        if (words[0].equals("import")) {
+            ImportFunction importFunction = new ImportFunction();
+            importFunction.Import(this , words[1]);
+            return;
+        }
         if (source_code.startsWith("#head")) {
             try {
                 String head = source_code.substring(5).trim();

@@ -1,12 +1,2 @@
-var c = 1
+import math
 
-func a() -> public
-    return <1 + 1>
-end_func
-
-func main() -> public
-    var c = a()
-    out(c)
-end_func
-main()
-out(c)
