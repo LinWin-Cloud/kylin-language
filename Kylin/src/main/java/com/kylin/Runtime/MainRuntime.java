@@ -8,8 +8,6 @@ import program.value.Value;
 import program.vm.BaseLib;
 import program.vm.BaseRuntime;
 
-
-import javax.script.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -313,13 +311,6 @@ public class MainRuntime {
         runtimeError.setTime();
         runtimeError.setMessage(message);
         System.out.println(runtimeError.getError());
-    }
-    private String MakeTryCatch(int line,TryCatch tryCatch) {
-        ArrayList<String> exceptionCode = new ArrayList<>();
-        ExecFunction execFunction = new ExecFunction();
-        execFunction.setName(name);
-        execFunction.setMainRuntime(this);
-        return name;
     }
 }
 class TryCatch {
