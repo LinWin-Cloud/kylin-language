@@ -1,3 +1,7 @@
-import util.math
+func a() -> public
+    return "hello world"
+end_func
 
-out(math.add(1 , 1))
+var a = [a() , "2"]
+
+out(a[3])
