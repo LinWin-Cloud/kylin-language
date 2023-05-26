@@ -1,7 +1,4 @@
-func a() -> public
-    return "hello world"
-end_func
+import util.math
 
-var a = [a() , "2"]
-
-out(a[3])
+var a = 1
+fix a = 2
