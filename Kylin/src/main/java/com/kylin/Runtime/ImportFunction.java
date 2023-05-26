@@ -37,6 +37,9 @@ public class ImportFunction {
             importMainRuntime.run();
             for (ExecFunction execFunction : importMainRuntime.execFunctionHashMap.values())
             {
+                if (!execFunction.isPublic()) {
+                    continue;
+                }
                 mainRuntime.execFunctionHashMap.put(this.getLibName(importFile.getName())+"."+execFunction.getName() , execFunction);
             }
         }

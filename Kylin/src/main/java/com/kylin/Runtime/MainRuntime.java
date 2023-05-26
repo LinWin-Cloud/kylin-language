@@ -84,8 +84,8 @@ public class MainRuntime {
                     v.setName(name);
                     v.setContent(value);
                     v.setPublic(true);
+                    v.setType(Type.GetType(value));
                     ValueMap.put(name,v);
-                    return;
                 }
                 else{
                     value = Expression.getExString(value , codeLine , this);
@@ -93,9 +93,10 @@ public class MainRuntime {
                     v.setName(name);
                     v.setContent(value);
                     v.setPublic(true);
+                    v.setType(Type.GetType(value));
                     ValueMap.put(name,v);
-                    return;
                 }
+                return;
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",codeLine);
@@ -159,8 +160,6 @@ public class MainRuntime {
         if (words[0].equals("func") || (e != null && e.equals("func")))
         {
             try {
-                String regex = "\\s+(?=[^()]*\\))|(?<=\\))(?=\\S)";
-                //String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
                 String[] splitFunctionTitle = this.splitFunctionTitle(source_code);
                 //System.out.println(Arrays.toString(splitFunctionTitle));
                 String functionName_content = splitFunctionTitle[1].replace(" ","");
