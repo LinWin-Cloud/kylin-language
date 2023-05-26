@@ -1,6 +1,8 @@
 // Author: LinWinSoft
 // https://github.com/LinWin-Cloud/
 
+var a = 1
+
 func add(x,y) -> public
     // Add 'x' and 'y'
     return <x + y>
