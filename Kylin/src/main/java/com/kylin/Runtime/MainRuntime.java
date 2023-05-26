@@ -7,7 +7,9 @@ import program.value.ExecFunction;
 import program.value.Value;
 import program.vm.BaseLib;
 import program.vm.BaseRuntime;
+import program.vm.Fix;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -71,6 +73,10 @@ public class MainRuntime {
                 MainRuntime.sendSyntaxError(exception.getMessage() ,codeLine);
             }
         }
+        if (words[0].equals("fix") || (e != null && e.equals("fix"))) {
+            Fix.FixValue(source_code, this , codeLine);
+            return;
+        }
         if (words[0].equals("var") || (e != null && e.equals("var"))) {
             try {
                 String name = words[1];
@@ -99,7 +105,7 @@ public class MainRuntime {
                 return;
             }
             catch (Exception exception) {
-                sendRuntimeError("Define integer numeric errors",codeLine);
+                sendRuntimeError("Define numeric errors",codeLine);
             }
         }
         if (words[0].equals("javascript:"))
@@ -170,13 +176,11 @@ public class MainRuntime {
                 String FunctionName =splitFunctionTitle[0];
 
                 ExecFunction execFunction = new ExecFunction();
-                execFunction.setMainRuntime(this);
                 execFunction.setPublic(isPublic);
                 execFunction.inputList = input;
                 execFunction.setName(FunctionName);
                 execFunction.setMainRuntime(this);
                 execFunction.lastRuntime = this.name;
-                execFunction.setMainRuntime(this);
 
                 List<String> codeList = new ArrayList<>();
                 for (int i = codeLine + 1 ; i < this.code.size() ;i++)
@@ -189,6 +193,7 @@ public class MainRuntime {
                     codeList.add(code);
                 }
                 execFunction.code = codeList;
+                execFunction.setMainRuntime(this);
                 this.execFunctionHashMap.put(FunctionName , execFunction);
                 return;
             }
@@ -265,7 +270,13 @@ public class MainRuntime {
         try {
             String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
             //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
+            System.out.println(isFunction+" " + PublicRuntime.execFunctionHashMap.containsKey(UseFunction));
             if (this.execFunctionHashMap.containsKey(UseFunction))
+            {
+                FuncRun(source_code , UseFunction);
+                return true;
+            }
+            else if (this.isFunction && this.PublicRuntime.execFunctionHashMap.containsKey(UseFunction))
             {
                 FuncRun(source_code , UseFunction);
                 return true;
