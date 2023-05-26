@@ -28,5 +28,16 @@ f main = (in)
 end_f
 
 ```
+2. 命令式
+```
+var a = [1, 2 , 3]
+a.add(4)
 
+```
+3. 声明式
+```
+
+var a = ky.sh("select * from /home/")
+
+```
 
