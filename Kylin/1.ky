@@ -1,2 +1,3 @@
-import math
+import util.math
 
+out(math.add(1 , 1))

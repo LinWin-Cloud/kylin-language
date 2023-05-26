@@ -1,5 +1,7 @@
 package com.kylin.Runtime;
 
+import program.value.ExecFunction;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +11,7 @@ public class ImportFunction {
     public String Lib = "../lib/";
 
     public void Import(MainRuntime mainRuntime , String lib) throws Exception {
-        File importFile = new File(this.Lib + lib + ".ky");
+        File importFile = new File(this.Lib + "/" + lib.replace(".","/") + ".ky");
         if (!importFile.exists() || !importFile.isFile()) {
             throw new Exception("Can not find Module: "+lib);
         }
@@ -32,7 +34,18 @@ public class ImportFunction {
             }
             bufferedReader.close();
             importMainRuntime.code = code;
-            
+            importMainRuntime.run();
+            for (ExecFunction execFunction : importMainRuntime.execFunctionHashMap.values())
+            {
+                mainRuntime.execFunctionHashMap.put(this.getLibName(importFile.getName())+"."+execFunction.getName() , execFunction);
+            }
+        }
+    }
+    private String getLibName(String str) {
+        try {
+            return str.substring(0 , str.lastIndexOf("."));
+        }catch (Exception exception) {
+            return str;
         }
     }
 }

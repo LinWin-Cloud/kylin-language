@@ -154,13 +154,16 @@ public class MainRuntime {
         if (words[0].equals("func") || (e != null && e.equals("func")))
         {
             try {
-                String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
-                String[] splitFunctionTitle = source_code.split(regex);
+                String regex = "\\s+(?=[^()]*\\))|(?<=\\))(?=\\S)";
+                //String regex = "\\s+|(?<=\\()\".*\"(?=\\))|(?<=\\()\".*\",\\s*\".*\"(?=\\))|\\s*->\\s*";
+                String[] splitFunctionTitle = this.splitFunctionTitle(source_code);
+                //System.out.println(Arrays.toString(splitFunctionTitle));
                 String functionName_content = splitFunctionTitle[1].replace(" ","");
-                boolean isPublic = splitFunctionTitle[3].toLowerCase().equals("public");
+                boolean isPublic = splitFunctionTitle[2].toLowerCase().equals("public");
 
-                String[] input = functionName_content.substring(functionName_content.indexOf("(")+1,functionName_content.lastIndexOf(")")).split(",");
-                String FunctionName = functionName_content.substring(0,functionName_content.indexOf("(")).replace(" ","");
+                //System.out.println(functionName_content);
+                String[] input = splitFunctionTitle[1].replace(" ","").split(",");
+                String FunctionName =splitFunctionTitle[0];
 
                 ExecFunction execFunction = new ExecFunction();
                 execFunction.setMainRuntime(this);
@@ -186,6 +189,7 @@ public class MainRuntime {
                 return;
             }
             catch (Exception exception){
+                exception.printStackTrace();
                 MainRuntime.sendSyntaxError(source_code,codeLine);
             }
         }
@@ -294,6 +298,13 @@ public class MainRuntime {
         else {
             return "";
         }
+    }
+    public String[] splitFunctionTitle(String funcTitle) throws Exception {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        stringArrayList.add(funcTitle.substring(funcTitle.indexOf(" ")+1,funcTitle.indexOf("(")).trim());
+        stringArrayList.add(funcTitle.substring(funcTitle.indexOf("(")+1 , funcTitle.lastIndexOf(")")).trim());
+        stringArrayList.add(funcTitle.substring(funcTitle.lastIndexOf("->")+2).trim());
+        return stringArrayList.toArray(new String[stringArrayList.size()]);
     }
     public static void sendSyntaxError(String message,int line) {
         SyntaxError syntaxError = new SyntaxError();

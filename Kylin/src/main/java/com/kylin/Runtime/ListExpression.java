@@ -46,6 +46,7 @@ public class ListExpression {
         }
         catch (Exception exception)
         {
+
             MainRuntime.sendSyntaxError(exception.getMessage() , line);
             return null;
         }
