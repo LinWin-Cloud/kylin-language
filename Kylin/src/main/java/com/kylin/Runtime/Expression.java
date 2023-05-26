@@ -41,6 +41,22 @@ public class Expression
                     stringBuffer.append(mainRuntime.PublicRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
+                else if (token.contains("[") && token.endsWith("]")) {
+                    int index = Integer.parseInt(token.substring(token.indexOf("[") +1 , token.lastIndexOf("]")).trim());
+                    String ListName = token.substring(0,token.indexOf("[")).trim();
+                    if (mainRuntime.ListMap.containsKey(ListName)) {
+                        stringBuffer.append(mainRuntime.ListMap.get(ListName).get(index));
+                        continue;
+                    }
+                    else if (mainRuntime.PublicRuntime != null && mainRuntime.PublicRuntime.ListMap.containsKey(ListName))
+                    {
+                        stringBuffer.append(mainRuntime.PublicRuntime.ListMap.get(ListName).get(index));
+                        continue;
+                    }
+                    else {
+                        throw new Exception("ERROR: "+ListName);
+                    }
+                }
                 else if (token.startsWith("\"")) {
                     isStr = true;
                     stringBuffer.append(token.substring(1));

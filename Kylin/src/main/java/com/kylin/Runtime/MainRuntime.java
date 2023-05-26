@@ -80,17 +80,22 @@ public class MainRuntime {
                 {
                     ListExpression listExpression = new ListExpression();
                     listExpression.def_list_expression(name, value.substring(1, value.length() -1) , codeLine , this);
+                    Value v = new Value();
+                    v.setName(name);
+                    v.setContent(value);
+                    v.setPublic(true);
+                    ValueMap.put(name,v);
+                    return;
                 }
                 else{
                     value = Expression.getExString(value , codeLine , this);
+                    Value v = new Value();
+                    v.setName(name);
+                    v.setContent(value);
+                    v.setPublic(true);
+                    ValueMap.put(name,v);
+                    return;
                 }
-                Value v = new Value();
-                v.setName(name);
-                v.setContent(value);
-                v.setPublic(true);
-                ValueMap.put(name,v);
-                //System.out.println(name+" "+value);
-                return;
             }
             catch (Exception exception) {
                 sendRuntimeError("Define integer numeric errors",codeLine);

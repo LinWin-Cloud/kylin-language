@@ -15,10 +15,15 @@ public class ListExpression {
         try
         {
             String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-            CopyOnWriteArrayList<String> copyOnWriteArrayList = new CopyOnWriteArrayList<>(Arrays.asList(tokens));
-            if (mainRuntime.ValueMap.containsKey(name))
+            CopyOnWriteArrayList<String> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+            for (String i : tokens)
             {
-                MainRuntime.sendSyntaxError("Value: '"+name+"' was Defined.",line);
+                i = i.trim();
+                if (mainRuntime.ValueMap.containsKey(name))
+                {
+                    MainRuntime.sendSyntaxError("Value: '"+name+"' was Defined.",line);
+                }
+                copyOnWriteArrayList.add(Expression.getExString(i , line , mainRuntime));
             }
             mainRuntime.ListMap.put(name , copyOnWriteArrayList);
         }
@@ -35,11 +40,6 @@ public class ListExpression {
 
             for (String i : token) {
                 i = i .trim();
-                if (mainRuntime.ValueMap.containsKey(i)) {
-                    String content = mainRuntime.ValueMap.get(i).getContent().toString();
-                    stringList.add(content);
-                    continue;
-                }
                 stringList.add(Expression.getExString(i , line, mainRuntime));
             }
             return stringList.toArray(new String[stringList.size()]);
