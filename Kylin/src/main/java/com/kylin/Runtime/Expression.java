@@ -42,7 +42,10 @@ public class Expression
                     continue;
                 }
                 else if (token.contains("[") && token.endsWith("]")) {
-                    int index = Integer.parseInt(token.substring(token.indexOf("[") +1 , token.lastIndexOf("]")).trim());
+                    int index = Integer.parseInt(
+                            Expression.getExString(token.substring(token.indexOf("[") +1,
+                                    token.lastIndexOf("]")).trim(),line,mainRuntime
+                            ));
                     String ListName = token.substring(0,token.indexOf("[")).trim();
                     if (mainRuntime.ListMap.containsKey(ListName)) {
                         stringBuffer.append(mainRuntime.ListMap.get(ListName).get(index));
@@ -143,7 +146,7 @@ public class Expression
         catch (Exception exception)
         {
             //exception.printStackTrace();
-            MainRuntime.sendSyntaxError(exception.getMessage() , line);
+            MainRuntime.sendSyntaxError(exception.getMessage().toString() , line);
             return null;
         }
     }
