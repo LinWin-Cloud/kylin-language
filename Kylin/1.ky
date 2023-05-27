@@ -1,13 +1,4 @@
 
-func 1() -> private
-    for (1000)
-        out("hello world")
-    end_for
-end_func
-
-for (1000)
-    out("1")
-    for (10)
-        out("hello world")
-    end_for
+for (10000)
+    out("hello world")
 end_for
