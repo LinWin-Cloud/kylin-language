@@ -1,4 +1,8 @@
 
-for (10000)
+var a = getTime()
+
+for (100000)
     out("hello world")
 end_for
+var b = getTime()
+out(<b - a> "ms")
