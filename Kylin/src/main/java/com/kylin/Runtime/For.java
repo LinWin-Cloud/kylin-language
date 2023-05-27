@@ -1,8 +1,10 @@
 package com.kylin.Runtime;
 
+import program.value.ExecFunction;
 import sun.awt.X11.XSystemTrayPeer;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +20,6 @@ public class For {
     private static final String FOR_PATTERN = "for \\((\\d+)\\)";
     private static final String END_FOR_PATTERN = "end_for";
     public void ForDo(String code, int start,MainRuntime mainRuntime)
-            throws Exception
     {
         /**
         String[] split = code.split("(for\\s*\\(\\s*\\d+\\s*\\))(.*?)(end_for)");
@@ -27,13 +28,18 @@ public class For {
             System.out.println("--------------------");
             System.out.println(i);
         }*/
-        String getOptimizer = new ForOptimizer().Optimizer(code,mainRuntime,ForNumber);
-        for (int i = 0 ; i < this.range ;i++)
-        {
-            for (String s : getOptimizer.split("\n"))
+        try {
+            String GetOptimizer = new ForOptimizer().Optimizer(code , mainRuntime ,start);
+            String[] ExecCode = GetOptimizer.split("\n");
+            for (int j = 0 ; j < range ;j++)
             {
-                mainRuntime.exec(s , "");
+                for (String i : ExecCode)
+                {
+                    mainRuntime.exec(i , "");
+                }
             }
+        }catch (Exception exception) {
+            MainRuntime.sendRuntimeError(exception.getMessage() , start);
         }
     }
 }

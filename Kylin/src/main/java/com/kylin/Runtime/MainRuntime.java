@@ -202,7 +202,6 @@ public class MainRuntime {
         {
             int range = Integer.parseInt(source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")")).trim());
             int number = 0;
-            int ForNumber = 0;
             StringBuffer stringBuffer = new StringBuffer();
             for (int i = codeLine ; i < this.code.size() ;i++)
             {
@@ -210,25 +209,21 @@ public class MainRuntime {
                 String ForCode = this.code.get(i);
                 if (ForCode.startsWith("for")) {
                     number += 1;
-                    ForNumber += 1;
-                    stringBuffer.append(ForCode);
-                    stringBuffer.append("\n");
                     continue;
                 }
                 else if (ForCode.startsWith("end_for")) {
                     number -= 1;
-                    stringBuffer.append(ForCode);
-                    stringBuffer.append("\n");
                     continue;
                 }
-                stringBuffer.append(ForCode);
-                stringBuffer.append("\n");
+                else {
+                    stringBuffer.append(ForCode);
+                    stringBuffer.append("\n");
+                }
             }
             if (number != 0) {
                 throw new Exception("Syntax Error");
             }
             For f = new For();
-            f.setForNumber(ForNumber);
             f.setRange(range);
             f.ForDo(stringBuffer.toString() , codeLine , this);
             return;
