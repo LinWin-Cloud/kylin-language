@@ -1,15 +1,13 @@
-//out("hello world")
 
-var a = 1
-func main() -> public
-    fix a = <a+1>
+func 1() -> private
+    for (1000)
+        out("hello world")
+    end_for
 end_func
-main()
-out(a)
 
 for (1000)
-    out(a)
-    for (1000)
+    out("1")
+    for (10)
         out("hello world")
     end_for
 end_for
