@@ -6,3 +6,10 @@ func main() -> public
 end_func
 main()
 out(a)
+
+for (1000)
+    out(a)
+    for (1000)
+        out("hello world")
+    end_for
+end_for
