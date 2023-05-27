@@ -213,7 +213,7 @@ public class MainRuntime {
                 }
                 else if (ForCode.startsWith("end_for")) {
                     number -= 1;
-                    continue;
+                    break;
                 }
                 else {
                     stringBuffer.append(ForCode);

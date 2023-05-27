@@ -1,6 +1,7 @@
 package com.kylin.Runtime;
 
 import com.kylin.Main;
+import program.Function.BaseFunction;
 import program.value.ExecFunction;
 import program.value.Value;
 
@@ -95,6 +96,11 @@ public class Expression
                                 func,
                                 stringBuffer
                         );
+                        continue;
+                    }
+                    else if (BaseFunction.isBaseFunction(func,token,mainRuntime))
+                    {
+                        stringBuffer.append(BaseFunction.getBaseFunctionResult(func,token,mainRuntime));
                         continue;
                     }
                     else {
