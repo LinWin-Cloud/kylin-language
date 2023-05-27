@@ -339,7 +339,3 @@ public class MainRuntime {
         System.out.println(runtimeError.getError());
     }
 }
-class TryCatch {
-    public ArrayList<String> catchCode = new ArrayList<>();
-    public ArrayList<ExecFunction> codeList = new ArrayList<>();
-}
