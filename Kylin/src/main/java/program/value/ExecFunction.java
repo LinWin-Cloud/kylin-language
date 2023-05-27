@@ -54,7 +54,8 @@ public class ExecFunction {
             runtime.name = this.name;
             runtime.PublicRuntime = mainRuntime;
             runtime.ValueMap.putAll(input);
-            //System.out.println(mainRuntime.execFunctionHashMap.keySet());
+            runtime.execFunctionHashMap.putAll(mainRuntime.execFunctionHashMap);
+            //System.out.println(runtime.execFunctionHashMap.keySet());
             runtime.run();
             return runtime.getResult();
         }catch (Exception exception) {

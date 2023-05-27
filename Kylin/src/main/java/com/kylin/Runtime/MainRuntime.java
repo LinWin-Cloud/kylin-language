@@ -177,6 +177,7 @@ public class MainRuntime {
 
                 ExecFunction execFunction = new ExecFunction();
                 execFunction.setPublic(isPublic);
+                execFunction.setMainRuntime(this);
                 execFunction.inputList = input;
                 execFunction.setName(FunctionName);
                 execFunction.setMainRuntime(this);
@@ -193,12 +194,11 @@ public class MainRuntime {
                     codeList.add(code);
                 }
                 execFunction.code = codeList;
-                execFunction.setMainRuntime(this);
                 this.execFunctionHashMap.put(FunctionName , execFunction);
                 return;
             }
             catch (Exception exception){
-                exception.printStackTrace();
+                //exception.printStackTrace();
                 MainRuntime.sendSyntaxError(source_code,codeLine);
             }
         }
@@ -269,8 +269,8 @@ public class MainRuntime {
     private boolean isUseFunction(String source_code) {
         try {
             String UseFunction = source_code.substring(0,source_code.indexOf("(")).trim();
-            //System.out.println(UseFunction+";"+this.execFunctionHashMap.containsKey(UseFunction));
-            System.out.println(isFunction+" " + PublicRuntime.execFunctionHashMap.containsKey(UseFunction));
+            //System.out.println(UseFunction+";");
+            //System.out.println(isFunction+" " + PublicRuntime.execFunctionHashMap.containsKey(UseFunction));
             if (this.execFunctionHashMap.containsKey(UseFunction))
             {
                 FuncRun(source_code , UseFunction);

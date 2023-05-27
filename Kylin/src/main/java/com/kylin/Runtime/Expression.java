@@ -4,12 +4,7 @@ import com.kylin.Main;
 import program.value.ExecFunction;
 import program.value.Value;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class Expression
 {
@@ -23,24 +18,28 @@ public class Expression
             StringBuffer stringBuffer = new StringBuffer();
             boolean isStr = false;
             String[] tokens = content.split("[<>]");
-
             for (int i = 0 ; i < tokens.length ;i++)
             {
                 String token = tokens[i].trim();
-                //System.out.println(token);
-                if (token.startsWith("\"") && token.endsWith("\"")) {
+                if (
+                        token.startsWith("\"") && token.endsWith("\"")
+                ) {
                     stringBuffer.append(token, 1, token.length() -1);
                 }
-                else if (mainRuntime.ValueMap.containsKey(token))
+
+                else if (
+                        mainRuntime.ValueMap.containsKey(token))
                 {
                     stringBuffer.append(mainRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
+
                 else if (mainRuntime.PublicRuntime != null && mainRuntime.PublicRuntime.ValueMap.containsKey(token))
                 {
                     stringBuffer.append(mainRuntime.PublicRuntime.ValueMap.get(token).getContent());
                     continue;
                 }
+
                 else if (token.contains("[") && token.endsWith("]")) {
                     int index = Integer.parseInt(
                             Expression.getExString(token.substring(token.indexOf("[") +1,
@@ -87,7 +86,7 @@ public class Expression
                         continue;
                     }
                     else if (mainRuntime.isFunction &&
-                            mainRuntime.PublicRuntime.execFunctionHashMap.containsKey(func))
+                            Objects.requireNonNull(mainRuntime.PublicRuntime).execFunctionHashMap.containsKey(func))
                     {
                         Expression.runFunc(
                                 token,
@@ -110,18 +109,18 @@ public class Expression
                 }
                 else {
                     try {
-                        //System.out.println(token);
-                        //Calculator calculator = new Calculator();
                         String input = token;
-                        //String input = token.substring(1, token.length() -1);
                         input = input.replaceAll("\\s+", "");
                         StringBuffer sBuffer = new StringBuffer();
                         for (String s : input.split("\\s*(?<=[\\+\\-\\*/])|(?=[\\+\\-\\*/])\\s*"))
                         {
                             if (mainRuntime.ValueMap.containsKey(s.trim()))
                             {
-                                //System.out.println(mainRuntime.ValueMap.get(s.trim()).getContent());
                                 sBuffer.append(mainRuntime.ValueMap.get(s.trim()).getContent());
+                                continue;
+                            }
+                            if (mainRuntime.PublicRuntime != null && mainRuntime.PublicRuntime.ValueMap.containsKey(s.trim())) {
+                                sBuffer.append(mainRuntime.PublicRuntime.ValueMap.get(s.trim()).getContent());
                                 continue;
                             }
                             sBuffer.append(s);
