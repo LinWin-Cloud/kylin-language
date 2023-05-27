@@ -36,7 +36,4 @@ public class For {
             }
         }
     }
-    private void parse(String code) {
-
-    }
 }
