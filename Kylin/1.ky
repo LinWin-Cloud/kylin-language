@@ -1,4 +1,8 @@
+import util.math
+
 func a() -> public
     out("hello world")
 end_func
 a()
+
+var b = ky.sh("select * from /")
