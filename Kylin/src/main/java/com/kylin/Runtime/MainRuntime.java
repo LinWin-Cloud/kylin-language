@@ -163,17 +163,16 @@ public class MainRuntime {
                 MainRuntime.sendSyntaxError(exception.getMessage() , codeLine);
             }
         }
-        if (words[0].equals("func") || (e != null && e.equals("func")))
-        {
+        if (words[0].equals("func") || (e != null && e.equals("func"))) {
             try {
                 String[] splitFunctionTitle = this.splitFunctionTitle(source_code);
                 //System.out.println(Arrays.toString(splitFunctionTitle));
-                String functionName_content = splitFunctionTitle[1].replace(" ","");
+                String functionName_content = splitFunctionTitle[1].replace(" ", "");
                 boolean isPublic = splitFunctionTitle[2].toLowerCase().equals("public");
 
                 //System.out.println(functionName_content);
-                String[] input = splitFunctionTitle[1].replace(" ","").split(",");
-                String FunctionName =splitFunctionTitle[0];
+                String[] input = splitFunctionTitle[1].replace(" ", "").split(",");
+                String FunctionName = splitFunctionTitle[0];
 
                 ExecFunction execFunction = new ExecFunction();
                 execFunction.setPublic(isPublic);
@@ -184,8 +183,7 @@ public class MainRuntime {
                 execFunction.lastRuntime = this.name;
 
                 List<String> codeList = new ArrayList<>();
-                for (int i = codeLine + 1 ; i < this.code.size() ;i++)
-                {
+                for (int i = codeLine + 1; i < this.code.size(); i++) {
                     String code = this.code.get(i).trim();
                     if (code.equals("end_func")) {
                         codeLine = i;
@@ -194,15 +192,42 @@ public class MainRuntime {
                     codeList.add(code);
                 }
                 execFunction.code = codeList;
-                this.execFunctionHashMap.put(FunctionName , execFunction);
+                this.execFunctionHashMap.put(FunctionName, execFunction);
                 return;
-            }
-            catch (Exception exception){
-                //exception.printStackTrace();
-                MainRuntime.sendSyntaxError(source_code,codeLine);
+            } catch (Exception exception) {
+                MainRuntime.sendSyntaxError(source_code, codeLine);
             }
         }
-        if (source_code.equals("try")) {
+        if (words[0].equals("for") || (e != null && e.equals("for")))
+        {
+            int range = Integer.parseInt(source_code.substring(source_code.indexOf("(")+1,source_code.lastIndexOf(")")).trim());
+            int number = 0;
+            ArrayList<String> stringArrayList = new ArrayList<>();
+            for (int i = codeLine ; i < this.code.size() ;i++)
+            {
+                this.codeLine = i;
+                String ForCode = this.code.get(i);
+                if (ForCode.startsWith("for")) {
+                    number += 1;
+                    stringArrayList.add(ForCode);
+                    continue;
+                }
+                else if (ForCode.startsWith("end_for")) {
+                    number -= 1;
+                    stringArrayList.add(ForCode);
+                    continue;
+                }
+                stringArrayList.add(ForCode);
+            }
+            if (number != 0) {
+                throw new Exception("Syntax Error");
+            }
+            For f = new For();
+            f.setRange(range);
+            f.ForDo(stringArrayList , codeLine , this);
+            return;
+        }
+        if (source_code.equals("try") || (e != null && e.equals("try"))) {
             try
             {
                 //System.out.println(this.execFunctionHashMap.keySet());
