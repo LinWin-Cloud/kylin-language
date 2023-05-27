@@ -1,8 +1,8 @@
-import util.math
+//out("hello world")
 
-func a() -> public
-    out("hello world")
+var a = 1
+func main() -> public
+    fix a = <a+1>
 end_func
-a()
-
-var b = ky.sh("select * from /")
+main()
+out(a)
