@@ -1,8 +1,15 @@
+import util.math
+
+
+func main(a,b) -> public
+	out("Result: " <> math.add(a , b))
+	return 0
+end_func
 
 var a = getTime()
-
-for (100000)
-    out("hello world")
+for (1000000)
+	out("hello world")
 end_for
+
 var b = getTime()
-out(<b - a> "ms")
+out(b - a)
