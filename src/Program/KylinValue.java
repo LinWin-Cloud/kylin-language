@@ -12,6 +12,6 @@ public class KylinValue {
         this.type = type;
     }
     public void setContent(String content) {
-        this.content = content;
+        this.content = new KylinExpression().getExpression(content);
     }
 }
