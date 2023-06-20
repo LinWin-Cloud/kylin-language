@@ -1,2 +1,4 @@
-package Program;public class KylinType {
+package Program;
+
+public class KylinType {
 }
