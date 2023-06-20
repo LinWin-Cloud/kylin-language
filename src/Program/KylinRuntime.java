@@ -14,6 +14,7 @@ public class KylinRuntime {
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
             KylinValue kylinValue = new KylinValue();
+            kylinValue.kylinRuntime = this;
             kylinValue.setContent(content);
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);

@@ -17,9 +17,12 @@ public class mainApp {
             File target = new File(args[0]);
             if (target.exists() && target.isFile() && target.canRead()) {
                 try {
+                    long s = System.currentTimeMillis();
                     KylinRuntime main = new KylinRuntime();
                     main.code = baseFunction.getScript(target.getAbsolutePath());
                     main.run();
+                    long e = System.currentTimeMillis();
+                    System.out.println(e - s);
                 }catch (Exception exception) {
                     System.out.println(exception.getMessage());
                 }
