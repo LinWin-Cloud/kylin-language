@@ -1,5 +1,3 @@
+var a = 1
 
-for (100000)
-	var a = 1
-	out(a)
-end_for
+var b = 2
