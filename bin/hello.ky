@@ -1,0 +1,5 @@
+
+for (100000)
+	var a = 1
+	out(a)
+end_for
