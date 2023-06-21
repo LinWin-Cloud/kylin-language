@@ -19,6 +19,16 @@ public class KylinRuntime {
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);
         }
+        if (words[0].equals("func")) {
+            /**
+             * func func_name (a ,b) public
+             *      return <a + b>
+             * end_func
+             */
+            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
+            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
+            
+        }
     }
     public void run() throws Exception {
         for (int i = 0 ; i < this.code.size() ;i++) {

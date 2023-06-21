@@ -21,4 +21,13 @@ public class baseFunction {
         fileReader.close();
         return arrayList;
     }
+    public static boolean isBoolean(String expression) throws Exception {
+        if (expression.toLowerCase().equals("true")) {
+            return true;
+        }else if(expression.toLowerCase().equals("false")) {
+            return false;
+        }else {
+            throw new Exception("Syntax Error");
+        }
+    }
 }
