@@ -21,10 +21,10 @@ public class baseFunction {
         fileReader.close();
         return arrayList;
     }
-    public static boolean isBoolean(String expression) throws Exception {
-        if (expression.toLowerCase().equals("true")) {
+    public static boolean isPublic(String expression) throws Exception {
+        if (expression.toLowerCase().equals("public")) {
             return true;
-        }else if(expression.toLowerCase().equals("false")) {
+        }else if(expression.toLowerCase().equals("private")) {
             return false;
         }else {
             throw new Exception("Syntax Error");
