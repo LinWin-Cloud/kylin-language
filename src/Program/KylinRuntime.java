@@ -11,6 +11,10 @@ public class KylinRuntime {
     public Map<String , KylinValue> ValueMap = new HashMap<>();
     public Map<String , KylinFunction> FunctionMap = new HashMap<>();
     public boolean isFunction = false;
+    private String result = "";
+    public String getResult() {
+        return this.result;
+    }
     public void exec(String code, int i) throws Exception {
         String[] words = code.trim().split(" ");
         if (words[0].equals("var")) {
@@ -22,7 +26,10 @@ public class KylinRuntime {
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);
         }
-        if (words[0].equals("func")) {
+        if (isFunction && words[0].equals("return")) {
+            this.result = new KylinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
+        }
+        else if (words[0].equals("func")) {
             /**
              * func func_name (a ,b) public
              *      return <a + b>
@@ -42,15 +49,18 @@ public class KylinRuntime {
                 if (line.equals("end_func")) {
                     break;
                 }
+                if (line.equals("")) {
+                    continue;
+                }
                 functionCode.add(line);
             }
             kylinFunction.kylinRuntime.code = functionCode;
             this.FunctionMap.put(name , kylinFunction);
         }
-        if (isFunction(code)) {
+        else if (isFunction(code)) {
             return;
         }
-        if (KylinProgramBaseFunction.isProgramBaseFunction(code)) {
+        else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
             return;
         }
     }
