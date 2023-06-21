@@ -50,6 +50,9 @@ public class KylinRuntime {
         if (isFunction(code)) {
             return;
         }
+        if (KylinProgramBaseFunction.isProgramBaseFunction(code)) {
+            return;
+        }
     }
     public void run() throws Exception {
         for (int i = 0 ; i < this.code.size() ;i++) {
