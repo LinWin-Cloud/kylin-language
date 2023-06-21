@@ -37,11 +37,9 @@ public class KylinRuntime {
             kylinFunction.setInput(inputContent.split(","));
 
             ArrayList<String> functionCode = new ArrayList<>();
-            for (int j = i+1 ; j < this.code.size() ;j++)
-            {
+            for (int j = i+1 ; j < this.code.size() ;j++) {
                 String line = this.code.get(j).trim();
-                if (line.equals("end_func"))
-                {
+                if (line.equals("end_func")) {
                     break;
                 }
                 functionCode.add(line);
@@ -49,10 +47,26 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.code = functionCode;
             this.FunctionMap.put(name , kylinFunction);
         }
+        if (isFunction(code)) {
+            return;
+        }
     }
     public void run() throws Exception {
         for (int i = 0 ; i < this.code.size() ;i++) {
             this.exec(this.code.get(i) , i);
+        }
+    }
+    public boolean isFunction(String code) {
+        try {
+            String function = code.substring(0,code.indexOf("(")).trim();
+            if (this.FunctionMap.containsKey(function)) {
+                this.FunctionMap.get(function).kylinRuntime.run();
+                return true;
+            }else {
+                return false;
+            }
+        }catch (Exception exception) {
+            return false;
         }
     }
 }

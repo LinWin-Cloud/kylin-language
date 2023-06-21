@@ -1,2 +1,5 @@
-package Program;public class KylinProgramBaseFunction {
+package Program;
+
+public class KylinProgramBaseFunction {
+    
 }
