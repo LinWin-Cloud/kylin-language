@@ -1,0 +1,6 @@
+
+func main(a) public
+    return a
+end_func
+
+out(main(1))
