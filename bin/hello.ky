@@ -1,5 +1,11 @@
+var b = 2
+
 func main(a) public
-    out(a)
+    out(b)
 end_func
 
-main(1)
+func getVersion() public
+    return "1.0"
+end_func
+
+main("hello world")
