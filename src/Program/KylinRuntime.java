@@ -12,9 +12,11 @@ public class KylinRuntime {
     public Map<String , KylinFunction> FunctionMap = new HashMap<>();
     public boolean isFunction = false;
     private String result = "";
+    public int codeLine = 0;
     public String getResult() {
         return this.result;
     }
+
     public void exec(String code, int i) throws Exception {
         String[] words = code.trim().split(" ");
         if (words[0].equals("var")) {
@@ -47,6 +49,7 @@ public class KylinRuntime {
             for (int j = i+1 ; j < this.code.size() ;j++) {
                 String line = this.code.get(j).trim();
                 if (line.equals("end_func")) {
+                    this.codeLine = j;
                     break;
                 }
                 if (line.equals("")) {
@@ -65,15 +68,24 @@ public class KylinRuntime {
         }
     }
     public void run() throws Exception {
-        for (int i = 0 ; i < this.code.size() ;i++) {
-            this.exec(this.code.get(i) , i);
+        for (this.codeLine = 0 ; this.codeLine < this.code.size() ;codeLine++) {
+            this.exec(this.code.get(codeLine) , codeLine);
         }
     }
     public boolean isFunction(String code) {
         try {
             String function = code.substring(0,code.indexOf("(")).trim();
+            String content = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
             if (this.FunctionMap.containsKey(function)) {
-                this.FunctionMap.get(function).kylinRuntime.run();
+                KylinFunction kylinFunction =this.FunctionMap.get(function);
+                String[] split = content.split(",\\s*");
+                for (int i = 0 ; i < split.length ;i++) {
+                    KylinValue kylinValue = new KylinValue();
+                    kylinValue.setName(kylinFunction.input[i]);
+                    kylinValue.setContent(split[i]);
+                    kylinFunction.kylinRuntime.ValueMap.put(split[i] , kylinValue);
+                }
+                kylinFunction.kylinRuntime.run();
                 return true;
             }else {
                 return false;

@@ -25,7 +25,7 @@ public class KylinExpression {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
                     KylinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
-                    
+
                     String[] func_content = input.split(",\\s*");
                     for (int j = 0 ; j < kylinFunction.input.length ; j++) {
                         KylinValue kylinValue = new KylinValue();
