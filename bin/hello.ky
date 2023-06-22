@@ -8,4 +8,4 @@ func getVersion() public
     return "1.0"
 end_func
 
-main("hello world")
+for(main("hello world") , 100000 , false)
