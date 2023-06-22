@@ -18,7 +18,12 @@ public class KylinExpression {
                     continue;
                 }
                 else if (kylinRuntime.ValueMap.containsKey(s)) {
-                    stringBuffer.append(kylinRuntime.ValueMap.get(s).getContent());
+                    KylinValue kylinValue = kylinRuntime.ValueMap.get(s);
+                    if (kylinValue.getContent() == null) {
+                        throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.PublicRuntime.codeLine+1));
+                    }else {
+                        stringBuffer.append(kylinRuntime.ValueMap.get(s).getContent());
+                    }
                     continue;
                 }
                 else if(KylinProgramBaseFunction.isDefinedFunction(code , kylinRuntime)) {
@@ -42,7 +47,7 @@ public class KylinExpression {
             return stringBuffer.toString();
         }
         catch (Exception exception) {
-            exception.printStackTrace();
+            //exception.printStackTrace();
             System.out.println("[ERR] "+exception.getMessage());
             System.exit(1);
             return null;

@@ -12,6 +12,7 @@ public class KylinRuntime {
     public Map<String , KylinFunction> FunctionMap = new HashMap<>();
     public boolean isFunction = false;
     private String result = "";
+    public KylinRuntime PublicRuntime;
     public int codeLine = 0;
     public String getResult() {
         return this.result;
@@ -58,6 +59,7 @@ public class KylinRuntime {
                 functionCode.add(line);
             }
             kylinFunction.kylinRuntime.code = functionCode;
+            kylinFunction.kylinRuntime.PublicRuntime = this;
             this.FunctionMap.put(name , kylinFunction);
         }
         else if (isFunction(code)) {
@@ -83,7 +85,7 @@ public class KylinRuntime {
                     KylinValue kylinValue = new KylinValue();
                     kylinValue.setName(kylinFunction.input[i]);
                     kylinValue.setContent(split[i]);
-                    kylinFunction.kylinRuntime.ValueMap.put(split[i] , kylinValue);
+                    kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[i] , kylinValue);
                 }
                 kylinFunction.kylinRuntime.run();
                 return true;
