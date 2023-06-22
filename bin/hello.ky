@@ -1,5 +1,5 @@
-func main(a) public
-    out(a)
+func main(a , b) public
+    out(a <> b)
 end_func
 
-main("hello world")
+main(1,1)
