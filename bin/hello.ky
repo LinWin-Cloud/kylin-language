@@ -1,6 +1,5 @@
-
 func main(a) public
-    return a
+    out(a)
 end_func
 
-out(main(1))
+main("hello world")
