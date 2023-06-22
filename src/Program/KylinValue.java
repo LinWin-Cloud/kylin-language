@@ -4,7 +4,6 @@ public class KylinValue {
     private String name;
     private String type;
     private String content;
-    public KylinRuntime kylinRuntime;
 
     public void setName(String name) {
         this.name = name;
@@ -12,7 +11,7 @@ public class KylinValue {
     public void setType(String type) {
         this.type = type;
     }
-    public void setContent(String content) {
+    public void setContent(String content , KylinRuntime kylinRuntime) {
         this.content = new KylinExpression().getExpression(content , kylinRuntime);
         this.type = KylinType.getType(this.content);
     }

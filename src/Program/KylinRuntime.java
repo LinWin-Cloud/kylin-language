@@ -24,8 +24,7 @@ public class KylinRuntime {
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
             KylinValue kylinValue = new KylinValue();
-            kylinValue.kylinRuntime = this;
-            kylinValue.setContent(content);
+            kylinValue.setContent(content ,this);
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);
         }
@@ -81,10 +80,12 @@ public class KylinRuntime {
             if (this.FunctionMap.containsKey(function)) {
                 KylinFunction kylinFunction =this.FunctionMap.get(function);
                 String[] split = content.split(",\\s*");
-                for (int i = 0 ; i < split.length ;i++) {
+                // System.out.println(kylinFunction.input.length);
+                // System.out.println(split.length);
+                for (int i = 0 ; i < kylinFunction.input.length ;i++) {
                     KylinValue kylinValue = new KylinValue();
                     kylinValue.setName(kylinFunction.input[i]);
-                    kylinValue.setContent(split[i]);
+                    kylinValue.setContent(split[i] , this);
                     kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[i] , kylinValue);
                 }
                 kylinFunction.kylinRuntime.run();
@@ -93,6 +94,7 @@ public class KylinRuntime {
                 return false;
             }
         }catch (Exception exception) {
+            //exception.printStackTrace();
             return false;
         }
     }

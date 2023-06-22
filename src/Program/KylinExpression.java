@@ -1,5 +1,8 @@
 package Program;
 
+import sun.awt.X11.XSystemTrayPeer;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class KylinExpression {
@@ -35,12 +38,14 @@ public class KylinExpression {
                     for (int j = 0 ; j < kylinFunction.input.length ; j++) {
                         KylinValue kylinValue = new KylinValue();
                         kylinValue.setName(kylinFunction.input[j]);
-                        kylinValue.setContent(func_content[j]);
+                        kylinValue.setContent(func_content[j] , kylinRuntime);
                         kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
                     }
                     kylinFunction.kylinRuntime.run();
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
+                }else {
+                    stringBuffer.append(s);
                 }
             }
             //System.out.println(stringBuffer.toString());
@@ -48,6 +53,19 @@ public class KylinExpression {
         }
         catch (Exception exception) {
             //exception.printStackTrace();
+            System.out.println("[ERR] "+exception.getMessage());
+            System.exit(1);
+            return null;
+        }
+    }
+    public String[] getListExpression(String[] list , KylinRuntime kylinRuntime) {
+        try {
+            ArrayList<String> stringArrayList = new ArrayList<>();
+            for (String s : list) {
+                stringArrayList.add(this.getExpression(s,kylinRuntime));
+            }
+            return stringArrayList.toArray(new String[stringArrayList.size()]);
+        }catch (Exception exception) {
             System.out.println("[ERR] "+exception.getMessage());
             System.exit(1);
             return null;
