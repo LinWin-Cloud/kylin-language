@@ -13,13 +13,21 @@ public class KylinProgramBaseFunction {
             return false;
         }
     }
-    public static boolean isDefinedFunction(String code , KylinRuntime kylinRuntime) {
+    public static boolean isDefinedFunction(String code) {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
-            //String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-            return kylinRuntime.FunctionMap.containsKey(function);
+            String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
+            return true;
         }catch (Exception exception) {
             //exception.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean isRealDefinedFunction(String code , KylinRuntime kylinRuntime) {
+        try {
+            String function = code.substring(0 , code.indexOf("(")).trim();
+            return isDefinedFunction(code) && kylinRuntime.FunctionMap.containsKey(function);
+        }catch (Exception exception) {
             return false;
         }
     }

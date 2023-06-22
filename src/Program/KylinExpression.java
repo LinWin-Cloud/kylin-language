@@ -29,7 +29,7 @@ public class KylinExpression {
                     }
                     continue;
                 }
-                else if(KylinProgramBaseFunction.isDefinedFunction(code , kylinRuntime)) {
+                else if(KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
                     KylinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
@@ -44,7 +44,18 @@ public class KylinExpression {
                     kylinFunction.kylinRuntime.run();
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
-                }else {
+                }else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
+                {
+                    String function = code.substring(0 , code.indexOf("(")).trim();
+                    throw new Exception("ERR Function: "+function);
+                }
+                else if (kylinRuntime.PublicRuntime != null
+                    && kylinRuntime.PublicRuntime.ValueMap.containsKey(s)
+                ) {
+                    stringBuffer.append(kylinRuntime.PublicRuntime.ValueMap.get(s).getContent());
+                    continue;
+                }
+                else {
                     stringBuffer.append(s);
                 }
             }
