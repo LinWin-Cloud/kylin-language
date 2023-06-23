@@ -46,7 +46,7 @@ public class KylinExpression {
                     continue;
                 }
                 else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s)) {
-                    stringBuffer.append(KylinUseFunction.UseFunction(code));
+                    stringBuffer.append(KylinUseFunction.UseFunction(code , kylinRuntime));
                     continue;
                 }
                 else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))

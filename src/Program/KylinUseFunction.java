@@ -4,7 +4,8 @@ import main.baseFunction;
 
 public class KylinUseFunction {
     public static String[] KylinKeyWord ={
-            "getTime"
+            "getTime",
+            "input"
     };
     public static boolean isUseFunction(String expression) {
         try {
@@ -22,12 +23,16 @@ public class KylinUseFunction {
             return false;
         }
     }
-    public static String UseFunction(String expression) throws Exception {
+    public static String UseFunction(String expression ,KylinRuntime kylinRuntime) throws Exception {
         String funcName = expression.substring(0,expression.indexOf("(")).trim();
         String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
+        String[] split = content.split(",\\s*");
         if (funcName.equals(KylinKeyWord[0])) {
             return baseFunction.getTime();
-        }else {
+        }else if (funcName.equals(KylinKeyWord[1])) {
+            return baseFunction.input(new KylinExpression().getExpression(split[0] , kylinRuntime));
+        }
+        else {
             return null;
         }
     }

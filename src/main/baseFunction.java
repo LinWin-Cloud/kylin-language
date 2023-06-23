@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class baseFunction {
     public static ArrayList<String> getScript(String path) throws Exception {
@@ -47,5 +48,12 @@ public class baseFunction {
         stringBuffer.append(minute);
         stringBuffer.append(second);
         return stringBuffer.toString();
+    }
+    public static String input(String text) {
+        System.out.print(text);
+        Scanner scanner = new Scanner(System.in);
+        String in = scanner.nextLine();
+        scanner.close();
+        return in;
     }
 }
