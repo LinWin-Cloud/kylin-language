@@ -44,7 +44,12 @@ public class KylinExpression {
                     kylinFunction.kylinRuntime.run();
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
-                }else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
+                }
+                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s)) {
+                    stringBuffer.append(KylinUseFunction.UseFunction(code));
+                    continue;
+                }
+                else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
                 {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     throw new Exception("ERR Function: "+function);

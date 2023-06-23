@@ -3,6 +3,7 @@ package main;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class baseFunction {
     public static ArrayList<String> getScript(String path) throws Exception {
@@ -29,5 +30,22 @@ public class baseFunction {
         }else {
             throw new Exception("Syntax Error");
         }
+    }
+    public static String getTime() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(year);
+        stringBuffer.append(month);
+        stringBuffer.append(day);
+        stringBuffer.append(hour);
+        stringBuffer.append(minute);
+        stringBuffer.append(second);
+        return stringBuffer.toString();
     }
 }
