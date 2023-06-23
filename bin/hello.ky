@@ -1,11 +1,3 @@
-var b = 2
+var b = input("Input A Text: ")
 
-func main(a) public
-    out(a)
-end_func
-
-func getVersion() public
-    return "1.0"
-end_func
-
-out(getTime())
+out(b)
