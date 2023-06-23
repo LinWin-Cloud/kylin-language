@@ -1,11 +1,11 @@
 var b = 2
 
 func main(a) public
-    out(b)
+    out(a)
 end_func
 
 func getVersion() public
     return "1.0"
 end_func
 
-for(main("hello world") , 100000 , false)
+out(getTime())
