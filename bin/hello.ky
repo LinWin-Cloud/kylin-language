@@ -1,8 +1,8 @@
 
 
 var start = getTime()
-
-var a = "math: "<1+1+1-10>
+var t = 1
+var a = "math: "<1+1+1-10+t>
 
 func a() public
     out(a)
@@ -10,4 +10,4 @@ end_func
 
 for(a() , 100000 , false)
 var end = getTime()
-out(start <" "> end)
+out(end-start <> "s")
