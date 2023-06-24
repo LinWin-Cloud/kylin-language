@@ -1,6 +1,5 @@
 package Program;
 
-import sun.awt.X11.XSystemTrayPeer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +60,11 @@ public class KylinExpression {
                     continue;
                 }
                 else {
-                    stringBuffer.append(s);
+                    try {
+
+                    }catch (Exception exception) {
+                        stringBuffer.append(s);
+                    }
                 }
             }
             //System.out.println(stringBuffer.toString());
@@ -86,5 +89,8 @@ public class KylinExpression {
             System.exit(1);
             return null;
         }
+    }
+    public String getMath(String expression , KylinRuntime kylinRuntime) {
+
     }
 }
