@@ -1,7 +1,13 @@
-var a = "hello" <> "world"
 
-func hello() public
+
+var start = getTime()
+
+var a = "math: "<1+1+1-10>
+
+func a() public
     out(a)
 end_func
 
-hello()
+for(a() , 100000 , true)
+var end = getTime()
+out(a <" "> b)
