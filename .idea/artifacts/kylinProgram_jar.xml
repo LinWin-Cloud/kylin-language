@@ -7,6 +7,7 @@
       </element>
       <element id="module-output" name="Kylin" />
       <element id="library" level="project" name="Maven: com.github.teja24nex:jartest:1.0.3" />
+      <element id="dir-copy" path="$PROJECT_DIR$/out/production/kylin_ke" />
     </root>
   </artifact>
 </component>
