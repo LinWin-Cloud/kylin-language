@@ -29,9 +29,10 @@ public class KylinProgramBaseFunction {
                     else if (length == 3) {
                         boolean fast = getIn[2].equalsIgnoreCase("true");
                         if (fast) {
-                            ExecutorService executorService = Executors.newFixedThreadPool(30);
+                            ExecutorService executorService = Executors.newFixedThreadPool(100);
+                            Future<Integer> future = null;
                             for (int i = 0 ;i < range ;i++) {
-                                Future<Integer> future = executorService.submit(new Callable<Integer>() {
+                                future = executorService.submit(new Callable<Integer>() {
                                     @Override
                                     public Integer call() throws Exception {
                                         kylinRuntime.exec(func , kylinRuntime.codeLine);
