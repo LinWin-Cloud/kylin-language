@@ -62,10 +62,8 @@ public class KylinRuntime {
             this.FunctionMap.put(name , kylinFunction);
         }
         else if (isFunction(code)) {
-            return;
         }
         else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
-            return;
         }
     }
     public void run() throws Exception {

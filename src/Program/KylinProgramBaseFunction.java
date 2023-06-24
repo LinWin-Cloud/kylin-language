@@ -24,6 +24,7 @@ public class KylinProgramBaseFunction {
                         for (int i = 0 ;i < range ;i++) {
                             kylinRuntime.exec(func , kylinRuntime.codeLine);
                         }
+                        return true;
                     }
                     else if (length == 3) {
                         boolean fast = getIn[2].equalsIgnoreCase("true");
@@ -39,17 +40,22 @@ public class KylinProgramBaseFunction {
                                 });
                             }
                             executorService.shutdown();
+                            return true;
                         }else {
                             for (int i = 0 ;i < range ;i++) {
                                 kylinRuntime.exec(func , kylinRuntime.codeLine);
                             }
+                            return true;
                         }
                     }else {
-                        throw new Exception("Syntax Err!");
+                        System.out.println("Syntax Error.");
+                        System.exit(1);
+                        return true;
                     }
                 }catch (Exception exception) {
                     System.out.println("[ERR] "+exception.getMessage());
                     System.exit(1);
+                    return false;
                 }
             }
             return true;

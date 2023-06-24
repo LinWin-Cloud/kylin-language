@@ -49,13 +49,18 @@ public class KylinExpression {
                     continue;
                 }
                 else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s)) {
-                    stringBuffer.append(KylinUseFunction.UseFunction(code , kylinRuntime));
+                    stringBuffer.append(KylinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
                 else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
                 {
                     String function = code.substring(0 , code.indexOf("(")).trim();
-                    throw new Exception("ERR Function: "+function);
+                    try {
+                        double math = this.evaluateExpression(s);
+                        stringBuffer.append(math);
+                    }catch (Exception exception) {
+                        throw new Exception("ERR Expression: "+function);
+                    }
                 }
                 else if (kylinRuntime.PublicRuntime != null
                     && kylinRuntime.PublicRuntime.ValueMap.containsKey(s)
@@ -103,10 +108,10 @@ public class KylinExpression {
             } else if (evalResult instanceof Double) {
                 return (Double) evalResult;
             } else {
-                throw new IllegalArgumentException("无效的表达式");
+                throw new IllegalArgumentException("Invalid expression");
             }
         } catch (ScriptException e) {
-            throw new IllegalArgumentException("无效的表达式");
+            throw new IllegalArgumentException("Invalid expression");
         }
     }
 }

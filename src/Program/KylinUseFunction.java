@@ -20,6 +20,7 @@ public class KylinUseFunction {
             }
             return is;
         }catch (Exception exception) {
+            System.out.println(exception.getMessage());
             return false;
         }
     }
