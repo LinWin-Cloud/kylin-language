@@ -2,11 +2,15 @@ package main;
 
 import Program.KylinRuntime;
 
+import javax.script.*;
 import java.io.File;
+import java.io.Reader;
 
 public class mainApp {
     public static String MyHelpInformation = "Kylin Programming Language.\n" +
             "kylin [resource file]";
+    public static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    public static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("Python");
 
     public static void main(String[] args) {
         int length = args.length;

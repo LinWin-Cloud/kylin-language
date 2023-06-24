@@ -3,6 +3,7 @@ package Program;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class KylinExpression {
     public String getExpression(String code , KylinRuntime kylinRuntime) {
@@ -61,7 +62,8 @@ public class KylinExpression {
                 }
                 else {
                     try {
-
+                        double math = MathExpressionEvaluator.evaluateExpression(s , kylinRuntime);
+                        stringBuffer.append(math);
                     }catch (Exception exception) {
                         stringBuffer.append(s);
                     }
@@ -89,8 +91,5 @@ public class KylinExpression {
             System.exit(1);
             return null;
         }
-    }
-    public String getMath(String expression , KylinRuntime kylinRuntime) {
-
     }
 }
