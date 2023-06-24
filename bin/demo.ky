@@ -1,0 +1,56 @@
+// 这是一行注释
+/*
+ * 注释多行注释，这个程序是一个示例
+ */
+
+
+//这行kylin代码用于定义 var 关键字为 let
+#defined var let
+
+//这行代码导入内置的头文件中文编程标准库
+#include<head/chinese>
+
+
+定义 变量 = "hello world"
+输出(变量)
+
+
+定义 简单运算 = <1+1+1>
+定义 加上 = 输入("输入一个数字加上: ")
+简单运算 = <简单运算+加上>
+
+
+//接下来展示标准Kylin代码
+
+
+//定义一个函数test() ,输出hello world
+func test() public
+	out("hello world")
+end_func
+test()
+
+
+out("Kylin Version: "+getVersion())
+
+
+//快速定义函数 
+f test_1(a)
+	//这个函数是一个内部函数，其他kylin文件不允许访问
+	return a
+e_f
+
+//输出hello world
+out(test_1("hello world"))
+
+//调用nodejs，需要另外 kpt 库安装
+<nodejs>
+	console.log("hello world")
+</nodejs>
+
+
+//调用python, 内置的JPython运行环境
+<python>
+	print("hello world")
+</python>
+
+
