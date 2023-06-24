@@ -8,6 +8,6 @@ func a() public
     out(a)
 end_func
 
-for(a() , 100000 , true)
+for(a() , 100000 , false)
 var end = getTime()
-out(a <" "> b)
+out(start <" "> end)
