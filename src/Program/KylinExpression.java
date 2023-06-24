@@ -1,6 +1,9 @@
 package Program;
 
 
+import main.mainApp;
+
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
@@ -62,7 +65,7 @@ public class KylinExpression {
                 }
                 else {
                     try {
-                        double math = MathExpressionEvaluator.evaluateExpression(s , kylinRuntime);
+                        double math = this.evaluateExpression(s);
                         stringBuffer.append(math);
                     }catch (Exception exception) {
                         stringBuffer.append(s);
@@ -90,6 +93,21 @@ public class KylinExpression {
             System.out.println("[ERR] "+exception.getMessage());
             System.exit(1);
             return null;
+        }
+    }
+    public double evaluateExpression(String expression) throws Exception {
+        try {
+            Object evalResult = mainApp.scriptEngine.eval(expression);
+            if (evalResult instanceof Integer) {
+                return (Integer) evalResult;
+            } else if (evalResult instanceof Double) {
+                return (Double) evalResult;
+            } else {
+                throw new IllegalArgumentException("无效的表达式");
+            }
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("无效的表达式");
         }
     }
 }
