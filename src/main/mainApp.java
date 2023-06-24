@@ -12,7 +12,7 @@ public class mainApp {
     public static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     public static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int length = args.length;
         if (length == 0) {
             System.out.println(MyHelpInformation);

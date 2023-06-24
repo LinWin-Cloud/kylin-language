@@ -95,7 +95,7 @@ public class KylinExpression {
             return null;
         }
     }
-    public double evaluateExpression(String expression) throws Exception {
+    public double evaluateExpression(String expression) throws IllegalArgumentException {
         try {
             Object evalResult = mainApp.scriptEngine.eval(expression);
             if (evalResult instanceof Integer) {
@@ -106,7 +106,6 @@ public class KylinExpression {
                 throw new IllegalArgumentException("无效的表达式");
             }
         } catch (ScriptException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("无效的表达式");
         }
     }
