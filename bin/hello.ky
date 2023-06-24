@@ -1,2 +1,7 @@
-var a = <1+1>
-out(a)
+var a = "hello" <> "world"
+
+func hello() public
+    out(a)
+end_func
+
+hello()
