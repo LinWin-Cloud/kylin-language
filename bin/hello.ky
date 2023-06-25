@@ -8,6 +8,8 @@ func a() public
     out(a)
 end_func
 
-for(a() , 100000 , false)
-var end = getTime()
-out(end-start <> "s")
+f test()
+    out("hello world")
+e_f
+
+test()
