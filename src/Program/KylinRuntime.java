@@ -17,6 +17,8 @@ public class KylinRuntime {
     public String getResult() {
         return this.result;
     }
+    private Map<String , String> defined_keyword = new HashMap<>();
+    private Map<String , String> defined_func = new HashMap<>();
 
     public void exec(String code, int i) throws Exception {
         String[] words = code.trim().split(" ");
@@ -35,6 +37,17 @@ public class KylinRuntime {
         if (isFunction && words[0].equals("return")) {
             this.result = new KylinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
+        }
+        else if (words[0].equals("#defined")) {
+            String key = words[1];
+            String value = words[2];
+            this.defined_keyword.put(key , value);
+        }
+        else if (words[0].equals("#func"))
+        {
+            String key = words[1];
+            String value = words[2];
+            this.defined_func.put(key , value);
         }
         else if (words[0].equals("func")) {
             /**
