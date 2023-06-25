@@ -20,6 +20,9 @@ public class KylinRuntime {
 
     public void exec(String code, int i) throws Exception {
         String[] words = code.trim().split(" ");
+        if (code.equals("")) {
+            return;
+        }
         if (words[0].equals("var")) {
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
@@ -27,9 +30,11 @@ public class KylinRuntime {
             kylinValue.setContent(content ,this);
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);
+            return;
         }
         if (isFunction && words[0].equals("return")) {
             this.result = new KylinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
+            return;
         }
         else if (words[0].equals("func")) {
             /**
@@ -60,6 +65,7 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.code = functionCode;
             kylinFunction.kylinRuntime.PublicRuntime = this;
             this.FunctionMap.put(name , kylinFunction);
+            return;
         }
         else if (words[0].equals("f")) {
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
@@ -85,10 +91,17 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.code = functionCode;
             kylinFunction.kylinRuntime.PublicRuntime = this;
             this.FunctionMap.put(name , kylinFunction);
+            return;
         }
         else if (isFunction(code)) {
+            return;
         }
         else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
+            return;
+        }
+        else {
+            System.out.println("Syntax Error: "+code+" :: At Line: "+(codeLine+1));
+            System.exit(1);
         }
     }
     public void run() throws Exception {
