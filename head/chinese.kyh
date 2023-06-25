@@ -2,6 +2,9 @@
 #defined if 当
 #defined import 引入
 #defined else 另外
-#defined elif 当另外
 #defined #defined #定义
 #defined func 方法
+
+#func out 输出
+#func input 输入
+#func getTime 时间
