@@ -61,6 +61,31 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.PublicRuntime = this;
             this.FunctionMap.put(name , kylinFunction);
         }
+        else if (words[0].equals("f")) {
+            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
+            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
+            boolean isPublic = false;
+
+            KylinFunction kylinFunction = new KylinFunction();
+            kylinFunction.isPublic = isPublic;
+            kylinFunction.setInput(inputContent.split(","));
+
+            ArrayList<String> functionCode = new ArrayList<>();
+            for (int j = i+1 ; j < this.code.size() ;j++) {
+                String line = this.code.get(j).trim();
+                if (line.equals("e_f")) {
+                    this.codeLine = j;
+                    break;
+                }
+                if (line.equals("")) {
+                    continue;
+                }
+                functionCode.add(line);
+            }
+            kylinFunction.kylinRuntime.code = functionCode;
+            kylinFunction.kylinRuntime.PublicRuntime = this;
+            this.FunctionMap.put(name , kylinFunction);
+        }
         else if (isFunction(code)) {
         }
         else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
