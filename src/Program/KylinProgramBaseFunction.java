@@ -11,10 +11,14 @@ public class KylinProgramBaseFunction {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
             String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-            if (function.equals("out")) {
+            String keyword = kylinRuntime.defined_func.get(function);
+            if (keyword == null) {
+                keyword = "";
+            }
+            if (function.equals("out") || keyword.equals("out")) {
                 System.out.println(new KylinExpression().getExpression(input , kylinRuntime));
             }
-            if (function.equals("for")) {
+            if (function.equals("for") || keyword.equals("for")) {
                 String[] getIn = input.split(",\\s*");
                 try {
                     String func = getIn[0];

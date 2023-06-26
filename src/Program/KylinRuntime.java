@@ -20,7 +20,7 @@ public class KylinRuntime {
         return this.result;
     }
     private Map<String , String> defined_keyword = new HashMap<>();
-    private Map<String , String> defined_func = new HashMap<>();
+    public Map<String , String> defined_func = new HashMap<>();
     public String name;
 
     public KylinRuntime(String name) {
@@ -113,6 +113,10 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.PublicRuntime = this;
             this.FunctionMap.put(name , kylinFunction);
             return;
+        }
+        else if (code.startsWith("#include")) {
+            String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
+
         }
         else if (isFunction(code)) {
             return;
