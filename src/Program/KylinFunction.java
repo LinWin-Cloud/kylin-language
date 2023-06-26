@@ -4,9 +4,11 @@ public class KylinFunction {
     public String name;
     public String[] input;
     public boolean isPublic = true;
-    public KylinRuntime kylinRuntime = new KylinRuntime();
+    public KylinRuntime kylinRuntime = new KylinRuntime("");
 
-    public KylinFunction() {
+    public KylinFunction(String name) {
+        this.name = name;
+        kylinRuntime.name = this.name;
         kylinRuntime.isFunction = true;
     }
 

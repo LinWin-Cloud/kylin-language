@@ -22,7 +22,7 @@ public class mainApp {
             if (target.exists() && target.isFile() && target.canRead()) {
                 try {
                     //long s = System.currentTimeMillis();
-                    KylinRuntime main = new KylinRuntime();
+                    KylinRuntime main = new KylinRuntime("main");
                     main.code = baseFunction.getScript(target.getAbsolutePath());
                     main.run();
                     //long e = System.currentTimeMillis();

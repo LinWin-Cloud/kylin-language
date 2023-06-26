@@ -19,13 +19,19 @@ public class KylinRuntime {
     }
     private Map<String , String> defined_keyword = new HashMap<>();
     private Map<String , String> defined_func = new HashMap<>();
+    public String name;
+
+    public KylinRuntime(String name) {
+        this.name = name;
+    }
 
     public void exec(String code, int i) throws Exception {
         String[] words = code.trim().split(" ");
         if (code.equals("")) {
             return;
         }
-        if (words[0].equals("var")) {
+        String keyword = this.defined_keyword.get(words[0]);
+        if (words[0].equals("var") || keyword.equals("var")) {
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
             KylinValue kylinValue = new KylinValue();
@@ -34,22 +40,22 @@ public class KylinRuntime {
             this.ValueMap.put(name , kylinValue);
             return;
         }
-        if (isFunction && words[0].equals("return")) {
+        if (isFunction && (words[0].equals("return") || keyword.equals("return"))) {
             this.result = new KylinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
         }
-        else if (words[0].equals("#defined")) {
+        else if (words[0].equals("#defined") || keyword.equals("#defined")) {
             String key = words[1];
             String value = words[2];
             this.defined_keyword.put(key , value);
         }
-        else if (words[0].equals("#func"))
+        else if (words[0].equals("#func") || keyword.equals("#func"))
         {
             String key = words[1];
             String value = words[2];
             this.defined_func.put(key , value);
         }
-        else if (words[0].equals("func")) {
+        else if (words[0].equals("func") || words[0].equals("f") || keyword.equals("func") || keyword.equals("f")) {
             /**
              * func func_name (a ,b) public
              *      return <a + b>
@@ -57,49 +63,42 @@ public class KylinRuntime {
              */
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
             String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
-            boolean isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
-
-            KylinFunction kylinFunction = new KylinFunction();
-            kylinFunction.isPublic = isPublic;
-            kylinFunction.setInput(inputContent.split(","));
-
-            ArrayList<String> functionCode = new ArrayList<>();
-            for (int j = i+1 ; j < this.code.size() ;j++) {
-                String line = this.code.get(j).trim();
-                if (line.equals("end_func")) {
-                    this.codeLine = j;
-                    break;
-                }
-                if (line.equals("")) {
-                    continue;
-                }
-                functionCode.add(line);
+            boolean isPublic;
+            if (words[0].equals("func") || keyword.equals("func")) {
+                isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
+            }else{
+                isPublic = false;
             }
-            kylinFunction.kylinRuntime.code = functionCode;
-            kylinFunction.kylinRuntime.PublicRuntime = this;
-            this.FunctionMap.put(name , kylinFunction);
-            return;
-        }
-        else if (words[0].equals("f")) {
-            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
-            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
-            boolean isPublic = false;
 
-            KylinFunction kylinFunction = new KylinFunction();
+            KylinFunction kylinFunction = new KylinFunction(name);
             kylinFunction.isPublic = isPublic;
             kylinFunction.setInput(inputContent.split(","));
 
             ArrayList<String> functionCode = new ArrayList<>();
-            for (int j = i+1 ; j < this.code.size() ;j++) {
-                String line = this.code.get(j).trim();
-                if (line.equals("e_f")) {
-                    this.codeLine = j;
-                    break;
+            if (words[0].equals("func") || keyword.equals("func")) {
+                for (int j = i+1 ; j < this.code.size() ;j++) {
+                    String line = this.code.get(j).trim();
+                    if ((line.equals("end_func")) || this.defined_keyword.get(line).equals("end_func")) {
+                        this.codeLine = j;
+                        break;
+                    }
+                    if (line.equals("")) {
+                        continue;
+                    }
+                    functionCode.add(line);
                 }
-                if (line.equals("")) {
-                    continue;
+            }else{
+                for (int j = i+1 ; j < this.code.size() ;j++) {
+                    String line = this.code.get(j).trim();
+                    if ((line.equals("e_f")) || this.defined_keyword.get(line).equals("e_f")) {
+                        this.codeLine = j;
+                        break;
+                    }
+                    if (line.equals("")) {
+                        continue;
+                    }
+                    functionCode.add(line);
                 }
-                functionCode.add(line);
             }
             kylinFunction.kylinRuntime.code = functionCode;
             kylinFunction.kylinRuntime.PublicRuntime = this;
@@ -114,6 +113,7 @@ public class KylinRuntime {
         }
         else {
             System.out.println("Syntax Error: "+code+" :: At Line: "+(codeLine+1));
+
             System.exit(1);
         }
     }
