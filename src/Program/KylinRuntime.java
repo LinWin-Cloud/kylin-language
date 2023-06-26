@@ -33,6 +33,11 @@ public class KylinRuntime {
             return;
         }
         String keyword = this.defined_keyword.get(words[0]);
+        if (keyword == null) {
+            keyword = "";
+        }
+        //String keyword = this.defined_keyword.get(words[0]);
+        //System.out.println(words[0]);
         if (words[0].equals("var") || keyword.equals("var")) {
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
@@ -49,14 +54,15 @@ public class KylinRuntime {
         else if (words[0].equals("#defined") || keyword.equals("#defined")) {
             String key = words[1];
             String value = words[2];
-            System.out.println(key+" "+value);
-            this.defined_keyword.put(key , value);
+            this.defined_keyword.put(value , key);
+            return;
         }
         else if (words[0].equals("#func") || keyword.equals("#func"))
         {
             String key = words[1];
             String value = words[2];
-            this.defined_func.put(key , value);
+            this.defined_func.put(value , key);
+            return;
         }
         else if (words[0].equals("func") || words[0].equals("f") || keyword.equals("func") || keyword.equals("f")) {
             /**

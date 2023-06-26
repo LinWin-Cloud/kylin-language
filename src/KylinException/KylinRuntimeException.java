@@ -16,9 +16,9 @@ public class KylinRuntimeException {
     }
     public void PrintErrorMessage(KylinRuntime kylinRuntime) {
         System.out.println("KylinRuntimeException: `"+this.ErrMessage+"`");
-        System.out.println("Error code: "+kylinRuntime.code.get(kylinRuntime.codeLine));
-        System.out.println("At line: "+(kylinRuntime.codeLine+1));
-        System.out.println("At Runtime: "+kylinRuntime.name);
+        System.out.println("    Error code: "+kylinRuntime.code.get(kylinRuntime.codeLine));
+        System.out.println("    At line: "+(kylinRuntime.codeLine+1));
+        System.out.println("    At Runtime: "+kylinRuntime.name);
         if (this.isExit) {
             System.exit(1);
         }
