@@ -1,4 +1,4 @@
-package Exception;
+package KylinException;
 
 import Program.KylinRuntime;
 
@@ -15,8 +15,12 @@ public class KylinRuntimeException {
         return this.ErrMessage;
     }
     public void PrintErrorMessage(KylinRuntime kylinRuntime) {
-        System.out.println("KylinRuntimeException: `"+kylinRuntime.code.get(kylinRuntime.codeLine)+"`");
+        System.out.println("KylinRuntimeException: `"+this.ErrMessage+"`");
+        System.out.println("Error code: "+kylinRuntime.code.get(kylinRuntime.codeLine));
         System.out.println("At line: "+(kylinRuntime.codeLine+1));
-        System.out.println("At Runtime: "+kylinRuntime);
+        System.out.println("At Runtime: "+kylinRuntime.name);
+        if (this.isExit) {
+            System.exit(1);
+        }
     }
 }

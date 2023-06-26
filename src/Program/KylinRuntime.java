@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.Map;
 import java.util.Set;
 
+import KylinException.KylinRuntimeException;
+
 public class KylinRuntime {
     public ArrayList<String> code;
     public Map<String , KylinValue> ValueMap = new HashMap<>();
@@ -47,6 +49,7 @@ public class KylinRuntime {
         else if (words[0].equals("#defined") || keyword.equals("#defined")) {
             String key = words[1];
             String value = words[2];
+            System.out.println(key+" "+value);
             this.defined_keyword.put(key , value);
         }
         else if (words[0].equals("#func") || keyword.equals("#func"))
@@ -112,9 +115,8 @@ public class KylinRuntime {
             return;
         }
         else {
-            System.out.println("Syntax Error: "+code+" :: At Line: "+(codeLine+1));
-
-            System.exit(1);
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,true);
+            kylinRuntimeException.PrintErrorMessage(this);
         }
     }
     public void run() throws Exception {
