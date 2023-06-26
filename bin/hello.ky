@@ -1,21 +1,3 @@
-
-
-var start = getTime()
-var t = 1
-var a = "math: "<1+1+1-10+t>
-var a = "hello world"
-
-func a() public
-    out(a)
-end_func
-
-f test()
-    var a = input("输入字符串: ")
-    out(a)
-e_f
-
-func math_test(a,b) public
-    return <a+b>
-end_func
-
-out(math_test(1,1))
+#defined var let
+var a = "hello world";
+out(a)
