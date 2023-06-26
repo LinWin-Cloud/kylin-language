@@ -1,3 +1,4 @@
 #defined var let
-var a = "hello world";
+
+let a = "hello world"
 out(a)
