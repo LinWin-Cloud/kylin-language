@@ -3,7 +3,8 @@
 #defined import 引入
 #defined else 另外
 #defined #defined #定义
-#defined func 方法
+#defined func 函数
+#defined return 返回
 
 #func out 输出
 #func input 输入
