@@ -14,4 +14,8 @@ f test()
     out(a)
 e_f
 
-a()
+func math_test(a,b) public
+    return <a+b>
+end_func
+
+out(math_test(1,1))
