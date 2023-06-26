@@ -1,4 +1,4 @@
-#defined var let
+#include<{head/}>
 
 let a = "hello world"
-out(a)
+输出(a)
