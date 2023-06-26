@@ -6,10 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": ["/home/ubuntu-linux/kylin_ke/Kylin/1.ky"]
+            "args": [
+                "/home/ubuntu-linux/kylin_ke/Kylin/1.ky"
+            ]
         },
         {
             "type": "java",
