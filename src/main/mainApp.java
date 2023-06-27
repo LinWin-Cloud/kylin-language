@@ -5,13 +5,22 @@ import Program.KylinRuntime;
 import javax.script.*;
 import java.io.File;
 import java.io.Reader;
+import java.net.URISyntaxException;
 
 public class mainApp {
     public static String MyHelpInformation = "Kylin Programming Language.\n" +
             "kylin [resource file]";
     public static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     public static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
-    public static String jarDirectory = new File(mainApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+    public static String jarDirectory;
+
+    static {
+        try {
+            jarDirectory = new File(mainApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         int length = args.length;
