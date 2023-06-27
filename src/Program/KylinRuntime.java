@@ -70,49 +70,54 @@ public class KylinRuntime {
              *      return <a + b>
              * end_func
              */
-            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
-            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
-            boolean isPublic;
-            if (words[0].equals("func") || keyword.equals("func")) {
-                isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
-            }else{
-                isPublic = false;
-            }
+            try {
+                String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
+                String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
+                boolean isPublic;
 
-            KylinFunction kylinFunction = new KylinFunction(name);
-            kylinFunction.isPublic = isPublic;
-            kylinFunction.setInput(inputContent.split(","));
+                if (words[0].equals("func") || keyword.equals("func")) {
+                    isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
+                }else{
+                    isPublic = false;
+                }
 
-            ArrayList<String> functionCode = new ArrayList<>();
-            if (words[0].equals("func") || keyword.equals("func")) {
-                for (int j = i+1 ; j < this.code.size() ;j++) {
-                    String line = this.code.get(j).trim();
-                    if ((line.equals("end_func")) || this.defined_keyword.get(line).equals("end_func")) {
-                        this.codeLine = j;
-                        break;
+                KylinFunction kylinFunction = new KylinFunction(name);
+                kylinFunction.isPublic = isPublic;
+                kylinFunction.setInput(inputContent.split(","));
+
+                ArrayList<String> functionCode = new ArrayList<>();
+                if (words[0].equals("func") || keyword.equals("func")) {
+                    for (int j = i+1 ; j < this.code.size() ;j++) {
+                        String line = this.code.get(j).trim();
+                        if ((line.equals("end_func"))) {
+                            this.codeLine = j;
+                            break;
+                        }
+                        if (line.equals("")) {
+                            continue;
+                        }
+                        functionCode.add(line);
                     }
-                    if (line.equals("")) {
-                        continue;
+                }else{
+                    for (int j = i+1 ; j < this.code.size() ;j++) {
+                        String line = this.code.get(j).trim();
+                        if ((line.equals("e_f"))) {
+                            this.codeLine = j;
+                            break;
+                        }
+                        if (line.equals("")) {
+                            continue;
+                        }
+                        functionCode.add(line);
                     }
-                    functionCode.add(line);
                 }
-            }else{
-                for (int j = i+1 ; j < this.code.size() ;j++) {
-                    String line = this.code.get(j).trim();
-                    if ((line.equals("e_f")) || this.defined_keyword.get(line).equals("e_f")) {
-                        this.codeLine = j;
-                        break;
-                    }
-                    if (line.equals("")) {
-                        continue;
-                    }
-                    functionCode.add(line);
-                }
+                kylinFunction.kylinRuntime.code = functionCode;
+                kylinFunction.kylinRuntime.PublicRuntime = this;
+                this.FunctionMap.put(name , kylinFunction);
+                return;
+            }catch (Exception exception) {
+               exception.printStackTrace();
             }
-            kylinFunction.kylinRuntime.code = functionCode;
-            kylinFunction.kylinRuntime.PublicRuntime = this;
-            this.FunctionMap.put(name , kylinFunction);
-            return;
         }
         else if (code.startsWith("#include")) {
             main.baseFunction.include(code , this);
