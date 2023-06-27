@@ -1,4 +1,6 @@
-#include<{head}/chinese>
 
-let a = "hello world"
-输出(a)
+func main() public
+    out("hello world")
+end_func
+
+main()
