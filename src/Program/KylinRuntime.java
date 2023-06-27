@@ -115,8 +115,8 @@ public class KylinRuntime {
             return;
         }
         else if (code.startsWith("#include")) {
-            String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
-
+            main.baseFunction.include(code , this);
+            return;
         }
         else if (isFunction(code)) {
             return;

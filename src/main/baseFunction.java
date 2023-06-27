@@ -1,5 +1,7 @@
 package main;
 
+import Program.KylinRuntime;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -55,5 +57,9 @@ public class baseFunction {
         String in = scanner.nextLine();
         scanner.close();
         return in;
+    }
+    public static void include(String code , KylinRuntime kylinRuntime) {
+        String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
+        in = in.replace("{head}","");
     }
 }

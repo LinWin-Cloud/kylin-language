@@ -11,6 +11,7 @@ public class mainApp {
             "kylin [resource file]";
     public static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     public static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
+    public static String jarDirectory = new File(mainApp.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
 
     public static void main(String[] args) throws Exception {
         int length = args.length;
