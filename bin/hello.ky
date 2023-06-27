@@ -1,6 +1,7 @@
 
 func main() public
-    out("hello world")
+    var a = 1
+    out(a)
+    out(a)
 end_func
-
 main()
