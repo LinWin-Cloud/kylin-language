@@ -1,6 +1,7 @@
 package Program;
 
 
+import KylinException.KylinRuntimeException;
 import main.mainApp;
 
 import javax.script.ScriptException;
@@ -82,8 +83,9 @@ public class KylinExpression {
         }
         catch (Exception exception) {
             //exception.printStackTrace();
-            System.out.println("[ERR] "+exception.getMessage());
-            System.exit(1);
+            KylinRuntimeException kylinRuntimeException =
+                    new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1 , true);
+            kylinRuntimeException.PrintErrorMessage(kylinRuntime);
             return null;
         }
     }
