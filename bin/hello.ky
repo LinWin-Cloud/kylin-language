@@ -1,9 +1,12 @@
 #include<{head}/chinese.kyh>
 
+f a()
+    out("hello world")
+e_f
+
 func console() public
     var in = input("Linux Console $ ")
-    out(in)
+    if (in == 1) a()
 end_func
 
-console()
-console()
+for(console() , 10000 , false)
