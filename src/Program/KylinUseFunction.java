@@ -7,10 +7,13 @@ public class KylinUseFunction {
             "getTime",
             "input"
     };
-    public static boolean isUseFunction(String expression) {
+    public static boolean isUseFunction(String expression , KylinRuntime kylinRuntime) {
         try {
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
+            if (kylinRuntime.defined_func.containsKey(funcName)) {
+                return true;
+            }
             for (String s : KylinKeyWord) {
                 if (s.equals(funcName))
                 {

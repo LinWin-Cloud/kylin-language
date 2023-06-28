@@ -55,9 +55,7 @@ public class baseFunction {
     public static String input(String text) {
         System.out.print(text);
         Scanner scanner = new Scanner(System.in);
-        String in = scanner.nextLine();
-        scanner.close();
-        return in;
+        return scanner.nextLine();
     }
     public static void include(String code , KylinRuntime kylinRuntime) throws Exception {
         String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));

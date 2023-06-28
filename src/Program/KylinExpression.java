@@ -49,7 +49,7 @@ public class KylinExpression {
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s)) {
+                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s , kylinRuntime)) {
                     stringBuffer.append(KylinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
@@ -82,7 +82,7 @@ public class KylinExpression {
             return stringBuffer.toString();
         }
         catch (Exception exception) {
-            //exception.printStackTrace();
+            exception.printStackTrace();
             KylinRuntimeException kylinRuntimeException =
                     new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1 , true);
             kylinRuntimeException.PrintErrorMessage(kylinRuntime);
@@ -141,7 +141,7 @@ public class KylinExpression {
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s)) {
+                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s,kylinRuntime)) {
                     stringBuffer.append(KylinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
