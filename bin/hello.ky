@@ -1,7 +1,4 @@
+#include<{head}/chinese.kyh>
 
-func main() public
-    var a = 1
-    out(a)
-    out(a)
-end_func
-main()
+变量 a = 1
+输出(输入("输入一个字符串: "))
