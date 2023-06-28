@@ -22,6 +22,7 @@ public class KylinRuntime {
     public Map<String , String> defined_keyword = new HashMap<>();
     public Map<String , String> defined_func = new HashMap<>();
     public String name;
+    private boolean isIf = false;
 
     public KylinRuntime(String name) {
         this.name = name;
@@ -118,6 +119,18 @@ public class KylinRuntime {
             }catch (Exception exception) {
                exception.printStackTrace();
             }
+        }
+        else if (words[0].equals("if") || keyword.equals("if")) {
+            this.isIf = true;
+            String[] splitArray = code.split("\\b(?=a\\()|(?<=\\(\\w*)\\(");
+
+            String IF = splitArray[0].trim();
+            String func = splitArray[1].trim();
+
+            String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
+            boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
+            System.out.println(isTrue);
+            return;
         }
         else if (code.startsWith("#include")) {
             main.baseFunction.include(code , this);

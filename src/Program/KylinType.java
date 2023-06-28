@@ -14,6 +14,9 @@ public class KylinType {
         }
         catch (Exception ignored) {
         }
+        if (content.equalsIgnoreCase("true") || content.equalsIgnoreCase("false")) {
+            return "bool";
+        }
         return "string";
     }
 }
