@@ -19,7 +19,7 @@ public class KylinRuntime {
     public String getResult() {
         return this.result;
     }
-    private Map<String , String> defined_keyword = new HashMap<>();
+    public Map<String , String> defined_keyword = new HashMap<>();
     public Map<String , String> defined_func = new HashMap<>();
     public String name;
 

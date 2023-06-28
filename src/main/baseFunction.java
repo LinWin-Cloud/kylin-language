@@ -3,6 +3,7 @@ package main;
 import Program.KylinRuntime;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,8 +59,45 @@ public class baseFunction {
         scanner.close();
         return in;
     }
-    public static void include(String code , KylinRuntime kylinRuntime) {
+    public static void include(String code , KylinRuntime kylinRuntime) throws Exception {
         String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
-        in = in.replace("{head}","");
+        in = in.replace("{head}", mainApp.jarDirectory+"/../head");
+        File file = new File(in);
+        if (file.isFile() && file.canRead()) {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while (true) {
+                String line = bufferedReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                line = line.trim();
+                if (line.equals("")) {
+                    continue;
+                }
+                String[] words = line.split(" ");
+                String keyword = kylinRuntime.defined_keyword.get(words[0]);
+                if (keyword == null) {
+                    keyword = "";
+                }
+                if (words[0].equals("#defined") || keyword.equals("#defined")) {
+                    String key = words[1];
+                    String value = words[2];
+                    kylinRuntime.defined_keyword.put(value , key);
+                    continue;
+                }
+                if (words[0].equals("#func") || keyword.equals("#func"))
+                {
+                    String key = words[1];
+                    String value = words[2];
+                    kylinRuntime.defined_func.put(value , key);
+                    continue;
+                }else {
+                    throw new Exception("Target head file syntax error: "+line);
+                }
+            }
+        }else {
+            throw new Exception("Can not find target head file.");
+        }
     }
 }
