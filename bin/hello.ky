@@ -1,11 +1,11 @@
-#include<{head}/chinese.kyh>
 
-f a()
+func a() public
     out("hello world")
-e_f
+end_func
 
 func console() public
     var in = input("Linux Console $ ")
+    out(in)
     if (in == 1) a()
 end_func
 
