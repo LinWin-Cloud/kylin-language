@@ -71,7 +71,6 @@ public class KylinRuntime {
              *      return <a + b>
              * end_func
              */
-            try {
                 String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
                 String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
@@ -116,20 +115,23 @@ public class KylinRuntime {
                 kylinFunction.kylinRuntime.PublicRuntime = this;
                 this.FunctionMap.put(name , kylinFunction);
                 return;
-            }catch (Exception exception) {
-               exception.printStackTrace();
-            }
         }
         else if (words[0].equals("if") || keyword.equals("if")) {
             this.isIf = true;
-            String[] splitArray = code.split("\\b(?=a\\()|(?<=\\(\\w*)\\(");
+            try {
+                String[] splitArray = code.split("(?=\\s[a-zA-Z]+\\()");
 
-            String IF = splitArray[0].trim();
-            String func = splitArray[1].trim();
+                String IF = splitArray[0].trim();
+                String func = splitArray[1].trim();
 
-            String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
-            boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
-            System.out.println(isTrue);
+                String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
+                boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
+                if (isTrue) {
+                    new KylinExpression().getExpression(func,this);
+                }
+            }catch (Exception exception) {
+                exception.printStackTrace();
+            }
             return;
         }
         else if (code.startsWith("#include")) {
@@ -159,8 +161,8 @@ public class KylinRuntime {
             if (this.FunctionMap.containsKey(function)) {
                 KylinFunction kylinFunction =this.FunctionMap.get(function);
                 String[] split = content.split(",\\s*");
-                // System.out.println(kylinFunction.input.length);
-                // System.out.println(split.length);
+                 //System.out.println(kylinFunction.input.length);
+                 //System.out.println(split.length);
                 for (int i = 0 ; i < kylinFunction.input.length ;i++) {
                     KylinValue kylinValue = new KylinValue();
                     kylinValue.setName(kylinFunction.input[i]);

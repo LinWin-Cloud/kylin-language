@@ -11,7 +11,6 @@ public class KylinBoolean {
                 String[] array = str.split("==");
                 String a = array[0].trim();
                 String b = array[1].trim();
-                System.out.println(a+" "+b);
                 if (a.contains("(") && a.contains(")")) {
                     KylinFunction f = kylinRuntime.FunctionMap.get(a.substring(0,a.indexOf("(")));
                     if (f != null) {
