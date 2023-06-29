@@ -1,5 +1,7 @@
 package Program;
 
+import main.mainApp;
+
 public class KylinBoolean {
     public boolean isBool(String str , KylinRuntime kylinRuntime)
     {
@@ -7,15 +9,16 @@ public class KylinBoolean {
             if (str.contains("==")) {
                 StringBuffer stringBuffer = new StringBuffer();
                 String[] array = str.split("==");
-                String a = array[0];
-                String b = array[1];
+                String a = array[0].trim();
+                String b = array[1].trim();
+                System.out.println(a+" "+b);
                 if (a.contains("(") && a.contains(")")) {
                     KylinFunction f = kylinRuntime.FunctionMap.get(a.substring(0,a.indexOf("(")));
                     if (f != null) {
                         String[] in = a.substring(a.indexOf("(")+1, a.lastIndexOf(")")).split(",\\s*");
                         f.setInput(in);
                         f.kylinRuntime.run();
-                        stringBuffer.append(f.kylinRuntime.getResult());
+                        a = f.kylinRuntime.getResult();
                     }else {
                         return false;
                     }
@@ -26,19 +29,21 @@ public class KylinBoolean {
                         String[] in = a.substring(b.indexOf("(")+1, b.lastIndexOf(")")).split(",\\s*");
                         f.setInput(in);
                         f.kylinRuntime.run();
-                        stringBuffer.append(f.kylinRuntime.getResult());
+                        b = f.kylinRuntime.getResult();
                     }else {
                         return false;
                     }
                 }
                 if (kylinRuntime.ValueMap.containsKey(a)) {
-                    stringBuffer.append(kylinRuntime.ValueMap.get(a).getContent());
+                    a = kylinRuntime.ValueMap.get(a).getContent();
                 }
                 if (kylinRuntime.ValueMap.containsKey(b)) {
-                    stringBuffer.append(kylinRuntime.ValueMap.get(b));
+                    b = kylinRuntime.ValueMap.get(b).getContent();
                 }
-                System.out.println(stringBuffer.toString());
-                return Boolean.parseBoolean(stringBuffer.toString());
+                stringBuffer.append(a);
+                stringBuffer.append("==");
+                stringBuffer.append(b);
+                return (boolean) mainApp.scriptEngine.eval(stringBuffer.toString());
             }
             return Boolean.parseBoolean(str);
         } catch (Exception e) {
