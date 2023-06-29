@@ -37,6 +37,7 @@ public class KylinBoolean {
                 if (kylinRuntime.ValueMap.containsKey(b)) {
                     stringBuffer.append(kylinRuntime.ValueMap.get(b));
                 }
+                System.out.println(stringBuffer.toString());
                 return Boolean.parseBoolean(stringBuffer.toString());
             }
             return Boolean.parseBoolean(str);
