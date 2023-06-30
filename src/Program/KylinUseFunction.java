@@ -2,10 +2,14 @@ package Program;
 
 import main.baseFunction;
 
+import java.security.Key;
+
 public class KylinUseFunction {
     public static String[] KylinKeyWord ={
             "getTime",
-            "input"
+            "input",
+            "get_os",
+            "get_path"
     };
     public static boolean isUseFunction(String expression , KylinRuntime kylinRuntime) {
         try {
@@ -40,6 +44,12 @@ public class KylinUseFunction {
             return baseFunction.getTime();
         }else if (funcName.equals(KylinKeyWord[1]) || keyword.equals(KylinKeyWord[1])) {
             return baseFunction.input(new KylinExpression().getExpression(split[0] , kylinRuntime));
+        }
+        else if (funcName.equals(KylinKeyWord[2]) || keyword.equals(KylinKeyWord[2])) {
+            return System.getProperty("os.name");
+        }
+        else if (funcName.equals(KylinKeyWord[3]) || keyword.equals(KylinKeyWord[3])) {
+            return System.getProperty("user.dir");
         }
         else {
             return null;
