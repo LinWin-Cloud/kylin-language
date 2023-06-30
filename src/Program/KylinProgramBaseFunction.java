@@ -1,6 +1,10 @@
 package Program;
 
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -62,6 +66,37 @@ public class KylinProgramBaseFunction {
                     System.exit(1);
                     return false;
                 }
+            }
+            if (function.equals("clear") || keyword.equals("clear")) {
+                String os = System.getProperty("os.name");
+                if (os.contains("Windows")) {
+                    Runtime.getRuntime().exec("cls");
+                }
+                else {
+                    Runtime.getRuntime().exec("clear");
+                }
+            }
+            if (function.equals("shell") || keyword.equals("shell")) {
+                String os = System.getProperty("os.name");
+                Process process;
+                if (os.contains("Windows")) {
+                    process = Runtime.getRuntime().exec(new KylinExpression().getExpression(input,kylinRuntime));
+                }
+                else {
+                    process = Runtime.getRuntime().exec(new KylinExpression().getExpression(input,kylinRuntime));
+                }
+                InputStream inputStream = process.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                while (true) {
+                    String line = bufferedReader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    System.out.println(line);
+                }
+                bufferedReader.close();
+                inputStream.close();
+                process.destroy();
             }
             return true;
         }catch (Exception exception) {

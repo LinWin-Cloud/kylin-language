@@ -46,7 +46,6 @@ public class KylinBoolean {
             }
             return Boolean.parseBoolean(str);
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
