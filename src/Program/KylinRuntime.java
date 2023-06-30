@@ -127,7 +127,8 @@ public class KylinRuntime {
                 String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
                 boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
                 if (isTrue) {
-                    System.out.println(func);
+                    //System.out.println(func);
+                    //System.out.println(this.FunctionMap.keySet());
                     new KylinExpression().getExpression(func,this);
                 }
             }catch (Exception exception) {

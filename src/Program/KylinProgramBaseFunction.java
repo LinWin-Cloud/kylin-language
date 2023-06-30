@@ -81,7 +81,7 @@ public class KylinProgramBaseFunction {
     public static boolean isRealDefinedFunction(String code , KylinRuntime kylinRuntime) {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
-            return isDefinedFunction(code) && kylinRuntime.FunctionMap.containsKey(function);
+            return (isDefinedFunction(code) && kylinRuntime.FunctionMap.containsKey(function)) || (isDefinedFunction(code) && kylinRuntime.isFunction && kylinRuntime.PublicRuntime.FunctionMap.containsKey(function));
         }catch (Exception exception) {
             return false;
         }

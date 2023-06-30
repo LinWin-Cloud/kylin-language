@@ -37,16 +37,32 @@ public class KylinExpression {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
                     KylinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
-
+                    KylinFunction PubFunc = null;
                     String[] func_content = input.split(",\\s*");
-                    for (int j = 0 ; j < kylinFunction.input.length ; j++) {
-                        KylinValue kylinValue = new KylinValue();
-                        kylinValue.setName(kylinFunction.input[j]);
-                        kylinValue.setContent(func_content[j] , kylinRuntime);
-                        kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
+
+                    if (kylinFunction == null && (kylinRuntime.PublicRuntime!=null&&kylinRuntime.PublicRuntime.FunctionMap.containsKey(function))) {
+                        PubFunc = kylinRuntime.PublicRuntime.FunctionMap.get(function);
                     }
-                    kylinFunction.kylinRuntime.run();
-                    stringBuffer.append(kylinFunction.kylinRuntime.getResult());
+                    if (PubFunc == null) {
+                        for (int j = 0 ; j < kylinFunction.input.length ; j++) {
+                            KylinValue kylinValue = new KylinValue();
+                            kylinValue.setName(kylinFunction.input[j]);
+                            kylinValue.setContent(func_content[j] , kylinRuntime);
+                            kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
+                        }
+                        kylinFunction.kylinRuntime.run();
+                        stringBuffer.append(kylinFunction.kylinRuntime.getResult());
+                    }
+                    else {
+                        for (int j = 0 ; j < PubFunc.input.length ; j++) {
+                            KylinValue kylinValue = new KylinValue();
+                            kylinValue.setName(PubFunc.input[j]);
+                            kylinValue.setContent(func_content[j] , kylinRuntime);
+                            PubFunc.kylinRuntime.ValueMap.put(PubFunc.input[j] , kylinValue);
+                        }
+                        PubFunc.kylinRuntime.run();
+                        stringBuffer.append(PubFunc.kylinRuntime.getResult());
+                    }
                     continue;
                 }
                 else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s , kylinRuntime)) {
@@ -82,7 +98,7 @@ public class KylinExpression {
             return stringBuffer.toString();
         }
         catch (Exception exception) {
-            exception.printStackTrace();
+            //exception.printStackTrace();
             KylinRuntimeException kylinRuntimeException =
                     new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1 , true);
             kylinRuntimeException.PrintErrorMessage(kylinRuntime);
