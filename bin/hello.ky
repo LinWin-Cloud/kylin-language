@@ -1,1 +1,6 @@
-out(get_path())
+
+
+func a() public
+    var a = get_os()
+    out(a)
+end_func
