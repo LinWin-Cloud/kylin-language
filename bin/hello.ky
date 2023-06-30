@@ -1,12 +1,3 @@
 
-func a() public
-    out("hello world")
-end_func
 
-func console() public
-    var in = input("Linux Console $ ")
-    out(in)
-    if (in == 1) a()
-end_func
-
-for(console() , 10000 , false)
+shell("echo hello world")
