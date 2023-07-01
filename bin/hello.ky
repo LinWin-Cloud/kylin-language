@@ -1,7 +1,16 @@
 
-
 func a() public
+
+    f b()
+        out("hello world1")
+    e_f
+
+    f c()
+        out("hello world2")
+    e_f
+
     var a = input("input: ")
-    out(a)
+    if (a == 1) b()
+    else c()
 end_func
 a()
