@@ -1,16 +1,14 @@
+#include<{head}/chinese.kyh>
 
-func a() public
+f a()
+    out("你选择了继续")
+e_f
 
-    f b()
-        out("hello world1")
-    e_f
+f b()
+    out("你选择了不继续")
+e_f
 
-    f c()
-        out("hello world2")
-    e_f
-
-    var a = input("input: ")
-    if (a == 1) b()
-    else c()
-end_func
-a()
+输出("你好，世界")
+变量 a = 输入("是否继续: [y/n] ")
+if (a == y) a()
+else b()
