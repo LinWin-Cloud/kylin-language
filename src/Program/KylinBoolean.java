@@ -39,10 +39,7 @@ public class KylinBoolean {
                 if (kylinRuntime.ValueMap.containsKey(b)) {
                     b = kylinRuntime.ValueMap.get(b).getContent();
                 }
-                stringBuffer.append(a);
-                stringBuffer.append("==");
-                stringBuffer.append(b);
-                return (boolean) mainApp.scriptEngine.eval(stringBuffer.toString());
+                return a.equals(b);
             }
             return Boolean.parseBoolean(str);
         } catch (Exception e) {
