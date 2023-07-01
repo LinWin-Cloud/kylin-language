@@ -8,6 +8,9 @@ import java.util.Set;
 
 import KylinException.KylinRuntimeException;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 public class KylinRuntime {
     public ArrayList<String> code;
     public Map<String , KylinValue> ValueMap = new HashMap<>();
@@ -23,6 +26,7 @@ public class KylinRuntime {
     public Map<String , String> defined_func = new HashMap<>();
     public String name;
     private boolean isIf = false;
+    private boolean IF_OK = false;
 
     public KylinRuntime(String name) {
         this.name = name;
@@ -118,23 +122,25 @@ public class KylinRuntime {
         }
         else if (words[0].equals("if") || keyword.equals("if")) {
             this.isIf = true;
-            try {
-                String[] splitArray = code.split("(?=\\s[a-zA-Z]+\\()");
+            String[] splitArray = code.split("(?=\\s[a-zA-Z]+\\()");
 
-                String IF = splitArray[0].trim();
-                String func = splitArray[1].trim();
+            String IF = splitArray[0].trim();
+            String func = splitArray[1].trim();
 
-                String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
-                boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
-                if (isTrue) {
-                    //System.out.println(func);
-                    //System.out.println(this.FunctionMap.keySet());
-                    new KylinExpression().getExpression(func,this);
-                }
-            }catch (Exception exception) {
-                exception.printStackTrace();
+            String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
+            boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
+            if (isTrue) {
+                this.IF_OK = true;
+                //System.out.println(func);
+                //System.out.println(this.FunctionMap.keySet());
+                new KylinExpression().getExpression(func,this);
             }
             return;
+        }
+        else if (words[0].equals("else") && this.isIf && !this.IF_OK) {
+            this.isIf = false;
+            String func = code.substring(code.indexOf(" ")+1);
+            new KylinExpression().getExpression(func,this);
         }
         else if (code.startsWith("#include")) {
             main.baseFunction.include(code , this);
