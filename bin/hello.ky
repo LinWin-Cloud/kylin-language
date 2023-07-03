@@ -1,14 +1,9 @@
 
 f a()
-    out("你选择了继续")
+    out("hello world")
 e_f
+var a = getTime()
+for(a(), 1000)
+var b = getTime()
 
-f b()
-    out("你选择了不继续")
-e_f
-
-err c(e)
-    out(e.message)
-e_err
-
-exception(a() , c())
+out(<b-a>)
