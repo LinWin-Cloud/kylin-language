@@ -1,6 +1,8 @@
 package Program;
 
 
+import KylinException.KylinRuntimeException;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,7 +70,8 @@ public class KylinProgramBaseFunction {
                     return true;
                 }
             }catch (Exception exception) {
-                System.out.println("[ERR] "+exception.getMessage());
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1,true);
+                kylinRuntimeException.PrintErrorMessage(kylinRuntime);
                 System.exit(1);
                 return false;
             }
