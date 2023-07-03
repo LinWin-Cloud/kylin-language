@@ -1,5 +1,6 @@
 package main;
 
+import KylinException.KylinRuntimeException;
 import Program.KylinRuntime;
 
 import javax.script.*;
@@ -30,15 +31,16 @@ public class mainApp {
         else {
             File target = new File(args[0]);
             if (target.exists() && target.isFile() && target.canRead()) {
+                KylinRuntime main = new KylinRuntime("main");
                 try {
                     //long s = System.currentTimeMillis();
-                    KylinRuntime main = new KylinRuntime("main");
                     main.code = baseFunction.getScript(target.getAbsolutePath());
                     main.run();
                     //long e = System.currentTimeMillis();
                     //System.out.println(e - s);
                 }catch (Exception exception) {
-                    System.out.println(exception.getMessage());
+                    KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0,true);
+                    kylinRuntimeException.PrintErrorMessage(main);
                 }
             }
             else {

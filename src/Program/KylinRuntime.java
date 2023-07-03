@@ -179,7 +179,7 @@ public class KylinRuntime {
             return;
         }
         else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
-            return;
+            KylinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
             KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,true);
