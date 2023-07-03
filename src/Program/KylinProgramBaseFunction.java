@@ -98,6 +98,9 @@ public class KylinProgramBaseFunction {
                 inputStream.close();
                 process.destroy();
             }
+            if (function.equals("exception") || keyword.equals("exception")) {
+
+            }
             return true;
         }catch (Exception exception) {
             return false;

@@ -13,6 +13,7 @@ import javax.script.ScriptEngineManager;
 
 public class KylinRuntime {
     public ArrayList<String> code;
+    public boolean isError = false;
     public Map<String , KylinValue> ValueMap = new HashMap<>();
     public Map<String , KylinFunction> FunctionMap = new HashMap<>();
     public boolean isFunction = false;
@@ -141,6 +142,34 @@ public class KylinRuntime {
             this.isIf = false;
             String func = code.substring(code.indexOf(" ")+1);
             new KylinExpression().getExpression(func,this);
+        }
+        else if (words[0].equals("err") || keyword.equals("err")) {
+            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
+            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
+            boolean isPublic = false;
+
+            KylinFunction kylinFunction = new KylinFunction(name);
+            kylinFunction.isPublic = isPublic;
+
+            ArrayList<String> functionCode = new ArrayList<>();
+            for (int j = i+1 ; j < this.code.size() ;j++) {
+                String line = this.code.get(j).trim();
+                if ((line.equals("e_err"))) {
+                    this.codeLine = j;
+                    break;
+                }
+                if (line.equals("")) {
+                    continue;
+                }
+                functionCode.add(line);
+            }
+            kylinFunction.kylinRuntime.code = functionCode;
+            kylinFunction.kylinRuntime.PublicRuntime = this;
+            KylinValue kylinValue = new KylinValue();
+            kylinValue.setName(inputContent+".message");
+            kylinFunction.kylinRuntime.ValueMap.put(inputContent+".message",kylinValue);
+            this.FunctionMap.put(name , kylinFunction);
+            return;
         }
         else if (code.startsWith("#include")) {
             main.baseFunction.include(code , this);
