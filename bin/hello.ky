@@ -1,4 +1,3 @@
-#include<{head}/chinese.kyh>
 
 f a()
     out("你选择了继续")
@@ -8,7 +7,8 @@ f b()
     out("你选择了不继续")
 e_f
 
-输出("你好，世界")
-变量 a = 输入("是否继续: [y/n] ")
-if (a == y) a()
-else b()
+err c(e)
+    out(e.message)
+e_err
+
+exception(a() , c())
