@@ -16,6 +16,7 @@ public class KylinRuntime {
     public boolean isError = false;
     public Map<String , KylinValue> ValueMap = new HashMap<>();
     public Map<String , KylinFunction> FunctionMap = new HashMap<>();
+    public Map<String , KylinFunction> ExceptionMap = new HashMap<>();
     public boolean isFunction = false;
     private String result = "";
     public KylinRuntime PublicRuntime;
@@ -165,10 +166,12 @@ public class KylinRuntime {
             }
             kylinFunction.kylinRuntime.code = functionCode;
             kylinFunction.kylinRuntime.PublicRuntime = this;
+            kylinFunction.isException = true;
+            kylinFunction.err_code = inputContent+".message";
             KylinValue kylinValue = new KylinValue();
             kylinValue.setName(inputContent+".message");
             kylinFunction.kylinRuntime.ValueMap.put(inputContent+".message",kylinValue);
-            this.FunctionMap.put(name , kylinFunction);
+            this.ExceptionMap.put(name , kylinFunction);
             return;
         }
         else if (code.startsWith("#include")) {
@@ -176,6 +179,7 @@ public class KylinRuntime {
             return;
         }
         else if (isFunction(code)) {
+            runFunction(code);
             return;
         }
         else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
@@ -195,24 +199,29 @@ public class KylinRuntime {
         try {
             String function = code.substring(0,code.indexOf("(")).trim();
             String content = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-            if (this.FunctionMap.containsKey(function)) {
-                KylinFunction kylinFunction =this.FunctionMap.get(function);
-                String[] split = content.split(",\\s*");
-                 //System.out.println(kylinFunction.input.length);
-                 //System.out.println(split.length);
-                for (int i = 0 ; i < kylinFunction.input.length ;i++) {
-                    KylinValue kylinValue = new KylinValue();
-                    kylinValue.setName(kylinFunction.input[i]);
-                    kylinValue.setContent(split[i] , this);
-                    kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[i] , kylinValue);
-                }
-                kylinFunction.kylinRuntime.run();
-                return true;
-            }else {
-                return false;
-            }
+            return this.FunctionMap.containsKey(function);
         }catch (Exception exception) {
             //exception.printStackTrace();
+            return false;
+        }
+    }
+    public boolean runFunction(String code) throws Exception {
+        String function = code.substring(0,code.indexOf("(")).trim();
+        String content = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
+        if (this.FunctionMap.containsKey(function)) {
+            KylinFunction kylinFunction =this.FunctionMap.get(function);
+            String[] split = content.split(",\\s*");
+            //System.out.println(kylinFunction.input.length);
+            //System.out.println(split.length);
+            for (int i = 0 ; i < kylinFunction.input.length ;i++) {
+                KylinValue kylinValue = new KylinValue();
+                kylinValue.setName(kylinFunction.input[i]);
+                kylinValue.setContent(split[i] , this);
+                kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[i] , kylinValue);
+            }
+            kylinFunction.kylinRuntime.run();
+            return true;
+        }else {
             return false;
         }
     }

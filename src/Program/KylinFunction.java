@@ -4,6 +4,8 @@ public class KylinFunction {
     public String name;
     public String[] input;
     public boolean isPublic = true;
+    public boolean isException = false;
+    public String err_code;
     public KylinRuntime kylinRuntime = new KylinRuntime("");
 
     public KylinFunction(String name) {

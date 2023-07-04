@@ -3,6 +3,7 @@ package Program;
 
 import KylinException.KylinRuntimeException;
 
+import javax.print.attribute.standard.MediaSize;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -114,7 +115,20 @@ public class KylinProgramBaseFunction {
             try {
                 new KylinExpression().getExpression(func , kylinRuntime);
             }catch (Exception exception) {
-                new KylinExpression().getExpression(err , kylinRuntime);
+                try {
+                    String name = err.substring(0,err.indexOf("("));
+                    KylinFunction kylinFunction = kylinRuntime.ExceptionMap.get(name);
+                    if (kylinFunction == null) {
+                        throw new Exception("Cannot find target exception function: "+ name);
+                    }else {
+                        KylinValue kylinValue = new KylinValue();
+                        kylinValue.setName(kylinFunction.err_code);
+                        kylinValue.setContent(exception.getMessage() , kylinRuntime);
+                        kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.err_code, kylinValue);
+                    }
+                }catch (Exception exception1) {
+                    throw new Exception(exception1);
+                }
             }
         }
         return true;
