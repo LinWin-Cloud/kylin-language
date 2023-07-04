@@ -18,8 +18,9 @@ Kylin是一款高级编程语言，其目的是为了解决现如今很多的编
 你应该选择kyLin，不仅仅是因为他适合初学者，更重要的是，他的功能更加强大，他对标Python，在网页服务器方面
 KyLin可以超过Python甚至接近c++
 
-#### 文档:-docx
-文档链接: <a href='https://gitee.com/LinwinSoft/kylin_ke/tree/master/doc/Chinese'>中文文档</a>
+## 文档:-docx
+### 文档链接:
+1. <a href='https://gitee.com/LinwinSoft/kylin_ke/tree/master/doc/Chinese'>中文文档</a>
 
 ## 函数式编程
 1. 函数
