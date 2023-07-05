@@ -43,6 +43,9 @@ public class KylinRuntime {
         if (keyword == null) {
             keyword = "";
         }
+        if (code.startsWith("//")) {
+            return;
+        }
         //String keyword = this.defined_keyword.get(words[0]);
         //System.out.println(words[0]);
         if (words[0].equals("var") || keyword.equals("var")) {
