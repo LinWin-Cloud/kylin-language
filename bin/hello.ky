@@ -1,9 +1,1 @@
 
-f a()
-    out("hello world")
-e_f
-var a = getTime()
-for(a(), 1000)
-var b = getTime()
-
-out(<b-a>)
