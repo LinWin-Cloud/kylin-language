@@ -65,3 +65,6 @@ for(main() , 1000)
 8. SQL
 9. Linux Shell
 10. Go
+
+## 基于jvm的生态
+如果是kylin-jvm,那么KyLin编程语言同样是支持一些Java的类库的，就是说一些编程语言的类库可以直接调用Java的。
