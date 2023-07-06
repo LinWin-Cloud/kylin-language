@@ -1,6 +1,1 @@
-
-var a = <1+1>
-var d = 2
-var c = <a-d>
-out(c)
-
+import "util.math"
