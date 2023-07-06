@@ -5,7 +5,14 @@ import java.io.File;
 public class ImportLib {
     public static void lib_import(String expression , KylinRuntime kylinRuntime) throws Exception
     {
-
+        String path = main.mainApp.jarDirectory + "/";
+        File result = searchFile(path, expression);
+        if (result != null) {
+            KylinRuntime import_kylin = new KylinRuntime(result.getName());
+            
+        }else {
+            throw new Exception("No module: "+expression);
+        }
     }
 
     public static File searchFile(String basePath, String searchString) {
