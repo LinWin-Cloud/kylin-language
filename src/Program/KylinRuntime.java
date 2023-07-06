@@ -177,6 +177,11 @@ public class KylinRuntime {
             this.ExceptionMap.put(name , kylinFunction);
             return;
         }
+        else if (words[0].equals("import")) {
+            String lib = code.substring(code.indexOf("\"")+1,code.lastIndexOf("\""));
+            ImportLib.lib_import(lib.trim(),this);
+            return;
+        }
         else if (code.startsWith("#include")) {
             main.baseFunction.include(code , this);
             return;
