@@ -1,1 +1,13 @@
 import "util.math"
+
+class a
+    func __init__() public
+        out("hello world")
+    end_func
+
+    func a() public
+        out("hello world2")
+    end_func
+end_class
+
+var a = new a()
