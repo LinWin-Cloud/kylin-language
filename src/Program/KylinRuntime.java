@@ -4,51 +4,48 @@ import main.baseFunction;
 
 import java.util.*;
 import java.util.Map;
-import java.util.Set;
 
 import KylinException.KylinRuntimeException;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 public class KylinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
-    public Map<String , KylinValue> ValueMap = new HashMap<>();
-    public Map<String , KylinFunction> FunctionMap = new HashMap<>();
-    public Map<String , KylinFunction> ExceptionMap = new HashMap<>();
-    public boolean isFunction = false;
-    private String result = "";
-    public KylinRuntime PublicRuntime;
+    public Map<String , KylinValue> ValueMap = new HashMap<>();                 // 储存本运行环境的变量
+    public Map<String , KylinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
+    public Map<String , KylinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
+    public boolean isFunction = false;                                          // 本运行环境是否是 函数
+    private String result = "";                                 
+    public KylinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
     public int codeLine = 0;
     public String getResult() {
         return this.result;
     }
-    public Map<String , String> defined_keyword = new HashMap<>();
-    public Map<String , String> defined_func = new HashMap<>();
-    public String name;
-    private boolean isIf = false;
-    private boolean IF_OK = false;
+    public Map<String , String> defined_keyword = new HashMap<>();              // 定义的关键字hashmap
+    public Map<String , String> defined_func = new HashMap<>();                 // 定义的函数关键字，例如 out("hello world") 可以定义为 print("hello world")
+    public String name;                                                         // 本运行环境名字
+    private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
+    private boolean IF_OK = false;                                              // if语句是否结束
 
     public KylinRuntime(String name) {
         this.name = name;
     }
 
     public void exec(String code, int i) throws Exception {
+        //通过空格分割字符串
         String[] words = code.trim().split(" ");
         if (code.equals("")) {
             return;
         }
         String keyword = this.defined_keyword.get(words[0]);
+        // 这个keyword对应一个hashmap中的value , 例如中文编程下 "变量 a = 1"，那么这个 "变量" 就会对应一个值 "var" ，同样可以处理语句
         if (keyword == null) {
             keyword = "";
         }
         if (code.startsWith("//")) {
+            // 这条是处理注释，是注释的直接过去
             return;
         }
-        //String keyword = this.defined_keyword.get(words[0]);
-        //System.out.println(words[0]);
         if (words[0].equals("var") || keyword.equals("var")) {
+            //这个是定义变量的语句
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
             KylinValue kylinValue = new KylinValue();
@@ -62,6 +59,7 @@ public class KylinRuntime {
             return;
         }
         else if (words[0].equals("#defined") || keyword.equals("#defined")) {
+            // 定义关键字是什么
             String key = words[1];
             String value = words[2];
             this.defined_keyword.put(value , key);
@@ -79,6 +77,10 @@ public class KylinRuntime {
              * func func_name (a ,b) public
              *      return <a + b>
              * end_func
+             * 
+             * f func_name() 
+             *      return "hello world"
+             * e_f
              */
                 String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
                 String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
@@ -148,6 +150,7 @@ public class KylinRuntime {
             new KylinExpression().getExpression(func,this);
         }
         else if (words[0].equals("err") || keyword.equals("err")) {
+            //定义异常处理函数
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
             String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
             boolean isPublic = false;
