@@ -98,4 +98,11 @@ public class baseFunction {
             throw new Exception("Can not find target head file.");
         }
     }
+    public static String getLastName(String str) {
+        try {
+            return str.substring(0,str.lastIndexOf("."));
+        }catch (Exception exception) {
+            return str;
+        }
+    }
 }
