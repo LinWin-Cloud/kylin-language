@@ -70,3 +70,14 @@ for(main() , 1000)
 
 ## 基于jvm的生态
 如果是kylin-jvm,那么KyLin编程语言同样是支持一些Java的类库的，就是说一些编程语言的类库可以直接调用Java的。
+
+## 目录结构
+### src ---源代码
+#### KylinException	---处理异常的代码
+#### main ---启动和主要参数
+#### Program ---KyLin运行环境主要代码
+
+### out ---输出的class
+### bin ---存放真正成型的jar和启动文件
+### head ---自定义头文件
+### kpt ---kpt包管理器
