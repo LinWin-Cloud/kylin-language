@@ -58,6 +58,7 @@ public class KyLinRuntime {
             KyLinValue kylinValue = new KyLinValue();
             kylinValue.setContent(content ,this);
             kylinValue.setName(name);
+            kylinValue.setIs_public(true);
             this.ValueMap.put(name , kylinValue);
             return;
         }
