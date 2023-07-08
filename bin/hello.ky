@@ -4,8 +4,6 @@ func main() public
     out("hello world")
 end_func
 
-create_thread(main())
-
 class a : public
 
     private homo = 114514
