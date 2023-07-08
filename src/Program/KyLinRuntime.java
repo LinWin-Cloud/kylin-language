@@ -204,7 +204,7 @@ public class KyLinRuntime {
         else if (words[0].equals("class") || keyword.equals("class"))
         {
             String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
-            boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")).trim());
+            boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")+1).trim());
 
             KyLinClass kyLinClass = new KyLinClass(name);
             kyLinClass.isPublic = isPublic;

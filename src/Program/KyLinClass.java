@@ -119,6 +119,5 @@ public class KyLinClass {
                 this.functionHashMap.put(kylinFunction.name , kylinFunction);
             }
         }
-        System.out.println(this.functionHashMap.keySet());
     }
 }
