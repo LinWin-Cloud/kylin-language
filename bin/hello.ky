@@ -12,5 +12,10 @@ class a : public
     func __init__() public
         out("hello world")
     end_func
+
+    func test() public
+        out("hello world")
+    end_func
 end_class
 
+var a = new(a)
