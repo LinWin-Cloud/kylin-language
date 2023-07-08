@@ -12,8 +12,7 @@ class a : public
     public is_homo = true
 
     func __init__() public
-
+        out("hello world")
     end_func
 end_class
 
-var a = new(a)
