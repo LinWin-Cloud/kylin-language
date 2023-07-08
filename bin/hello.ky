@@ -1,6 +1,16 @@
 import "util.math"
 
-class a
+func main() public
+    out("hello world")
+end_func
+
+create_thread(main())
+
+class a : public
+
+    private homo = 114514
+    public is_homo = true
+
     func __init__() public
 
     end_func
