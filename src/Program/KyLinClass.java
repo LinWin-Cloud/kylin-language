@@ -21,7 +21,7 @@ public class KyLinClass {
     {
         for (int i = 0 ; i < this.code.size() ; i++)
         {
-            
+
         }
     }
 }

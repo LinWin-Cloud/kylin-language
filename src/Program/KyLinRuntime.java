@@ -2,6 +2,7 @@ package Program;
 
 import main.baseFunction;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map;
 
@@ -30,22 +31,27 @@ public class KyLinRuntime {
         this.name = name;
     }
 
-    public void exec(String code, int i) throws Exception {
+    public void exec(String code, int i) throws Exception
+    {
         //通过空格分割字符串
         String[] words = code.trim().split(" ");
-        if (code.equals("")) {
+        if (code.equals(""))
+        {
             return;
         }
         String keyword = this.defined_keyword.get(words[0]);
         // 这个keyword对应一个hashmap中的value , 例如中文编程下 "变量 a = 1"，那么这个 "变量" 就会对应一个值 "var" ，同样可以处理语句
-        if (keyword == null) {
+        if (keyword == null)
+        {
             keyword = "";
         }
-        if (code.startsWith("//")) {
+        if (code.startsWith("//"))
+        {
             // 这条是处理注释，是注释的直接过去
             return;
         }
-        if (words[0].equals("var") || keyword.equals("var")) {
+        if (words[0].equals("var") || keyword.equals("var"))
+        {
             //这个是定义变量的语句
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
@@ -55,11 +61,13 @@ public class KyLinRuntime {
             this.ValueMap.put(name , kylinValue);
             return;
         }
-        if (isFunction && (words[0].equals("return") || keyword.equals("return"))) {
+        if (isFunction && (words[0].equals("return") || keyword.equals("return")))
+        {
             this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
         }
-        else if (words[0].equals("#defined") || keyword.equals("#defined")) {
+        else if (words[0].equals("#defined") || keyword.equals("#defined"))
+        {
             // 定义关键字是什么
             String key = words[1];
             String value = words[2];
@@ -87,9 +95,11 @@ public class KyLinRuntime {
                 String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
 
-                if (words[0].equals("func") || keyword.equals("func")) {
+                if (words[0].equals("func") || keyword.equals("func"))
+                {
                     isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
-                }else{
+                }else
+                {
                     isPublic = false;
                 }
 
@@ -98,7 +108,8 @@ public class KyLinRuntime {
                 kylinFunction.setInput(inputContent.split(","));
 
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (words[0].equals("func") || keyword.equals("func")) {
+                if (words[0].equals("func") || keyword.equals("func"))
+                {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line = this.code.get(j).trim();
                         if ((line.equals("end_func"))) {
@@ -111,7 +122,8 @@ public class KyLinRuntime {
                         functionCode.add(line);
                     }
                 }else{
-                    for (int j = i+1 ; j < this.code.size() ;j++) {
+                    for (int j = i+1 ; j < this.code.size() ;j++)
+                    {
                         String line = this.code.get(j).trim();
                         if ((line.equals("e_f"))) {
                             this.codeLine = j;
@@ -128,7 +140,8 @@ public class KyLinRuntime {
                 this.FunctionMap.put(name , kylinFunction);
                 return;
         }
-        else if (words[0].equals("if") || keyword.equals("if")) {
+        else if (words[0].equals("if") || keyword.equals("if"))
+        {
             this.isIf = true;
             String[] splitArray = code.split("(?=\\s[a-zA-Z]+\\()");
 
@@ -137,7 +150,8 @@ public class KyLinRuntime {
 
             String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
             boolean isTrue = new KyLinBoolean().isBool(IF_DO,this);
-            if (isTrue) {
+            if (isTrue)
+            {
                 this.IF_OK = true;
                 //System.out.println(func);
                 //System.out.println(this.FunctionMap.keySet());
@@ -145,12 +159,14 @@ public class KyLinRuntime {
             }
             return;
         }
-        else if (words[0].equals("else") && this.isIf && !this.IF_OK) {
+        else if (words[0].equals("else") && this.isIf && !this.IF_OK)
+        {
             this.isIf = false;
             String func = code.substring(code.indexOf(" ")+1);
             new KyLinExpression().getExpression(func,this);
         }
-        else if (words[0].equals("err") || keyword.equals("err")) {
+        else if (words[0].equals("err") || keyword.equals("err"))
+        {
             //定义异常处理函数
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
             String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
@@ -160,13 +176,16 @@ public class KyLinRuntime {
             kylinFunction.isPublic = isPublic;
 
             ArrayList<String> functionCode = new ArrayList<>();
-            for (int j = i+1 ; j < this.code.size() ;j++) {
+            for (int j = i+1 ; j < this.code.size() ;j++)
+            {
                 String line = this.code.get(j).trim();
-                if ((line.equals("e_err"))) {
+                if ((line.equals("e_err")))
+                {
                     this.codeLine = j;
                     break;
                 }
-                if (line.equals("")) {
+                if (line.equals(""))
+                {
                     continue;
                 }
                 functionCode.add(line);
@@ -181,20 +200,33 @@ public class KyLinRuntime {
             this.ExceptionMap.put(name , kylinFunction);
             return;
         }
-        else if (words[0].equals("import")) {
+        else if (words[0].equals("class") || keyword.equals("class"))
+        {
+            String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
+            boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")).trim());
+            for (int j = i + 1 ; j < this.code.size() ; j++)
+            {
+                
+            }
+        }
+        else if (words[0].equals("import") || keyword.equals("import"))
+        {
             String lib = code.substring(code.indexOf("\"")+1,code.lastIndexOf("\""));
             ImportLib.lib_import(lib.trim(),this);
             return;
         }
-        else if (code.startsWith("#include")) {
+        else if (code.startsWith("#include"))
+        {
             main.baseFunction.include(code , this);
             return;
         }
-        else if (isFunction(code)) {
+        else if (isFunction(code))
+        {
             runFunction(code);
             return;
         }
-        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code , this)) {
+        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code , this))
+        {
             KyLinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
