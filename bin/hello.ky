@@ -1,3 +1,9 @@
 import "util.math"
 
-out(math.add(1,1))
+class a
+    func __init__() public
+
+    end_func
+end_class
+
+var a = new(a)
