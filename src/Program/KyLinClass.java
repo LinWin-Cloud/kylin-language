@@ -1,2 +1,4 @@
-package Program;public class KyLinClass {
+package Program;
+
+public class KyLinClass {
 }

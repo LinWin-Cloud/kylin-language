@@ -1,7 +1,7 @@
 package main;
 
 import KylinException.KylinRuntimeException;
-import Program.KylinRuntime;
+import Program.KyLinRuntime;
 
 import javax.script.*;
 import java.io.File;
@@ -32,7 +32,7 @@ public class mainApp {
             File target = new File(args[0]);
             if (target.exists() && target.isFile() && target.canRead()) {
                 //设置新的运行环境 main
-                KylinRuntime main = new KylinRuntime("main");
+                KyLinRuntime main = new KyLinRuntime("main");
                 try {
                     //long s = System.currentTimeMillis();
                     main.code = baseFunction.getScript(target.getAbsolutePath()); //把代码加载进入运行环境

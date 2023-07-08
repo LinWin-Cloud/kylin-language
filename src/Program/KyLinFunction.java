@@ -1,14 +1,14 @@
 package Program;
 
-public class KylinFunction {
+public class KyLinFunction {
     public String name;
     public String[] input;
     public boolean isPublic = true;
     public boolean isException = false;
     public String err_code;
-    public KylinRuntime kylinRuntime = new KylinRuntime("");
+    public KyLinRuntime kylinRuntime = new KyLinRuntime("");
 
-    public KylinFunction(String name) {
+    public KyLinFunction(String name) {
         this.name = name;
         kylinRuntime.name = this.name;
         kylinRuntime.isFunction = true;
@@ -18,7 +18,7 @@ public class KylinFunction {
         this.input = input;
         for (String s : input)
         {
-            KylinValue kylinValue = new KylinValue();
+            KyLinValue kylinValue = new KyLinValue();
             kylinValue.setName(s);
             this.kylinRuntime.ValueMap.put(s , kylinValue);
         }

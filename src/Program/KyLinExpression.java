@@ -6,11 +6,9 @@ import main.mainApp;
 
 import javax.script.ScriptException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
 
-public class KylinExpression {
-    public String getExpression(String code , KylinRuntime kylinRuntime) {
+public class KyLinExpression {
+    public String getExpression(String code , KyLinRuntime kylinRuntime) {
         try {
             String[] tokens = code.split("[<>]");
             StringBuffer stringBuffer = new StringBuffer();
@@ -25,7 +23,7 @@ public class KylinExpression {
                     continue;
                 }
                 else if (kylinRuntime.ValueMap.containsKey(s)) {
-                    KylinValue kylinValue = kylinRuntime.ValueMap.get(s);
+                    KyLinValue kylinValue = kylinRuntime.ValueMap.get(s);
                     if (kylinValue.getContent() == null) {
                         throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.PublicRuntime.codeLine+1));
                     }else {
@@ -33,11 +31,11 @@ public class KylinExpression {
                     }
                     continue;
                 }
-                else if(KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
+                else if(KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-                    KylinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
-                    KylinFunction PubFunc = null;
+                    KyLinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
+                    KyLinFunction PubFunc = null;
                     String[] func_content = input.split(",\\s*");
 
                     if (kylinFunction == null && (kylinRuntime.PublicRuntime!=null&&kylinRuntime.PublicRuntime.FunctionMap.containsKey(function))) {
@@ -45,7 +43,7 @@ public class KylinExpression {
                     }
                     if (PubFunc == null) {
                         for (int j = 0 ; j < kylinFunction.input.length ; j++) {
-                            KylinValue kylinValue = new KylinValue();
+                            KyLinValue kylinValue = new KyLinValue();
                             kylinValue.setName(kylinFunction.input[j]);
                             kylinValue.setContent(func_content[j] , kylinRuntime);
                             kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
@@ -55,7 +53,7 @@ public class KylinExpression {
                     }
                     else {
                         for (int j = 0 ; j < PubFunc.input.length ; j++) {
-                            KylinValue kylinValue = new KylinValue();
+                            KyLinValue kylinValue = new KyLinValue();
                             kylinValue.setName(PubFunc.input[j]);
                             kylinValue.setContent(func_content[j] , kylinRuntime);
                             PubFunc.kylinRuntime.ValueMap.put(PubFunc.input[j] , kylinValue);
@@ -65,11 +63,11 @@ public class KylinExpression {
                     }
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s , kylinRuntime)) {
-                    stringBuffer.append(KylinUseFunction.UseFunction(s , kylinRuntime));
+                else if (KyLinProgramBaseFunction.isDefinedFunction(code) && KyLinUseFunction.isUseFunction(s , kylinRuntime)) {
+                    stringBuffer.append(KyLinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
+                else if (KyLinProgramBaseFunction.isDefinedFunction(code) && !KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
                 {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     try {
@@ -105,7 +103,7 @@ public class KylinExpression {
             return null;
         }
     }
-    public String[] getListExpression(String[] list , KylinRuntime kylinRuntime) {
+    public String[] getListExpression(String[] list , KyLinRuntime kylinRuntime) {
         try {
             ArrayList<String> stringArrayList = new ArrayList<>();
             for (String s : list) {
@@ -118,7 +116,7 @@ public class KylinExpression {
             return null;
         }
     }
-    public double evaluateExpression(String expression , KylinRuntime kylinRuntime) throws IllegalArgumentException {
+    public double evaluateExpression(String expression , KyLinRuntime kylinRuntime) throws IllegalArgumentException {
         try {
             String[] exp = expression.split("(?=[+\\-*/()])|(?<=[+\\-*/()])");
             String code = expression;
@@ -133,7 +131,7 @@ public class KylinExpression {
                     continue;
                 }
                 else if (kylinRuntime.ValueMap.containsKey(s)) {
-                    KylinValue kylinValue = kylinRuntime.ValueMap.get(s);
+                    KyLinValue kylinValue = kylinRuntime.ValueMap.get(s);
                     if (kylinValue.getContent() == null) {
                         throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.PublicRuntime.codeLine+1));
                     }else {
@@ -141,14 +139,14 @@ public class KylinExpression {
                     }
                     continue;
                 }
-                else if(KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
+                else if(KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-                    KylinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
+                    KyLinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
 
                     String[] func_content = input.split(",\\s*");
                     for (int j = 0 ; j < kylinFunction.input.length ; j++) {
-                        KylinValue kylinValue = new KylinValue();
+                        KyLinValue kylinValue = new KyLinValue();
                         kylinValue.setName(kylinFunction.input[j]);
                         kylinValue.setContent(func_content[j] , kylinRuntime);
                         kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
@@ -157,11 +155,11 @@ public class KylinExpression {
                     stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && KylinUseFunction.isUseFunction(s,kylinRuntime)) {
-                    stringBuffer.append(KylinUseFunction.UseFunction(s , kylinRuntime));
+                else if (KyLinProgramBaseFunction.isDefinedFunction(code) && KyLinUseFunction.isUseFunction(s,kylinRuntime)) {
+                    stringBuffer.append(KyLinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
-                else if (KylinProgramBaseFunction.isDefinedFunction(code) && !KylinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
+                else if (KyLinProgramBaseFunction.isDefinedFunction(code) && !KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime))
                 {
                     String function = code.substring(0 , code.indexOf("(")).trim();
                     try {

@@ -1,6 +1,6 @@
 package KylinException;
 
-import Program.KylinRuntime;
+import Program.KyLinRuntime;
 
 public class KylinRuntimeException {
     private String ErrMessage;
@@ -14,7 +14,7 @@ public class KylinRuntimeException {
     public String getErrMessage() {
         return this.ErrMessage;
     }
-    public void PrintErrorMessage(KylinRuntime kylinRuntime) {
+    public void PrintErrorMessage(KyLinRuntime kylinRuntime) {
         System.out.println("KylinRuntimeException: `"+this.ErrMessage+"`");
         System.out.println("    Error code: "+kylinRuntime.code.get(kylinRuntime.codeLine));
         System.out.println("    At line: "+(kylinRuntime.codeLine+1));

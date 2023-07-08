@@ -1,7 +1,7 @@
 package Program;
 
-public class KylinType {
-    public static String getType(String content) {
+public class KyLinType {
+    public static String getType(String content, KyLinRuntime kylinRuntime) {
         try {
             double b = Double.parseDouble(content);
             return "num";

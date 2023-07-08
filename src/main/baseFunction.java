@@ -1,6 +1,6 @@
 package main;
 
-import Program.KylinRuntime;
+import Program.KyLinRuntime;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,7 +57,7 @@ public class baseFunction {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
-    public static void include(String code , KylinRuntime kylinRuntime) throws Exception {
+    public static void include(String code , KyLinRuntime kylinRuntime) throws Exception {
         String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
         in = in.replace("{head}", mainApp.jarDirectory+"/../head");
         File file = new File(in);

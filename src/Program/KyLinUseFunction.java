@@ -2,16 +2,14 @@ package Program;
 
 import main.baseFunction;
 
-import java.security.Key;
-
-public class KylinUseFunction {
+public class KyLinUseFunction {
     public static String[] KylinKeyWord ={
             "getTime",
             "input",
             "get_os",
             "get_path"
     };
-    public static boolean isUseFunction(String expression , KylinRuntime kylinRuntime) {
+    public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
@@ -31,7 +29,7 @@ public class KylinUseFunction {
             return false;
         }
     }
-    public static String UseFunction(String expression ,KylinRuntime kylinRuntime) throws Exception {
+    public static String UseFunction(String expression , KyLinRuntime kylinRuntime) throws Exception {
         String funcName = expression.substring(0,expression.indexOf("(")).trim();
         String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
         String[] split = content.split(",\\s*");
@@ -43,7 +41,7 @@ public class KylinUseFunction {
         if (funcName.equals(KylinKeyWord[0]) || keyword.equals(KylinKeyWord[0])) {
             return baseFunction.getTime();
         }else if (funcName.equals(KylinKeyWord[1]) || keyword.equals(KylinKeyWord[1])) {
-            return baseFunction.input(new KylinExpression().getExpression(split[0] , kylinRuntime));
+            return baseFunction.input(new KyLinExpression().getExpression(split[0] , kylinRuntime));
         }
         else if (funcName.equals(KylinKeyWord[2]) || keyword.equals(KylinKeyWord[2])) {
             return System.getProperty("os.name");

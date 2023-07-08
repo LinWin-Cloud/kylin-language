@@ -3,17 +3,15 @@ package Program;
 
 import KylinException.KylinRuntimeException;
 
-import javax.print.attribute.standard.MediaSize;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class KylinProgramBaseFunction {
+public class KyLinProgramBaseFunction {
     private static String[] base = {
         "out",
         "for",
@@ -21,7 +19,7 @@ public class KylinProgramBaseFunction {
         "shell",
         "exception"
     };
-    public static boolean runProgramBaseFunction(String code , KylinRuntime kylinRuntime) throws Exception {
+    public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
         String keyword = kylinRuntime.defined_func.get(function);
@@ -29,7 +27,7 @@ public class KylinProgramBaseFunction {
             keyword = "";
         }
         if (function.equals("out") || keyword.equals("out")) {
-            System.out.println(new KylinExpression().getExpression(input , kylinRuntime));
+            System.out.println(new KyLinExpression().getExpression(input , kylinRuntime));
         }
         if (function.equals("for") || keyword.equals("for")) {
             String[] getIn = input.split(",(?![^(]*\\))");
@@ -90,10 +88,10 @@ public class KylinProgramBaseFunction {
             String os = System.getProperty("os.name");
             Process process;
             if (os.contains("Windows")) {
-                process = Runtime.getRuntime().exec(new KylinExpression().getExpression(input,kylinRuntime));
+                process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(input,kylinRuntime));
             }
             else {
-                process = Runtime.getRuntime().exec(new KylinExpression().getExpression(input,kylinRuntime));
+                process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(input,kylinRuntime));
             }
             InputStream inputStream = process.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -113,15 +111,15 @@ public class KylinProgramBaseFunction {
             String func = splitIn[0].trim();
             String err = splitIn[1].trim();
             try {
-                new KylinExpression().getExpression(func , kylinRuntime);
+                new KyLinExpression().getExpression(func , kylinRuntime);
             }catch (Exception exception) {
                 try {
                     String name = err.substring(0,err.indexOf("("));
-                    KylinFunction kylinFunction = kylinRuntime.ExceptionMap.get(name);
+                    KyLinFunction kylinFunction = kylinRuntime.ExceptionMap.get(name);
                     if (kylinFunction == null) {
                         throw new Exception("Cannot find target exception function: "+ name);
                     }else {
-                        KylinValue kylinValue = new KylinValue();
+                        KyLinValue kylinValue = new KyLinValue();
                         kylinValue.setName(kylinFunction.err_code);
                         kylinValue.setContent(exception.getMessage() , kylinRuntime);
                         kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.err_code, kylinValue);
@@ -133,7 +131,7 @@ public class KylinProgramBaseFunction {
         }
         return true;
     }
-    public static boolean isProgramBaseFunction(String code , KylinRuntime kylinRuntime) {
+    public static boolean isProgramBaseFunction(String code , KyLinRuntime kylinRuntime) {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
             String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
@@ -161,7 +159,7 @@ public class KylinProgramBaseFunction {
             return false;
         }
     }
-    public static boolean isRealDefinedFunction(String code , KylinRuntime kylinRuntime) {
+    public static boolean isRealDefinedFunction(String code , KyLinRuntime kylinRuntime) {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
             return (isDefinedFunction(code) && kylinRuntime.FunctionMap.containsKey(function)) || (isDefinedFunction(code) && kylinRuntime.isFunction && kylinRuntime.PublicRuntime.FunctionMap.containsKey(function));

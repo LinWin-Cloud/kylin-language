@@ -1,9 +1,7 @@
 package Program;
 
-import main.mainApp;
-
-public class KylinBoolean {
-    public boolean isBool(String str , KylinRuntime kylinRuntime)
+public class KyLinBoolean {
+    public boolean isBool(String str , KyLinRuntime kylinRuntime)
     {
         try {
             if (str.contains("==")) {
@@ -12,7 +10,7 @@ public class KylinBoolean {
                 String a = array[0].trim();
                 String b = array[1].trim();
                 if (a.contains("(") && a.contains(")")) {
-                    KylinFunction f = kylinRuntime.FunctionMap.get(a.substring(0,a.indexOf("(")));
+                    KyLinFunction f = kylinRuntime.FunctionMap.get(a.substring(0,a.indexOf("(")));
                     if (f != null) {
                         String[] in = a.substring(a.indexOf("(")+1, a.lastIndexOf(")")).split(",\\s*");
                         f.setInput(in);
@@ -23,7 +21,7 @@ public class KylinBoolean {
                     }
                 }
                 if (b.contains("(") && b.contains(")")) {
-                    KylinFunction f = kylinRuntime.FunctionMap.get(b.substring(0,b.indexOf("(")));
+                    KyLinFunction f = kylinRuntime.FunctionMap.get(b.substring(0,b.indexOf("(")));
                     if (f != null) {
                         String[] in = a.substring(b.indexOf("(")+1, b.lastIndexOf(")")).split(",\\s*");
                         f.setInput(in);

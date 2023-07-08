@@ -6,15 +6,15 @@ import java.util.*;
 import java.util.Map;
 
 import KylinException.KylinRuntimeException;
-public class KylinRuntime {
+public class KyLinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
-    public Map<String , KylinValue> ValueMap = new HashMap<>();                 // 储存本运行环境的变量
-    public Map<String , KylinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
-    public Map<String , KylinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
+    public Map<String , KyLinValue> ValueMap = new HashMap<>();                 // 储存本运行环境的变量
+    public Map<String , KyLinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
+    public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
     public boolean isFunction = false;                                          // 本运行环境是否是 函数
     private String result = "";                                 
-    public KylinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
+    public KyLinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
     public int codeLine = 0;
     public String getResult() {
         return this.result;
@@ -24,8 +24,9 @@ public class KylinRuntime {
     public String name;                                                         // 本运行环境名字
     private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
     private boolean IF_OK = false;                                              // if语句是否结束
+    public Map<String , KyLinClass> classMap = new HashMap<>();                 // 本运行环境下的 类 储存
 
-    public KylinRuntime(String name) {
+    public KyLinRuntime(String name) {
         this.name = name;
     }
 
@@ -48,14 +49,14 @@ public class KylinRuntime {
             //这个是定义变量的语句
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
-            KylinValue kylinValue = new KylinValue();
+            KyLinValue kylinValue = new KyLinValue();
             kylinValue.setContent(content ,this);
             kylinValue.setName(name);
             this.ValueMap.put(name , kylinValue);
             return;
         }
         if (isFunction && (words[0].equals("return") || keyword.equals("return"))) {
-            this.result = new KylinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
+            this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
         }
         else if (words[0].equals("#defined") || keyword.equals("#defined")) {
@@ -92,7 +93,7 @@ public class KylinRuntime {
                     isPublic = false;
                 }
 
-                KylinFunction kylinFunction = new KylinFunction(name);
+                KyLinFunction kylinFunction = new KyLinFunction(name);
                 kylinFunction.isPublic = isPublic;
                 kylinFunction.setInput(inputContent.split(","));
 
@@ -135,19 +136,19 @@ public class KylinRuntime {
             String func = splitArray[1].trim();
 
             String IF_DO = IF.substring(IF.indexOf("(")+1,IF.length()-1);
-            boolean isTrue = new KylinBoolean().isBool(IF_DO,this);
+            boolean isTrue = new KyLinBoolean().isBool(IF_DO,this);
             if (isTrue) {
                 this.IF_OK = true;
                 //System.out.println(func);
                 //System.out.println(this.FunctionMap.keySet());
-                new KylinExpression().getExpression(func,this);
+                new KyLinExpression().getExpression(func,this);
             }
             return;
         }
         else if (words[0].equals("else") && this.isIf && !this.IF_OK) {
             this.isIf = false;
             String func = code.substring(code.indexOf(" ")+1);
-            new KylinExpression().getExpression(func,this);
+            new KyLinExpression().getExpression(func,this);
         }
         else if (words[0].equals("err") || keyword.equals("err")) {
             //定义异常处理函数
@@ -155,7 +156,7 @@ public class KylinRuntime {
             String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
             boolean isPublic = false;
 
-            KylinFunction kylinFunction = new KylinFunction(name);
+            KyLinFunction kylinFunction = new KyLinFunction(name);
             kylinFunction.isPublic = isPublic;
 
             ArrayList<String> functionCode = new ArrayList<>();
@@ -174,7 +175,7 @@ public class KylinRuntime {
             kylinFunction.kylinRuntime.PublicRuntime = this;
             kylinFunction.isException = true;
             kylinFunction.err_code = inputContent+".message";
-            KylinValue kylinValue = new KylinValue();
+            KyLinValue kylinValue = new KyLinValue();
             kylinValue.setName(inputContent+".message");
             kylinFunction.kylinRuntime.ValueMap.put(inputContent+".message",kylinValue);
             this.ExceptionMap.put(name , kylinFunction);
@@ -193,8 +194,8 @@ public class KylinRuntime {
             runFunction(code);
             return;
         }
-        else if (KylinProgramBaseFunction.isProgramBaseFunction(code , this)) {
-            KylinProgramBaseFunction.runProgramBaseFunction(code,this);
+        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code , this)) {
+            KyLinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
             KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,true);
@@ -220,12 +221,12 @@ public class KylinRuntime {
         String function = code.substring(0,code.indexOf("(")).trim();
         String content = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
         if (this.FunctionMap.containsKey(function)) {
-            KylinFunction kylinFunction =this.FunctionMap.get(function);
+            KyLinFunction kylinFunction =this.FunctionMap.get(function);
             String[] split = content.split(",\\s*");
             //System.out.println(kylinFunction.input.length);
             //System.out.println(split.length);
             for (int i = 0 ; i < kylinFunction.input.length ;i++) {
-                KylinValue kylinValue = new KylinValue();
+                KyLinValue kylinValue = new KyLinValue();
                 kylinValue.setName(kylinFunction.input[i]);
                 kylinValue.setContent(split[i] , this);
                 kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[i] , kylinValue);

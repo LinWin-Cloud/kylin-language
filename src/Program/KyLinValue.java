@@ -1,6 +1,6 @@
 package Program;
 
-public class KylinValue {
+public class KyLinValue {
     private String name;
     private String type;
     private String content;
@@ -11,9 +11,9 @@ public class KylinValue {
     public void setType(String type) {
         this.type = type;
     }
-    public void setContent(String content , KylinRuntime kylinRuntime) {
-        this.content = new KylinExpression().getExpression(content , kylinRuntime);
-        this.type = KylinType.getType(this.content);
+    public void setContent(String content , KyLinRuntime kylinRuntime) {
+        this.content = new KyLinExpression().getExpression(content , kylinRuntime);
+        this.type = KyLinType.getType(this.content , kylinRuntime);
     }
     public String getContent() {
         return this.content;

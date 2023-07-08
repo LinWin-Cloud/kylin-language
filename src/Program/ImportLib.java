@@ -5,15 +5,15 @@ import main.baseFunction;
 import java.io.File;
 
 public class ImportLib {
-    public static void lib_import(String expression , KylinRuntime kylinRuntime) throws Exception
+    public static void lib_import(String expression , KyLinRuntime kylinRuntime) throws Exception
     {
         String path = main.mainApp.jarDirectory + "/../lib/";
         File result = searchFile(path, expression.replace(".","/"));
         if (result != null) {
-            KylinRuntime import_kylin = new KylinRuntime(result.getName());
+            KyLinRuntime import_kylin = new KyLinRuntime(result.getName());
             import_kylin.code = baseFunction.getScript(result.getAbsolutePath()); //把代码加载进入运行环境
             import_kylin.run();
-            for (KylinFunction kylinFunction : import_kylin.FunctionMap.values()) {
+            for (KyLinFunction kylinFunction : import_kylin.FunctionMap.values()) {
                 kylinRuntime.FunctionMap.put(main.baseFunction.getLastName(result.getName())+"."+kylinFunction.name , kylinFunction);
             }
             //System.out.println(kylinRuntime.FunctionMap.keySet());

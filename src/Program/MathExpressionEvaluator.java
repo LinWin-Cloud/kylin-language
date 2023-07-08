@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class MathExpressionEvaluator {
 
-    public static double evaluateExpression(String expression , KylinRuntime kylinRuntime) {
+    public static double evaluateExpression(String expression , KyLinRuntime kylinRuntime) {
         String[] tokens = tokenizeExpression(expression);
         Stack<Double> stack = new Stack<>();
 
