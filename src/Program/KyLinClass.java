@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class KyLinClass {
     public String name;
-    private boolean isPublic = false;
+    public boolean isPublic = false;
     private KyLinRuntime kyLinRuntime;
     public HashMap<String , KyLinFunction> functionHashMap = new HashMap<>();
     public HashMap<String , KyLinValue> valueHashMap = new HashMap<>();
@@ -21,7 +21,14 @@ public class KyLinClass {
     {
         for (int i = 0 ; i < this.code.size() ; i++)
         {
+            String line = this.code.get(i);
+            String[] words = line.split(" ");
+            if (words[0].equals("public")) {
 
+            }
+            else if (words[0].equals("private")) {
+
+            }
         }
     }
 }

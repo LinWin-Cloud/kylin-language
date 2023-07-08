@@ -204,10 +204,26 @@ public class KyLinRuntime {
         {
             String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
             boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")).trim());
+
+            KyLinClass kyLinClass = new KyLinClass(name);
+            kyLinClass.isPublic = isPublic;
+
             for (int j = i + 1 ; j < this.code.size() ; j++)
             {
-                
+                String line = this.code.get(j).trim();
+                if (line.equals(""))
+                {
+                    continue;
+                }
+                if (line.equals("end_class"))
+                {
+                    this.codeLine = j;
+                    break;
+                }
+                kyLinClass.code.add(line);
             }
+            kyLinClass.init_class();
+            return;
         }
         else if (words[0].equals("import") || keyword.equals("import"))
         {
