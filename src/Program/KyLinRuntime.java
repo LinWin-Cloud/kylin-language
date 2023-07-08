@@ -224,6 +224,7 @@ public class KyLinRuntime {
                 kyLinClass.code.add(line);
             }
             kyLinClass.init_class();
+            this.classMap.put(name , kyLinClass);
             return;
         }
         else if (words[0].equals("import") || keyword.equals("import"))
@@ -247,8 +248,11 @@ public class KyLinRuntime {
             KyLinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
+            /*
             KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,true);
             kylinRuntimeException.PrintErrorMessage(this);
+            */
+            new KyLinExpression().getExpression(code,this);
         }
     }
     public void run() throws Exception {

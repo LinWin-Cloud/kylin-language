@@ -91,7 +91,7 @@ public class KyLinClass {
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line_1 = this.code.get(j).trim();
-                        if ((line.equals("end_func"))) {
+                        if ((line_1.equals("end_func"))) {
                             i = j;
                             break;
                         }
@@ -104,7 +104,7 @@ public class KyLinClass {
                     for (int j = i+1 ; j < this.code.size() ;j++)
                     {
                         String line_1 = this.code.get(j).trim();
-                        if ((line.equals("e_f"))) {
+                        if ((line_1.equals("e_f"))) {
                             i = j;
                             break;
                         }
@@ -118,6 +118,14 @@ public class KyLinClass {
                 kylinFunction.kylinRuntime.PublicRuntime = kyLinRuntime;
                 this.functionHashMap.put(kylinFunction.name , kylinFunction);
             }
+        }
+    }
+    public void run_init_() throws Exception {
+        KyLinFunction kyLinFunction = this.functionHashMap.get("__init__");
+        if (kyLinFunction == null) {
+            return;
+        }else {
+            kyLinFunction.kylinRuntime.run();
         }
     }
 }

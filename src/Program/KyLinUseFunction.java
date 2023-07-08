@@ -2,12 +2,15 @@ package Program;
 
 import main.baseFunction;
 
+import java.nio.file.LinkPermission;
+
 public class KyLinUseFunction {
     public static String[] KylinKeyWord ={
             "getTime",
             "input",
             "get_os",
-            "get_path"
+            "get_path",
+            "new"
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -29,7 +32,7 @@ public class KyLinUseFunction {
             return false;
         }
     }
-    public static String UseFunction(String expression , KyLinRuntime kylinRuntime) throws Exception {
+    public static Object UseFunction(String expression , KyLinRuntime kylinRuntime) throws Exception {
         String funcName = expression.substring(0,expression.indexOf("(")).trim();
         String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
         String[] split = content.split(",\\s*");
@@ -48,6 +51,15 @@ public class KyLinUseFunction {
         }
         else if (funcName.equals(KylinKeyWord[3]) || keyword.equals(KylinKeyWord[3])) {
             return System.getProperty("user.dir");
+        }
+        else if (funcName.equals(KylinKeyWord[4]) || keyword.equals(KylinKeyWord[4])) {
+            KyLinClass kyLinClass = kylinRuntime.classMap.get(content);
+            if (kyLinClass == null) {
+                throw new Exception(content+" is not a class.");
+            }else {
+                kyLinClass.run_init_();
+            }
+            return kyLinClass;
         }
         else {
             return null;
