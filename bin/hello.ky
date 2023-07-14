@@ -1,4 +1,13 @@
 import "util.math"
 
-1231232
-out(math.add(100000123091289038021,1290123333333333333))
+f a()
+   out(math.add(100000123091289038021,1290123333333333333))
+e_f
+
+class a : public
+    func __init__() public
+        out("hello world")
+    end_func
+end_class
+
+var a = new(a)
