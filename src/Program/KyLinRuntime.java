@@ -26,7 +26,7 @@ public class KyLinRuntime {
     private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
     private boolean IF_OK = false;                                              // if语句是否结束
     public Map<String , KyLinClass> classMap = new HashMap<>();                 // 本运行环境下的 类 储存
-
+    public boolean OnErrorExit = true;
     public KyLinRuntime(String name) {
         this.name = name;
     }
@@ -248,11 +248,9 @@ public class KyLinRuntime {
             KyLinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
-            /*
-            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,true);
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,OnErrorExit);
             kylinRuntimeException.PrintErrorMessage(this);
-            */
-            new KyLinExpression().getExpression(code,this);
+            //new KyLinExpression().getExpression(code,this);
         }
     }
     public void run() throws Exception {

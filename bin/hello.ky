@@ -1,21 +1,4 @@
 import "util.math"
 
-func main() public
-    out("hello world")
-end_func
-
-class a : public
-
-    private homo = 114514
-    public is_homo = true
-
-    func __init__() public
-        out("hello world")
-    end_func
-
-    func test() public
-        out("hello world")
-    end_func
-end_class
-
-var a = new(a)
+1231232
+out(math.add(100000123091289038021,1290123333333333333))

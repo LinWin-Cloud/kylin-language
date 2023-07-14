@@ -95,8 +95,13 @@ public class KyLinExpression {
             //System.out.println(stringBuffer.toString());
             return stringBuffer.toString();
         }
+        catch (StackOverflowError stackOverflowError) {
+            KylinRuntimeException kylinRuntimeException =
+                    new KylinRuntimeException("StackOverflowError" , kylinRuntime.codeLine+1 , true);
+            kylinRuntimeException.PrintErrorMessage(kylinRuntime);
+            return null;
+        }
         catch (Exception exception) {
-            //exception.printStackTrace();
             KylinRuntimeException kylinRuntimeException =
                     new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1 , true);
             kylinRuntimeException.PrintErrorMessage(kylinRuntime);
