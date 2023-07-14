@@ -52,43 +52,7 @@ public class KyLinRuntime {
         }
         if (words[0].equals("var") || keyword.equals("var"))
         {
-            //这个是定义变量的语句
-            String name = words[1];
-            String content = code.substring(code.indexOf("=")+1).trim();
-            if (content.replace(" ","").startsWith("new(") && content.endsWith(")"))
-            {
-                String new_class = content.substring(content.indexOf("(")+1,content.lastIndexOf(")")).trim();
-                if (this.classMap.containsKey(new_class)) {
-                    KyLinValue value = new KyLinValue();
-                    value.setName(name);
-                    value.setType(new_class);
-                    value.setContent(this.classMap.get(new_class) , this);
-                    value.setIs_public(true);
-                    /**
-                     * Init a new class.
-                     */
-                    KyLinClass tmp = this.classMap.get(new_class);
-                    KyLinClass kyLinClass = new KyLinClass(tmp.name);
-                    kyLinClass.code = tmp.code;
-                    kyLinClass.isPublic = tmp.isPublic;
-                    kyLinClass.functionHashMap = tmp.functionHashMap;
-                    kyLinClass.name = tmp.name;
-                    kyLinClass.valueHashMap = tmp.valueHashMap;
-                    kyLinClass.run_init_();
 
-                    for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
-                        this.FunctionMap.put(value.getName()+"."+kyLinFunction.name , kyLinFunction);
-                    }
-                }else {
-                    throw new Exception("Can not init a new class: "+new_class);
-                }
-                return;
-            }
-            KyLinValue kylinValue = new KyLinValue();
-            kylinValue.setContent(content ,this);
-            kylinValue.setName(name);
-            kylinValue.setIs_public(true);
-            this.ValueMap.put(name , kylinValue);
             return;
         }
         if (isFunction && (words[0].equals("return") || keyword.equals("return")))
@@ -316,5 +280,45 @@ public class KyLinRuntime {
         }else {
             return false;
         }
+    }
+    public void new_value(String code) throws Exception {
+        //这个是定义变量的语句
+        String[] words = code.split(" ");
+        String name = words[1];
+        String content = code.substring(code.indexOf("=")+1).trim();
+        if (content.replace(" ","").startsWith("new(") && content.endsWith(")"))
+        {
+            String new_class = content.substring(content.indexOf("(")+1,content.lastIndexOf(")")).trim();
+            if (this.classMap.containsKey(new_class)) {
+                KyLinValue value = new KyLinValue();
+                value.setName(name);
+                value.setType(new_class);
+                value.setContent(this.classMap.get(new_class) , this);
+                value.setIs_public(true);
+                /**
+                 * Init a new class.
+                 */
+                KyLinClass tmp = this.classMap.get(new_class);
+                KyLinClass kyLinClass = new KyLinClass(tmp.name);
+                kyLinClass.code = tmp.code;
+                kyLinClass.isPublic = tmp.isPublic;
+                kyLinClass.functionHashMap = tmp.functionHashMap;
+                kyLinClass.name = tmp.name;
+                kyLinClass.valueHashMap = tmp.valueHashMap;
+                kyLinClass.run_init_();
+
+                for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
+                    this.FunctionMap.put(value.getName()+"."+kyLinFunction.name , kyLinFunction);
+                }
+            }else {
+                throw new Exception("Can not init a new class: "+new_class);
+            }
+            return;
+        }
+        KyLinValue kylinValue = new KyLinValue();
+        kylinValue.setContent(content ,this);
+        kylinValue.setName(name);
+        kylinValue.setIs_public(true);
+        this.ValueMap.put(name , kylinValue);
     }
 }
