@@ -32,10 +32,10 @@ public class KyLinBoolean {
                     }
                 }
                 if (kylinRuntime.ValueMap.containsKey(a)) {
-                    a = kylinRuntime.ValueMap.get(a).getContent();
+                    a = String.valueOf(kylinRuntime.ValueMap.get(a).getContent());
                 }
                 if (kylinRuntime.ValueMap.containsKey(b)) {
-                    b = kylinRuntime.ValueMap.get(b).getContent();
+                    b = String.valueOf(kylinRuntime.ValueMap.get(b).getContent());
                 }
                 return a.equals(b);
             }

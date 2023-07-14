@@ -55,6 +55,20 @@ public class KyLinRuntime {
             //这个是定义变量的语句
             String name = words[1];
             String content = code.substring(code.indexOf("=")+1).trim();
+            if (content.replace(" ","").startsWith("new(") && content.endsWith(")"))
+            {
+                String new_class = content.substring(content.indexOf("(")+1,content.lastIndexOf(")")).trim();
+                if (this.classMap.containsKey(new_class)) {
+                    KyLinValue value = new KyLinValue();
+                    value.setName(name);
+                    value.setType(new_class);
+                    value.setContent(this.classMap.get(new_class) , this);
+                    value.setIs_public(true);
+                }else {
+                    throw new Exception("Can not init a new class: "+new_class);
+                }
+                return;
+            }
             KyLinValue kylinValue = new KyLinValue();
             kylinValue.setContent(content ,this);
             kylinValue.setName(name);
