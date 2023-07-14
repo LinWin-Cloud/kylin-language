@@ -316,6 +316,7 @@ public class KyLinRuntime {
                         this.FunctionMap.put(stringBuffer.toString() , kyLinFunction);
                     }
                 }
+                System.out.println(kyLinClass.valueHashMap.values());
                 for (KyLinValue kyLinValue : kyLinClass.valueHashMap.values()) {
                     if (kyLinValue.isPublic()) {
                         StringBuffer stringBuffer = new StringBuffer();
