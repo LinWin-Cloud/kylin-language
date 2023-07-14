@@ -5,9 +5,17 @@ f a()
 e_f
 
 class a : public
+
+    private a = 1
+
     func __init__() public
         out("hello world")
+    end_func
+
+    func print(out) public
+        out(a)
     end_func
 end_class
 
 var a = new(a)
+a.print("hello world")
