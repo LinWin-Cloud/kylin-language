@@ -41,23 +41,11 @@ public class KyLinClass {
                 continue;
             }
             if (words[0].equals("public")) {
-                String name = words[1];
-                String content = line.substring(code.indexOf("=")+1).trim();
-                KyLinValue kylinValue = new KyLinValue();
-                kylinValue.setContent(content ,kyLinRuntime);
-                kylinValue.setName(name);
-                kylinValue.setIs_public(true);
-                kyLinRuntime.ValueMap.put(name , kylinValue);
+                kyLinRuntime.new_value(line , true);
                 continue;
             }
             else if (words[0].equals("private")) {
-                String name = words[1];
-                String content = line.substring(code.indexOf("=")+1).trim();
-                KyLinValue kylinValue = new KyLinValue();
-                kylinValue.setContent(content ,kyLinRuntime);
-                kylinValue.setName(name);
-                kylinValue.setIs_public(false);
-                kyLinRuntime.ValueMap.put(name , kylinValue);
+                kyLinRuntime.new_value(line , false);
                 continue;
             }
             else if (words[0].equals("func") || words[0].equals("f") || keyword.equals("func") || keyword.equals("f")) {

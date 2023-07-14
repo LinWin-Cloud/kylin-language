@@ -52,7 +52,7 @@ public class KyLinRuntime {
         }
         if (words[0].equals("var") || keyword.equals("var"))
         {
-
+            this.new_value(code,true);
             return;
         }
         if (isFunction && (words[0].equals("return") || keyword.equals("return")))
@@ -281,7 +281,7 @@ public class KyLinRuntime {
             return false;
         }
     }
-    public void new_value(String code) throws Exception {
+    public void new_value(String code , boolean isPublic) throws Exception {
         //这个是定义变量的语句
         String[] words = code.split(" ");
         String name = words[1];
@@ -294,7 +294,7 @@ public class KyLinRuntime {
                 value.setName(name);
                 value.setType(new_class);
                 value.setContent(this.classMap.get(new_class) , this);
-                value.setIs_public(true);
+                value.setIs_public(isPublic);
                 /**
                  * Init a new class.
                  */
@@ -308,7 +308,22 @@ public class KyLinRuntime {
                 kyLinClass.run_init_();
 
                 for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
-                    this.FunctionMap.put(value.getName()+"."+kyLinFunction.name , kyLinFunction);
+                    if (kyLinFunction.isPublic) {
+                        StringBuffer stringBuffer = new StringBuffer();
+                        stringBuffer.append(value.getName());
+                        stringBuffer.append(".");
+                        stringBuffer.append(kyLinFunction.name);
+                        this.FunctionMap.put(stringBuffer.toString() , kyLinFunction);
+                    }
+                }
+                for (KyLinValue kyLinValue : kyLinClass.valueHashMap.values()) {
+                    if (kyLinValue.isPublic()) {
+                        StringBuffer stringBuffer = new StringBuffer();
+                        stringBuffer.append(value.getName());
+                        stringBuffer.append(".");
+                        stringBuffer.append(kyLinValue.getName());
+                        this.ValueMap.put(stringBuffer.toString() , kyLinValue);
+                    }
                 }
             }else {
                 throw new Exception("Can not init a new class: "+new_class);
