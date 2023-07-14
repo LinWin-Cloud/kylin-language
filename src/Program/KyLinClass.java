@@ -9,7 +9,6 @@ public class KyLinClass {
     public String name;
     public boolean isPublic = false;
     public KyLinRuntime kyLinRuntime;
-    public HashMap<String , KyLinFunction> functionHashMap = new HashMap<>();
     public ArrayList<String> code = new ArrayList<>();
 
     public KyLinClass(String name)
@@ -103,12 +102,12 @@ public class KyLinClass {
                 }
                 kylinFunction.kylinRuntime.code = functionCode;
                 kylinFunction.kylinRuntime.PublicRuntime = kyLinRuntime;
-                this.functionHashMap.put(kylinFunction.name , kylinFunction);
+                kyLinRuntime.FunctionMap.put(kylinFunction.name , kylinFunction);
             }
         }
     }
     public void run_init_() throws Exception {
-        KyLinFunction kyLinFunction = this.functionHashMap.get("__init__");
+        KyLinFunction kyLinFunction = this.kyLinRuntime.FunctionMap.get("__init__");
         if (kyLinFunction == null) {
             return;
         }else {

@@ -302,11 +302,11 @@ public class KyLinRuntime {
                 KyLinClass kyLinClass = new KyLinClass(tmp.name);
                 kyLinClass.code = tmp.code;
                 kyLinClass.isPublic = tmp.isPublic;
-                kyLinClass.functionHashMap = tmp.functionHashMap;
                 kyLinClass.name = tmp.name;
+                kyLinClass.kyLinRuntime = tmp.kyLinRuntime;;
                 kyLinClass.run_init_();
 
-                for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
+                for (KyLinFunction kyLinFunction : kyLinClass.kyLinRuntime.FunctionMap.values()) {
                     if (kyLinFunction.isPublic) {
                         StringBuffer stringBuffer = new StringBuffer();
                         stringBuffer.append(value.getName());
@@ -332,7 +332,7 @@ public class KyLinRuntime {
         KyLinValue kylinValue = new KyLinValue();
         kylinValue.setContent(content ,this);
         kylinValue.setName(name);
-        kylinValue.setIs_public(true);
+        kylinValue.setIs_public(isPublic);
         this.ValueMap.put(name , kylinValue);
     }
 }
