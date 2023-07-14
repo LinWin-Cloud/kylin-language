@@ -16,7 +16,7 @@ public class KyLinProgramBaseFunction {
         "out",
         "for",
         "shell",
-        "shell",
+        "clear",
         "exception"
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {

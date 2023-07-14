@@ -65,7 +65,6 @@ public class mainApp {
                     }catch (Exception exception) {
                         KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0,false);
                         kylinRuntimeException.PrintErrorMessage(main);
-
                     }
                 }
                 else {
