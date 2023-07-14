@@ -64,6 +64,21 @@ public class KyLinRuntime {
                     value.setType(new_class);
                     value.setContent(this.classMap.get(new_class) , this);
                     value.setIs_public(true);
+                    /**
+                     * Init a new class.
+                     */
+                    KyLinClass tmp = this.classMap.get(new_class);
+                    KyLinClass kyLinClass = new KyLinClass(tmp.name);
+                    kyLinClass.code = tmp.code;
+                    kyLinClass.isPublic = tmp.isPublic;
+                    kyLinClass.functionHashMap = tmp.functionHashMap;
+                    kyLinClass.name = tmp.name;
+                    kyLinClass.valueHashMap = tmp.valueHashMap;
+                    kyLinClass.run_init_();
+
+                    for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
+                        this.FunctionMap.put(value.getName()+"."+kyLinFunction.name , kyLinFunction);
+                    }
                 }else {
                     throw new Exception("Can not init a new class: "+new_class);
                 }
