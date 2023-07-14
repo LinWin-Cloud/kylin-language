@@ -304,7 +304,6 @@ public class KyLinRuntime {
                 kyLinClass.isPublic = tmp.isPublic;
                 kyLinClass.functionHashMap = tmp.functionHashMap;
                 kyLinClass.name = tmp.name;
-                kyLinClass.valueHashMap = tmp.valueHashMap;
                 kyLinClass.run_init_();
 
                 for (KyLinFunction kyLinFunction : kyLinClass.functionHashMap.values()) {
@@ -316,8 +315,7 @@ public class KyLinRuntime {
                         this.FunctionMap.put(stringBuffer.toString() , kyLinFunction);
                     }
                 }
-                System.out.println(kyLinClass.valueHashMap.values());
-                for (KyLinValue kyLinValue : kyLinClass.valueHashMap.values()) {
+                for (KyLinValue kyLinValue : kyLinClass.kyLinRuntime.ValueMap.values()) {
                     if (kyLinValue.isPublic()) {
                         StringBuffer stringBuffer = new StringBuffer();
                         stringBuffer.append(value.getName());

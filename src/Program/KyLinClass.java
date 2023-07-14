@@ -8,9 +8,8 @@ import java.util.HashMap;
 public class KyLinClass {
     public String name;
     public boolean isPublic = false;
-    private KyLinRuntime kyLinRuntime;
+    public KyLinRuntime kyLinRuntime;
     public HashMap<String , KyLinFunction> functionHashMap = new HashMap<>();
-    public HashMap<String , KyLinValue> valueHashMap = new HashMap<>();
     public ArrayList<String> code = new ArrayList<>();
 
     public KyLinClass(String name)
