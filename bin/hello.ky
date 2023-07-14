@@ -5,19 +5,17 @@ f a()
 e_f
 
 class a : public
-
-    private a = 1
-    public b = 2
+    public Class_b = 2
 
     func __init__() public
         out("hello world")
     end_func
 
     func print(out) public
-        out(a)
+        out(b)
     end_func
 end_class
 
 var a = new(a)
 a.print("hello world")
-out(a.b)
+out(a.Class_b)
