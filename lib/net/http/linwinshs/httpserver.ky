@@ -1,0 +1,32 @@
+
+
+class Httpserver: public
+    public port = null
+    public ip = null
+    public server_path = get_path()
+
+    func set_port(in_port) public
+        val port = in_port
+    end_func
+
+    func set_ip(in_ip) public
+        val ip = in_ip
+    end_func
+
+    func set_path(in_path) public
+        val server_path = in_path
+    end_func
+
+    func start() public
+
+        import "util.java.load_class"
+        import "io.file"
+
+        var boot = get_path(),"/../lib/net/http/linwinshs/http_service.jar"
+        var in = port , " " , ip , " " , server_path
+        //print(boot)
+        //print(in)
+
+        load_class.run_jar(boot , in)
+    end_func
+end_class

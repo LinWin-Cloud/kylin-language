@@ -1,0 +1,9 @@
+
+func a() public
+    print(1)
+end_func
+func exec_java(path , input_value) public
+    //print(java_runtime() , "/../jdk/bin/kylin " , path , " ")
+    var using_runtime = java_runtime() , "/../jdk/bin/kylin " , path , " ", input_value
+    shell(using_runtime)
+end_func
