@@ -1,0 +1,4 @@
+#! /bin/bash
+
+script_dir=$(cd $(dirname $0);pwd)
+$script_dir/jdk/bin/kylin -jar $script_dir/release/kylin_language.jar $1
