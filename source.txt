@@ -2,6 +2,7 @@ src/./api/KyLin_GetFileContent.java
 src/./main/mainApp.java
 src/./main/PathLoader.java
 src/./main/baseFunction.java
+src/./Function/KyLinUnsafe.java
 src/./Function/TypeOf.java
 src/./Function/Write.java
 src/./KylinException/KylinRuntimeException.java
