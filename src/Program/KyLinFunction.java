@@ -1,5 +1,8 @@
 package Program;
 
+import main.baseFunction;
+import main.mainApp;
+
 public class KyLinFunction {
     public String name;
     public String[] input;

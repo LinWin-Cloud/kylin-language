@@ -1,10 +1,14 @@
 package Program;
 
+import main.baseFunction;
+import main.mainApp;
+
 public class KyLinValue {
     private String name;
     private String type = "";
     private Object content;
     private boolean is_public = true;
+    private long pointer;
 
     public void setName(String name) {
         this.name = name;
@@ -24,6 +28,8 @@ public class KyLinValue {
         //this.content = new KyLinExpression().getExpression(String.valueOf(content) , kylinRuntime);
         this.content = content;
         this.type = KyLinType.getType(String.valueOf(this.content) , kylinRuntime);
+        this.pointer = baseFunction.getRandomLong();
+        mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);
     }
     public void setIs_public(boolean isPublic) {
         this.is_public = isPublic;
@@ -39,6 +45,9 @@ public class KyLinValue {
     }
     public boolean isPublic() {
         return this.is_public;
+    }
+    public long getPointer() {
+        return this.pointer;
     }
 
     @Override

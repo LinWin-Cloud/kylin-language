@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.Random;
 
 import java.lang.Object;
 
@@ -106,5 +107,10 @@ public class baseFunction {
         else {
             throw new Exception("No Value: "+value_name);
         }
+    }
+    public static long getRandomLong() {
+        Random random = new Random();
+
+        return random.nextLong();
     }
 }

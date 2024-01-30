@@ -2,12 +2,14 @@ package main;
 
 import KylinException.KylinRuntimeException;
 import Program.KyLinRuntime;
+import Program.KyLinValue;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class mainApp {
     public static PrintStream printStream = new PrintStream(System.out);
@@ -17,7 +19,7 @@ public class mainApp {
             "   -console            Enter into the kylin console.\n" + "kylin [resource file]";
     public static String jarDirectory = null;
     public static HashMap<String , String> import_lib_value = new HashMap<>();
-
+    public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     private static String CACHE_DIR = "";
     public static double version = 1.0;
     public static String version_type = "preview";

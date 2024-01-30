@@ -4,15 +4,18 @@ import Function.TypeOf;
 import main.PathLoader;
 import main.baseFunction;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import KylinException.KylinRuntimeException;
 public class KyLinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
-    public Map<String , KyLinValue> ValueMap = new HashMap<>();                 // 储存本运行环境的变量
+    public ConcurrentHashMap<String , KyLinValue> ValueMap = new ConcurrentHashMap<>();                 // 储存本运行环境的变量
     public Map<String , KyLinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
     public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
     public boolean isFunction = false;                                          // 本运行环境是否是 函数
@@ -23,7 +26,7 @@ public class KyLinRuntime {
         return this.result;
     }
     public Map<String , String> defined_keyword = new HashMap<>();              // 定义的关键字hashmap
-    public Map<String , String> defined_func = new HashMap<>();                 // 定义的函数关键字，例如 out("hello world") 可以定义为 print("hello world")
+    public Map<String , String> defined_func = new HashMap<>();                 // 定义的函数关键字，例如 out("hello world") 可以定义为 print("hello world"),kylin3.0废除该标准
     public String name;                                                         // 本运行环境名字
     private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
     private boolean IF_OK = false;                                              // if语句是否结束
@@ -37,7 +40,6 @@ public class KyLinRuntime {
 
     public void exec(String code, int i) throws Exception
     {
-        //通过空格分割字符串
         String[] words = code.trim().split(" ");
         if (code.equals(""))
         {

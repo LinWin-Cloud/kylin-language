@@ -28,6 +28,8 @@ public class KyLinUseFunction {
             "index",                    // 13
             "lastindex",                // 14
             "delete",                   // 15
+            "get_pointer",              // 16
+            "toVal",                    // 17
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -188,8 +190,39 @@ public class KyLinUseFunction {
             value.setIs_public(true);
             return value;
         }
+        else if (funcName.equals(KylinKeyWord[16])) {
+            //System.out.println(mainApp.all_kylin_value_pointer);
+            return getAddress(content,kylinRuntime);
+        }
+        else if (funcName.equals(KylinKeyWord[17])) {
+            KyLinValue value = new KyLinValue();
+            value.setType("string");
+            value.setIs_public(true);
+            //System.out.println(new KyLinExpression().getExpression(content,kylinRuntime));
+            value.setContent(mainApp.all_kylin_value_pointer.get(new KyLinExpression().getExpression(content,kylinRuntime)) , kylinRuntime);
+            return value;
+        }
         else {
             return null;
         }
+    }
+    public static KyLinValue getAddress(String content , KyLinRuntime kylinRuntime) throws Exception {
+        KyLinValue value = new KyLinValue();
+        value.setType("string");
+
+        KyLinRuntime sub_runtime = kylinRuntime.PublicRuntime;
+        if (kylinRuntime.ValueMap.containsKey(content)) {
+            KyLinValue k = kylinRuntime.ValueMap.get(content);
+            value.setContent(String.valueOf(k.getPointer()), kylinRuntime);
+        }
+        else if (sub_runtime != null && sub_runtime.ValueMap.containsKey(content)) {
+            KyLinValue k = sub_runtime.ValueMap.get(content);
+            value.setContent(String.valueOf(k.getPointer()), kylinRuntime);
+        }
+        else {
+            throw new Exception("Runtime Exception.");
+        }
+        value.setIs_public(true);
+        return value;
     }
 }
