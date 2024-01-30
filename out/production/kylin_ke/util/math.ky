@@ -1,0 +1,21 @@
+// Author: LinWinSoft
+// https://github.com/LinWin-Cloud/
+
+func add(x,y) public
+    // Add 'x' and 'y'
+    return x + y
+end_func
+
+func multiply(x,y) public
+    // multiply
+    return x * y
+end_func
+
+func subtract(x,y) public
+    // subtract
+    return x - y
+end_func
+
+func division(x,y) public
+    return x / y
+end_func

@@ -1,0 +1,10 @@
+
+
+func run_jar(jar_path , input_value) public
+
+    import "io.file"
+
+    print(jar_path)
+    print(input_value)
+    shell(java_runtime() , "/../jdk/bin/kylin -jar " , jar_path , " " , input_value)
+end_func

@@ -1,0 +1,18 @@
+
+class file : public
+
+    public target_path = null
+
+    func set_path(path) public
+        val target_path = path
+    end_func
+
+    func exists() public
+        return file_exists(target_path)
+    end_func
+
+    func get_content() public
+        return get_file_content(target_path)
+    end_func
+
+end_class
