@@ -7,6 +7,9 @@ KyLin 是一款基于Jvm的跨平台高效的编程语言。面相对象和面�
 
 从功能和一些设计上是对标Python的，但是修改了Python一些不太合理的地方，同样借鉴了各个编程语言，修复了这些编程语言的不足之处。
 
+在 kylin 3.0 标准当中加入了指针特性，并且是一个重要的特性，不过这个指针是安全的，并且可以无视kylin标准变量
+中最高可调用当前函数运行环境下只能够获取到上一个运行环境中的变量
+
 ## 发行版 https://gitee.com/LinwinSoft/kylin_ke/releases
 ## Kylin专用jdk: https://gitee.com/LinWin-Cloud/
 
@@ -19,11 +22,8 @@ KyLin 是一款基于Jvm的跨平台高效的编程语言。面相对象和面�
 
 > ./kylin ./1.ky
 
-## Kylin支持多种其他编程语言内嵌运行
-1. Python (Preview版本暂不开通)
-2. javascript (Preview版本暂不开通)
-3. node.js 	(需要通过官方源安装，Preview版本暂未开通)
-4. Java
+## Kylin支持其他编程语言内嵌运行
+1. Java
 
 ## 关于Kylin Programing Language.
 Kylin是一款高级编程语言，其目的是为了解决现如今很多的编程语言语法不够简单，或者是简单的编程语言不够强大
