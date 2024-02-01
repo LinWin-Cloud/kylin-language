@@ -5,7 +5,9 @@ import api.KyLin_GetFileContent;
 import main.baseFunction;
 import main.mainApp;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,7 @@ public class KyLinUseFunction {
             "delete",                   // 15
             "get_pointer",              // 16
             "toVal",                    // 17
+            "shell_output",             // 18
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -99,7 +102,7 @@ public class KyLinUseFunction {
         else if (funcName.equals(KylinKeyWord[6]) || keyword.equals(KylinKeyWord[6])) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
-            value.setContent(TypeOf.typeOf(content , kylinRuntime), kylinRuntime);
+            value.setContent(KyLinType.getType(content , kylinRuntime), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
@@ -202,6 +205,31 @@ public class KyLinUseFunction {
             value.setContent(mainApp.all_kylin_value_pointer.get(new KyLinExpression().getExpression(content,kylinRuntime)) , kylinRuntime);
             return value;
         }
+        else if (funcName.equals(KylinKeyWord[18])) {
+            KyLinValue value = new KyLinValue();
+            value.setType("string");
+            value.setIs_public(true);
+            // 执行Shell命令
+            Process process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(content , kylinRuntime));
+            // 获取命令输出流
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            // 获取命令错误流
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            // 读取输出
+            String outputLine;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((outputLine = stdInput.readLine()) != null) {
+                stringBuilder.append(outputLine);
+                stringBuilder.append("\n");
+            }
+            // 读取错误输出
+            while ((outputLine = stdError.readLine()) != null) {
+                stringBuilder.append(outputLine);
+                stringBuilder.append("\n");
+            }
+            value.setContent(stringBuilder.toString() , kylinRuntime);
+            return value;
+        }
         else {
             return null;
         }
@@ -220,7 +248,7 @@ public class KyLinUseFunction {
             value.setContent(String.valueOf(k.getPointer()), kylinRuntime);
         }
         else {
-            throw new Exception("Runtime Exception.");
+            throw new Exception("KyLin Pointer Error: No Pointer");
         }
         value.setIs_public(true);
         return value;

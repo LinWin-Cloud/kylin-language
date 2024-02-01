@@ -125,10 +125,12 @@ public class KyLinExpression {
         }
         catch (Exception exception) {
             //exception.printStackTrace();
-            KylinRuntimeException kylinRuntimeException =
-                    new KylinRuntimeException("Expression error" , kylinRuntime.codeLine+1 , true);
-            kylinRuntimeException.PrintErrorMessage(kylinRuntime);
-            return null;
+            /**
+             KylinRuntimeException kylinRuntimeException =
+             new KylinRuntimeException("Expression error" , kylinRuntime.codeLine+1 , true);
+             kylinRuntimeException.PrintErrorMessage(kylinRuntime);
+             */
+            throw new Exception(exception.getMessage());
         }
     }
     public String returnString(String str){

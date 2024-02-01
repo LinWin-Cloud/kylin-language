@@ -15,7 +15,7 @@ public class Write {
         }
         else {
             FileWriter fileWriter = new FileWriter(path , isCover);
-            fileWriter.write(content);
+            fileWriter.write(content);System.out.println(content);
             fileWriter.flush();
             fileWriter.close();
         }

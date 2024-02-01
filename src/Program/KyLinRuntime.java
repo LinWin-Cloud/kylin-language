@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import KylinException.KylinRuntimeException;
+import main.mainApp;
+
 public class KyLinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
@@ -315,8 +317,8 @@ public class KyLinRuntime {
             if (kyLinRuntime.classMap.containsKey(new_class)) {
                 KyLinValue value = new KyLinValue();
                 value.setName(name);
-                value.setType(new_class);
                 value.setContent(kyLinRuntime.classMap.get(new_class) , this);
+                value.setType(new_class);
                 value.setIs_public(isPublic);
                 /**
                  * Init a new class.
@@ -369,7 +371,7 @@ public class KyLinRuntime {
                 KyLinValue new_var = new KyLinValue();
                 new_var.setName(i);
                 new_var.setIs_public(false);
-                new_var.setType("obj");
+                new_var.setType(KyLinType.getType(i , kyLinRuntime));
                 new_var.setContent(new KyLinExpression().getExpression(i , this) , kyLinRuntime);
 
                 arrayList.add(new_var);

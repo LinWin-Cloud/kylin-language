@@ -27,7 +27,6 @@ public class KyLinValue {
         }
         //this.content = new KyLinExpression().getExpression(String.valueOf(content) , kylinRuntime);
         this.content = content;
-        this.type = KyLinType.getType(String.valueOf(this.content) , kylinRuntime);
         this.pointer = baseFunction.getRandomLong();
         mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);
     }

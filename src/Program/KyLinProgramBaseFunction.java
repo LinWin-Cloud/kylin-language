@@ -3,8 +3,11 @@ package Program;
 
 import Function.Write;
 import KylinException.KylinRuntimeException;
+import main.baseFunction;
+import main.mainApp;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +27,10 @@ public class KyLinProgramBaseFunction {
         "while",
         "write",
         "throw_error",
-            "exit"
+        "exit",
+        "except",
+        "list_add",
+        "list_rm",
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -53,6 +59,44 @@ public class KyLinProgramBaseFunction {
                 kylinRuntimeException.PrintErrorMessage(kylinRuntime);
                 System.exit(1);
                 return false;
+            }
+        }
+        if (function.equals("list_rm")) {
+            String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+            String list_object = getIn[0].trim();
+            int rm_object = Integer.parseInt(getIn[1].trim());
+            String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
+            KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
+            if (k.getType().equals("list")) {
+                KyLinList kyLinList = (KyLinList) k.getContent();
+                kyLinList.arrayList.remove(rm_object);
+                k.setContent(kyLinList , kylinRuntime);
+                mainApp.all_kylin_value_pointer.put(address , k);
+            }else {
+                throw new RuntimeException("TypeError");
+            }
+        }
+        if (function.equals("list_add")) {
+            String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+            String list_object = getIn[0].trim();
+            String add_object = getIn[1].trim();
+
+            //System.out.println(list_object+";"+add_object+";");
+            String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
+            KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
+            if (k.getType().equals("list")) {
+                KyLinList kyLinList = (KyLinList) k.getContent();
+                KyLinValue n_var = new KyLinValue();
+                n_var.setName(String.valueOf(baseFunction.getRandomLong()));
+                n_var.setContent(new KyLinExpression().getExpression(add_object ,kylinRuntime) , kylinRuntime);
+                n_var.setIs_public(true);
+                n_var.setType(KyLinType.getType(add_object , kylinRuntime));
+                kyLinList.arrayList.add(n_var);
+                k.setContent(kyLinList , kylinRuntime);
+                k.setType("list");
+                mainApp.all_kylin_value_pointer.put(address , k);
+            }else {
+                throw new RuntimeException("TypeError");
             }
         }
         if (function.equals("for")) {
@@ -174,6 +218,7 @@ public class KyLinProgramBaseFunction {
             String[] splitIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String func = splitIn[0].trim();
             String err = splitIn[1].trim();
+            //System.out.println(func+" "+err);
             try {
                 new KyLinExpression().getExpression(func , kylinRuntime);
             }catch (Exception exception) {
@@ -192,6 +237,7 @@ public class KyLinProgramBaseFunction {
                         kylinFunction.kylinRuntime.run();
                     }
                 }catch (Exception exception1) {
+                    //exception1.printStackTrace();
                     throw new Exception(exception1);
                 }
             }
