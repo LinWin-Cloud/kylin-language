@@ -20,6 +20,7 @@ public class mainApp {
     public static String jarDirectory = null;
     public static HashMap<String , String> import_lib_value = new HashMap<>();
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
     private static String CACHE_DIR = "";
     public static double version = 1.0;
     public static String version_type = "preview";

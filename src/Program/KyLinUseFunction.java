@@ -1,6 +1,7 @@
 package Program;
 
 import Function.TypeOf;
+import KylinException.KylinRuntimeException;
 import api.KyLin_GetFileContent;
 import main.baseFunction;
 import main.mainApp;
@@ -33,6 +34,7 @@ public class KyLinUseFunction {
             "get_pointer",              // 16
             "toVal",                    // 17
             "shell_output",             // 18
+            "new_thread",               // 19
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -228,6 +230,27 @@ public class KyLinUseFunction {
                 stringBuilder.append("\n");
             }
             value.setContent(stringBuilder.toString() , kylinRuntime);
+            return value;
+        }
+        else if (funcName.equals(KylinKeyWord[19])) {
+            KyLinValue value = new KyLinValue();
+            value.setType("thread");
+            value.setIs_public(true);
+            String pointer = String.valueOf(baseFunction.getRandomLong());
+            Thread t = new Thread(() -> {
+                try {
+                    new KyLinExpression().getExpression(content , kylinRuntime);
+                } catch (Exception e) {
+                    KylinRuntimeException kylinRuntimeException =
+                            new KylinRuntimeException(e.getMessage() , 0 , true);
+                    kylinRuntimeException.PrintErrorMessage(null);
+                }
+            });
+            t.start();
+            value.setContent(pointer , kylinRuntime);
+            mainApp.all_kylin_thread_map.put(pointer , t);
+
+            mainApp.all_kylin_value_pointer.put(pointer , value);
             return value;
         }
         else {
