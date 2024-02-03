@@ -5,6 +5,7 @@ src/./main/baseFunction.java
 src/./Function/KyLinUnsafe.java
 src/./Function/TypeOf.java
 src/./Function/Write.java
+src/./Function/RobotOptions.java
 src/./KylinException/KylinRuntimeException.java
 src/./Main.java
 src/./Program/KyLinList.java
