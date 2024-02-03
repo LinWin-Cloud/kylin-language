@@ -1,6 +1,7 @@
 package Program;
 
 
+import Function.RobotOptions;
 import Function.Write;
 import KylinException.KylinRuntimeException;
 import main.baseFunction;
@@ -31,6 +32,9 @@ public class KyLinProgramBaseFunction {
         "except",
         "list_add",
         "list_rm",
+        "kill_thread",
+        "gc",
+        "enterKey"
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -60,6 +64,15 @@ public class KyLinProgramBaseFunction {
                 System.exit(1);
                 return false;
             }
+        }
+        if (function.equals("enterKey")) {
+            String key = new KyLinExpression().getExpression(input , kylinRuntime);
+            RobotOptions.enterKey(key);
+        }
+        if (function.equals("kill_thread")) {
+            String pointer = new KyLinExpression().getExpression(input , kylinRuntime);
+            mainApp.all_kylin_thread_map.get(pointer).interrupt();
+            mainApp.all_kylin_thread_map.remove(pointer);
         }
         if (function.equals("list_rm")) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -98,6 +111,9 @@ public class KyLinProgramBaseFunction {
             }else {
                 throw new RuntimeException("TypeError");
             }
+        }
+        if (function.equals("gc")) {
+            System.gc();
         }
         if (function.equals("for")) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");

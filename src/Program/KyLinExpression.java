@@ -14,6 +14,7 @@ public class KyLinExpression {
             //System.out.println(this.isList(code , kylinRuntime)+" "+code);
             String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             StringBuilder stringBuffer = new StringBuilder();
+
             for (String s : tokens)
             {
                 s = s.trim();
@@ -47,6 +48,7 @@ public class KyLinExpression {
                             stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
                         }
                     }catch (Exception e) {
+                        e.printStackTrace();
                         throw new Exception(e);
                     }
                 }

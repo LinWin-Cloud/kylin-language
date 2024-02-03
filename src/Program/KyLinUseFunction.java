@@ -6,6 +6,7 @@ import api.KyLin_GetFileContent;
 import main.baseFunction;
 import main.mainApp;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -35,6 +36,7 @@ public class KyLinUseFunction {
             "toVal",                    // 17
             "shell_output",             // 18
             "new_thread",               // 19
+            "get_mouse_point",          // 20
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -251,6 +253,40 @@ public class KyLinUseFunction {
             mainApp.all_kylin_thread_map.put(pointer , t);
 
             mainApp.all_kylin_value_pointer.put(pointer , value);
+            return value;
+        }
+        else if (funcName.equals(KylinKeyWord[20])) {
+            KyLinValue value = new KyLinValue();
+            value.setIs_public(true);
+            Point point = MouseInfo.getPointerInfo().getLocation();
+
+            KyLinList list = new KyLinList();
+            list.arrayList = new ArrayList<>();
+            Integer x = point.x;
+            Integer y = point.y;
+
+            KyLinValue x_v = new KyLinValue();
+            x_v.setType("num");
+            x_v.setIs_public(true);
+            x_v.setContent(x , kylinRuntime);
+            KyLinValue y_v = new KyLinValue();
+            y_v.setType("num");
+            y_v.setIs_public(true);
+            y_v.setContent(y , kylinRuntime);
+
+            String pointer_1 = String.valueOf(baseFunction.getRandomLong());
+            String pointer_2 = String.valueOf(baseFunction.getRandomLong());
+            x_v.setName(pointer_1);
+            y_v.setName(pointer_2);
+
+            (kylinRuntime.ValueMap).put(pointer_1 , x_v);
+            (kylinRuntime.ValueMap).put(pointer_2 , y_v);
+
+            list.arrayList.add(x_v);
+            list.arrayList.add(y_v);
+            value.setContent(list , kylinRuntime);
+            System.out.println(value.getPointer());
+            value.setType("list");
             return value;
         }
         else {

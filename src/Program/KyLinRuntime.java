@@ -391,6 +391,33 @@ public class KyLinRuntime {
             return false;
         }
     }
+    public boolean isListGet(String code , String content , boolean isPublic , KyLinRuntime kylinRuntime) throws Exception {
+        if (content.replace(" ","").startsWith("list_get(") && content.endsWith(")")) {
+            String name = code.substring(code.indexOf(" ")+1 , code.indexOf("=")).trim();
+            String get_Object = content.substring(content.indexOf("(")+1,content.lastIndexOf(")")).trim();
+            String[] split = get_Object.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+            String list_object = split[0].trim();
+            String list_index = split[1].trim();
+            //System.out.println(list_object+";"+list_index+";");
+            String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
+            KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
+
+            KyLinValue value = new KyLinValue();
+
+            System.out.println(k.getPointer()+" "+address);
+            KyLinList list = (KyLinList) k.getContent();
+            KyLinValue kv = list.arrayList.get(Integer.parseInt(list_index));
+            value.setType(kv.getType());
+            value.setIs_public(isPublic);
+            value.setName(name);
+            value.setContent(kv.getContent() , kylinRuntime);
+            this.ValueMap.put(name , value);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     public void new_value(String code , boolean isPublic) throws Exception {
         //这个是定义变量的语句
         String name = code.substring(code.indexOf(" ")+1,code.indexOf("=")).trim();
@@ -420,6 +447,9 @@ public class KyLinRuntime {
                 return;
             }
             if (this.new_list(code , content , isPublic , this)) {
+                return;
+            }
+            if (this.isListGet(code , content , isPublic , this)) {
                 return;
             }
             KyLinValue kylinValue = new KyLinValue();
