@@ -20,10 +20,7 @@ KyLin 是一款基于Jvm的跨平台高效的编程语言。面相对象和面�
 
 > ./kylin #可以查看帮助
 
-> ./kylin ./1.ky
-
-## Kylin支持其他编程语言内嵌运行
-1. Java
+> ./kylin ./[源代码]
 
 ## 关于Kylin Programing Language.
 Kylin是一款高级编程语言，其目的是为了解决现如今很多的编程语言语法不够简单，或者是简单的编程语言不够强大
@@ -37,23 +34,22 @@ KyLin可以超过Python甚至接近c++
 ### 关键字
 1. ```if```
 2. ```else```
-3. ```#func```
-4. ```#defined```
-5. ```var```
-6. ```new()```
-7. ```func```
-8. ```f```
-9. ```e_f```
-10. ```end_func```
-11. ```err```
-12. ```e_err```
-13. ```for```
-14. ```while```
-15. ```import```
-16. ```class```
-17. ```end_class```
-18. ```private```
-19. ```public```
+3. ```var```
+4. ```new()```
+5. ```func```
+6. ```f```
+7. ```e_f```
+8. ```end_func```
+9. ```err```
+10. ```e_err```
+11. ```for```
+12. ```while```
+13. ```import```
+14. ```class```
+15. ```end_class```
+16. ```private```
+17. ```public```
+18. ```val```
 
 ### 内存溢出测试
 #### 无限递归
@@ -75,7 +71,7 @@ https://github.com/zmh-program/kylin-go/
 
 ## 文档:-docx
 ### 文档链接:
-1. <a href='https://gitee.com/LinwinSoft/kylin_ke/tree/master/doc/Chinese'>中文文档</a>
+1. <a href='https://gitee.com/Linwin-Cloud/kylin-language/tree/master/doc/Chinese'>中文文档</a>
 
 ## 函数式编程
 1. 函数
