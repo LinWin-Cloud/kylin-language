@@ -24,10 +24,11 @@ var f = “result: ” , a+a   		    //返回 “result: 2”
 
 
 2.kylin的数据类型
--- num   							数字型，进行数学运算的
--- string							字符串类型
--- obj								对象类型，主要为各种对象的
--- bool								布尔类型，true和false
+- num   							数字型，进行数学运算的
+- string							字符串类型
+- obj								最基础对象类型，主要为各种对象的
+- bool								布尔类型，true和false
+- list                            列表类型
 
 
 3.修改变量
@@ -36,6 +37,8 @@ var f = “result: ” , a+a   		    //返回 “result: 2”
 
 
 4.关键字
+
+(该标准在 kylin 3.0 已经废除)
 ```
 #include<{head}/chinese.kyh> 		导入默认的中文编程定义
 {head}/chinese.kyh可修改，{head}是编程语言默认的头文件库
@@ -51,7 +54,7 @@ print(“hello world”)
 func a() public
     // public可修改，也可以改成 private，public公共函数,private内部函数
     //在控制台内输出 hello world
-    out(“hello world”)
+    print(“hello world”)
 end_func
 
 f b()
@@ -102,6 +105,27 @@ out(e.message)
 e_err
 //当a()出现错误的时候运行b()
 exception(a() , b())
+```
+
+7. 列表对象与操作
+```
+var a = list(1,2,3,4)
+print(a[0])                 // 获取 1
+list_rm(a , 0)              // 移除 a列表中的第0个元素
+list_add(a , 5)             // 添加元素到列表中
+```
+请注意，该列表操作对象只能处理字符串类型和数字类型，无法处理对象类型
+```dtd
+class A:
+    func a() public
+        return 1
+    end_func
+end_class
+
+var o = new(A)
+var a = list(o)
+var b = list_get(o) //变量b获取的是一个 A 对象
+
 ```
 
 这是基础的语法，kylin很简单，你看两眼文档就会了。

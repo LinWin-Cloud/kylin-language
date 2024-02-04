@@ -16,6 +16,13 @@
 "index",                    // 13
 "lastindex",                // 14
 "delete",                   // 15
+"get_pointer",              // 16
+"toVal",                    // 17
+"shell_output",             // 18
+"new_thread",               // 19
+"get_mouse_point",          // 20
+"toInt",                    // 21
+"rm",                       // 22
 ```
 
 ### getTime
@@ -41,12 +48,15 @@
 ### bool
 判断是否是 布尔 类型
 > print(bool(1 > 2))                    // false
+> 
 > print(bool("hello" == "hello"))       // true
+> 
 > print(bool(1 != 2))                   // true
 
 ### typeof
 获取一个值的类型，除了基本类型以外，要么就是自己定义的class类型
 > var a = 1
+> 
 > print(typeof(a))          // num
 
 ### file_exists
@@ -60,9 +70,11 @@
 ### length
 获取数组或者是字符串的长度
 > var a = list(1,2,3)
+> 
 > print(length(a))              // 3
 >
 > var b = "hello"
+> 
 > print(length(b))              // 5
 
 ### pow
@@ -72,18 +84,64 @@
 ### sub
 截取字符串
 > var a = "hello"
+> 
 > print(sub(a , 0,1))           // 截取索引 0 到 1 的字符 也就是 "h"
 
 ### index
 在字符串内索引指定字符
 > var a = "hello"
+> 
 > print(index(a , "h"))         // 0
 
 ### lastindex
 在字符串内索引最后一个出现的字符
 > var a = "hello"
+> 
 > print(index(a , "h"))         // 0
 
-### delete
+### delete 或者是 rm
 删除文件或者文件夹
 > delete("1.txt")
+>
+> rm ("1.txt")
+
+### get_pointer
+获取一个变量的 指针 , 指针是 kylin 3.0加入的特性，用于全局变量，通过全局变量修改变量，
+可以无视 传统 kylin语言最高只能获取上一个运行环境中的变量的特性，可以直接获取全局的所有变量
+> var a = 1
+> 
+> var b = get_pointer(a)  // 是一个num类型数字
+> 
+> var c = toVal(b)        // 获取变量
+
+### toVal
+通过 指针获取变量
+```
+var a = 1
+var b = get_pointer(a)  // 是一个num类型数字
+var c = toVal(b)        // 获取变量
+```
+
+### shell_output
+执行 系统 shell指令并获取他们的 输出
+```dtd
+var a = shell_output("ls ./") //获取输出
+```
+
+### new_thread
+新建线程 , 获取的变量是一个指针
+```dtd
+func a() public
+    print(1)
+end_func
+
+var a = new_thread(a()) //获取的是一个指针
+kill_thread(a)
+```
+
+### toInt
+将数字对象转换成整形数字
+```dtd
+var a = "1.0"
+print(toInt(a)) // 1
+```

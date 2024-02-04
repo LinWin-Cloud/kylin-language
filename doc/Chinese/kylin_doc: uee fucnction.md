@@ -4,11 +4,18 @@
 "print",
 "for",
 "shell",
+"clear",
 "exception",
 "while",
 "write",
 "throw_error",
-"exit"
+"exit",
+"except",
+"list_add",
+"list_rm",
+"kill_thread",
+"gc",
+"enterKey"
 ```
 
 ### out 和 print
@@ -38,7 +45,7 @@ for(main() , 1000 , true)              //执行 1000 次 main() 函数，开启�
 调用操作系统命令
 > shell("echo hello world")            //输出 hello world
 
-### exception
+### exception 获取 except
 异常处理代码
 ```
 err err_code(e)
@@ -70,3 +77,29 @@ exception(a() , err_code())
 退出程序
 > exit(1) // 错误退出码 1
 > exit(0) // 退出并返回 0
+
+### list_add
+向列表添加元素
+```dtd
+var a = list(1,2,3)
+list_add(a , 1)
+```
+
+### list_rm
+删除列表中的元素
+```dtd
+var a = list(1,2,3,4)
+list_rm(a , 0) //删除第0个元素
+```
+
+### gc
+调用gc来管理内存
+```dtd
+gc()
+```
+
+### enterKey
+按下键盘
+```dtd
+enterKey("a") //按下a键
+```

@@ -59,3 +59,12 @@
 > import "util.java.load_class"
 
 > load_class.run_jar("./1.jar", "1 2 3")        // 运行 1.jar ，并输入命令行1 2 3
+
+
+### java
+可以直接运行java源代码的库
+```dtd
+import "java"
+// 运行 HelloWorld.java 文件
+java.exec_java("./HelloWorld.java")
+```
