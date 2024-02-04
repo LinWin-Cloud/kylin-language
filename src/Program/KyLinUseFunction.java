@@ -37,6 +37,8 @@ public class KyLinUseFunction {
             "shell_output",             // 18
             "new_thread",               // 19
             "get_mouse_point",          // 20
+            "toInt",                    // 21
+            "rm",                       // 22
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -59,15 +61,14 @@ public class KyLinUseFunction {
         String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
         String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
 
-        String keyword = "";
-        if (funcName.equals(KylinKeyWord[0]) || keyword.equals(KylinKeyWord[0])) {
+        if (funcName.equals("getTime")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(baseFunction.getTime() , kylinRuntime);
             value.setIs_public(true);
 
             return value;
-        }else if (funcName.equals(KylinKeyWord[1]) || keyword.equals(KylinKeyWord[1])) {
+        }else if (funcName.equals("input")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(baseFunction.input(new KyLinExpression().getExpression(split[0] , kylinRuntime)) , kylinRuntime);
@@ -75,63 +76,63 @@ public class KyLinUseFunction {
 
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[2]) || keyword.equals(KylinKeyWord[2])) {
+        else if (funcName.equals("get_os")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(System.getProperty("os.name") , kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[3]) || keyword.equals(KylinKeyWord[3])) {
+        else if (funcName.equals("get_path")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(System.getProperty("user.dir") , kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[4]) || keyword.equals(KylinKeyWord[4])) {
+        else if (funcName.equals("long_time")) {
             KyLinValue value = new KyLinValue();
             value.setType("num");
             value.setContent(System.currentTimeMillis() , kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[5]) || keyword.equals(KylinKeyWord[5])) {
+        else if (funcName.equals("bool")) {
             KyLinValue value = new KyLinValue();
             value.setType("bool");
             value.setContent(new KyLinBoolean().isBool(content,kylinRuntime) , kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[6]) || keyword.equals(KylinKeyWord[6])) {
+        else if (funcName.equals("typeof")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(KyLinType.getType(content , kylinRuntime), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[7]) || keyword.equals(KylinKeyWord[7])) {
+        else if (funcName.equals("file_exists")) {
             KyLinValue value = new KyLinValue();
             value.setType("bool");
             value.setContent(new File(new KyLinExpression().getExpression(content , kylinRuntime)).exists(), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[8]) || keyword.equals(KylinKeyWord[8])) {
+        else if (funcName.equals("get_file_content")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(new KyLin_GetFileContent().get_file_content(new KyLinExpression().getExpression(content , kylinRuntime)), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[9]) || keyword.equals(KylinKeyWord[9])) {
+        else if (funcName.equals("java_runtime")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setContent(mainApp.jarDirectory, kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[10]) || keyword.equals(KylinKeyWord[10]))
+        else if (funcName.equals("length"))
         {
             String type = TypeOf.typeOf(content , kylinRuntime);
             if (type.equals("list")) {
@@ -151,7 +152,7 @@ public class KyLinUseFunction {
                 return value;
             }
         }
-        else if (funcName.equals(KylinKeyWord[11]) || keyword.equals(KylinKeyWord[11])) {
+        else if (funcName.equals("pow")) {
             double a = Double.parseDouble(new KyLinExpression().getExpression(split[0] , kylinRuntime));
             double b = Double.parseDouble(new KyLinExpression().getExpression(split[1] , kylinRuntime));
             KyLinValue value = new KyLinValue();
@@ -160,27 +161,30 @@ public class KyLinUseFunction {
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[12]) || keyword.equalsIgnoreCase(KylinKeyWord[12]))
+        else if (funcName.equals("sub"))
         {
             String string = new KyLinExpression().getExpression(split[0] , kylinRuntime);
-            int a = Integer.parseInt(new KyLinExpression().getExpression(split[1] , kylinRuntime));
-            int b = Integer.parseInt(new KyLinExpression().getExpression(split[2] , kylinRuntime));
+            double a = Double.parseDouble(new KyLinExpression().getExpression(split[1] , kylinRuntime));
+            double b = Double.parseDouble(new KyLinExpression().getExpression(split[2] , kylinRuntime));
             KyLinValue value = new KyLinValue();
             value.setType("num");
-            value.setContent(string.substring(a , b), kylinRuntime);
+            value.setContent(string.substring((int) a , (int) b), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[13]) || keyword.equals(KylinKeyWord[13])) {
+        else if (funcName.equals("index")) {
             String string = new KyLinExpression().getExpression(split[0] , kylinRuntime);
             String charset = new KyLinExpression().getExpression(split[1] , kylinRuntime);
+
+            //System.out.println(string+" "+charset+" "+string.indexOf(charset));
+
             KyLinValue value = new KyLinValue();
             value.setType("num");
             value.setContent(string.indexOf(charset), kylinRuntime);
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[14]) || keyword.equals(KylinKeyWord[14])) {
+        else if (funcName.equals("lastindex")) {
             String string = new KyLinExpression().getExpression(split[0] , kylinRuntime);
             String charset = new KyLinExpression().getExpression(split[1] , kylinRuntime);
             KyLinValue value = new KyLinValue();
@@ -189,7 +193,7 @@ public class KyLinUseFunction {
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[15]) || keyword.equals(KylinKeyWord[15])) {
+        else if (funcName.equals("delete") || funcName.equals("rm")) {
             File file = new File(new KyLinExpression().getExpression(split[0] , kylinRuntime));
             KyLinValue value = new KyLinValue();
             value.setType("string");
@@ -197,11 +201,11 @@ public class KyLinUseFunction {
             value.setIs_public(true);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[16])) {
+        else if (funcName.equals("get_pointer")) {
             //System.out.println(mainApp.all_kylin_value_pointer);
             return getAddress(content,kylinRuntime);
         }
-        else if (funcName.equals(KylinKeyWord[17])) {
+        else if (funcName.equals("toVal")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setIs_public(true);
@@ -209,7 +213,7 @@ public class KyLinUseFunction {
             value.setContent(mainApp.all_kylin_value_pointer.get(new KyLinExpression().getExpression(content,kylinRuntime)) , kylinRuntime);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[18])) {
+        else if (funcName.equals("shell_output")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
             value.setIs_public(true);
@@ -234,7 +238,7 @@ public class KyLinUseFunction {
             value.setContent(stringBuilder.toString() , kylinRuntime);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[19])) {
+        else if (funcName.equals("new_thread")) {
             KyLinValue value = new KyLinValue();
             value.setType("thread");
             value.setIs_public(true);
@@ -255,7 +259,7 @@ public class KyLinUseFunction {
             mainApp.all_kylin_value_pointer.put(pointer , value);
             return value;
         }
-        else if (funcName.equals(KylinKeyWord[20])) {
+        else if (funcName.equals("get_mouse_point")) {
             KyLinValue value = new KyLinValue();
             value.setIs_public(true);
             Point point = MouseInfo.getPointerInfo().getLocation();
@@ -285,8 +289,15 @@ public class KyLinUseFunction {
             list.arrayList.add(x_v);
             list.arrayList.add(y_v);
             value.setContent(list , kylinRuntime);
-            System.out.println(value.getPointer());
+            //System.out.println(value.getPointer());
             value.setType("list");
+            return value;
+        }
+        else if (funcName.equals("toInt")) {
+            KyLinValue value = new KyLinValue();
+            value.setIs_public(true);
+            double d = Double.parseDouble(new KyLinExpression().getExpression(content , kylinRuntime));
+            value.setContent((int) d , kylinRuntime);
             return value;
         }
         else {

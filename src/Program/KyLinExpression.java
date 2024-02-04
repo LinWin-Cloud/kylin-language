@@ -39,16 +39,34 @@ public class KyLinExpression {
                         String input = code.substring(code.indexOf("[")+1 , code.lastIndexOf("]")).trim();
                         if (kylinRuntime.ValueMap.containsKey(function))
                         {
-                            KyLinList kyLinList = (KyLinList) kylinRuntime.ValueMap.get(function).getContent();
-                            stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+                            try {
+                                /**
+                                 * 这段代码真的是玄学，明明理论上运行没有问题，但是不加上这段 try - catch他可能就会处理成 string 类型的数据
+                                 * 怎么修复BUG都不行，那就将错就错吧，当try内的代码运行错误，那么就运行 string 处理程序.
+                                 */
+                                KyLinList kyLinList = (KyLinList) kylinRuntime.ValueMap.get(function).getContent();
+                                stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+                            }catch (Exception exception) {
+                                String stringObject = (String) kylinRuntime.ValueMap.get(function).getContent();
+                                String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
+                                String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                                stringBuffer.append(split[Integer.parseInt(input)]);
+                            }
                         }
                         else if (kylinRuntime.PublicRuntime != null && kylinRuntime.ValueMap.containsKey(function))
                         {
-                            KyLinList kyLinList = (KyLinList) kylinRuntime.PublicRuntime.ValueMap.get(function).getContent();
-                            stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+                            try {
+                                KyLinList kyLinList = (KyLinList) kylinRuntime.PublicRuntime.ValueMap.get(function).getContent();
+                                stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+                            }catch (Exception exception) {
+                                String stringObject = (String) kylinRuntime.PublicRuntime.ValueMap.get(function).getContent();
+                                String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
+                                String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                                stringBuffer.append(split[Integer.parseInt(input)]);
+                            }
                         }
                     }catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         throw new Exception(e);
                     }
                 }

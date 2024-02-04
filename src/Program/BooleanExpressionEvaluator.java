@@ -5,6 +5,9 @@
 package Program;
 
 public class BooleanExpressionEvaluator {
+    /**
+     *
+     */
     private String expression;
     private int index;
 
