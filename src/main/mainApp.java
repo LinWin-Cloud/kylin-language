@@ -22,8 +22,8 @@ public class mainApp {
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
     private static String CACHE_DIR = "";
-    public static double version = 1.0;
-    public static String version_type = "preview";
+    public static double version = 3.0;
+    public static String version_type = "Public";
 
     static {
         try {

@@ -42,6 +42,11 @@ public class KyLinUseFunction {
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
+            /**
+             * [注释补充]
+             * 判断是否是可调用的 函数
+             *
+             */
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
             for (String s : KylinKeyWord) {
@@ -57,6 +62,11 @@ public class KyLinUseFunction {
         }
     }
     public static KyLinValue UseFunction(String expression , KyLinRuntime kylinRuntime) throws Exception {
+        /**
+         * [注释补充]
+         * 调用的 函数
+         * 就是调用这些函数，这些都是内置的.
+         */
         String funcName = expression.substring(0,expression.indexOf("(")).trim();
         String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
         String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
