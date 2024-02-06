@@ -27,12 +27,7 @@ public class KyLinClass {
             {
                 continue;
             }
-            String keyword = kyLinRuntime.defined_keyword.get(words[0]);
             // 这个keyword对应一个hashmap中的value , 例如中文编程下 "变量 a = 1"，那么这个 "变量" 就会对应一个值 "var" ，同样可以处理语句
-            if (keyword == null)
-            {
-                keyword = "";
-            }
             if (line.startsWith("//"))
             {
                 // 这条是处理注释，是注释的直接过去
@@ -46,7 +41,7 @@ public class KyLinClass {
                 kyLinRuntime.new_value(line , false);
                 continue;
             }
-            else if (words[0].equals("func") || words[0].equals("f") || keyword.equals("func") || keyword.equals("f")) {
+            else if (words[0].equals("func") || words[0].equals("f")) {
                 /**
                  * func func_name (a ,b) public
                  *      return <a + b>
@@ -60,7 +55,7 @@ public class KyLinClass {
                 String inputContent = line.substring(line.indexOf("(")+1 , line.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
 
-                if (words[0].equals("func") || keyword.equals("func"))
+                if (words[0].equals("func"))
                 {
                     isPublic = baseFunction.isPublic(line.substring(line.lastIndexOf(")")+1).trim());
                 }else
@@ -73,7 +68,7 @@ public class KyLinClass {
                 kylinFunction.setInput(inputContent.split(","));
 
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (words[0].equals("func") || keyword.equals("func"))
+                if (words[0].equals("func"))
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line_1 = this.code.get(j).trim();

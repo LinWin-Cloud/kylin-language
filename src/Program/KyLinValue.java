@@ -20,12 +20,13 @@ public class KyLinValue {
         if (content == null) {
             this.content = null;
             this.type = "null";
+            this.pointer = baseFunction.getRandomLong();
+            mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);
             return;
         }
         if (kylinRuntime.classMap.containsKey(this.type)) {
             this.content = content;
         }
-        //this.content = new KyLinExpression().getExpression(String.valueOf(content) , kylinRuntime);
         this.content = content;
         this.pointer = baseFunction.getRandomLong();
         mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);

@@ -83,6 +83,7 @@ public class mainApp {
                     }
 
                     catch (Exception exception) {
+                        //(exception).printStackTrace();
                         KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0,false);
                         kylinRuntimeException.PrintErrorMessage(main);
                     }

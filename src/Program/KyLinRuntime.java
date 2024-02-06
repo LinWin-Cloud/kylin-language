@@ -47,23 +47,17 @@ public class KyLinRuntime {
         {
             return;
         }
-        String keyword = this.defined_keyword.get(words[0]);
-        // 这个keyword对应一个hashmap中的value , 例如中文编程下 "变量 a = 1"，那么这个 "变量" 就会对应一个值 "var" ，同样可以处理语句
-        if (keyword == null)
-        {
-            keyword = "";
-        }
         if (code.startsWith("//"))
         {
             // 这条是处理注释，是注释的直接过去
             return;
         }
-        if (words[0].equals("var") || keyword.equals("var"))
+        if (words[0].equals("var"))
         {
             this.new_value(code,true);
             return;
         }
-        if (isFunction && (words[0].equals("return") || keyword.equals("return")))
+        if (isFunction && (words[0].equals("return")))
         {
             this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
@@ -78,10 +72,10 @@ public class KyLinRuntime {
          *             return;
          *         }
          */
-        else if (words[0].equals("val") || keyword.equals("val")) {
+        else if (words[0].equals("val")) {
             new KyLinVal().Val(code,this);
         }
-        else if (words[0].equals("func") || words[0].equals("f") || keyword.equals("func") || keyword.equals("f")) {
+        else if (words[0].equals("func") || words[0].equals("f")) {
             /**
              * func func_name (a ,b) public
              *      return <a + b>
@@ -95,7 +89,7 @@ public class KyLinRuntime {
                 String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
 
-                if (words[0].equals("func") || keyword.equals("func"))
+                if (words[0].equals("func"))
                 {
                     isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
                 }else
@@ -108,7 +102,7 @@ public class KyLinRuntime {
                 kylinFunction.setInput(inputContent.split(","));
 
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (words[0].equals("func") || keyword.equals("func"))
+                if (words[0].equals("func"))
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line = this.code.get(j).trim();
@@ -140,7 +134,7 @@ public class KyLinRuntime {
                 this.FunctionMap.put(name , kylinFunction);
                 return;
         }
-        else if (words[0].equals("if") || keyword.equals("if"))
+        else if (words[0].equals("if"))
         {
             this.isIf = true;
             String[] splitArray = code.split("\\)\\s");
@@ -166,7 +160,7 @@ public class KyLinRuntime {
             String func = code.substring(code.indexOf(" ")+1);
             new KyLinExpression().getExpression(func,this);
         }
-        else if (words[0].equals("err") || keyword.equals("err"))
+        else if (words[0].equals("err"))
         {
             //定义异常处理函数
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
@@ -201,7 +195,7 @@ public class KyLinRuntime {
             this.ExceptionMap.put(name , kylinFunction);
             return;
         }
-        else if (words[0].equals("class") || keyword.equals("class"))
+        else if (words[0].equals("class"))
         {
             String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
             boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")+1).trim());
@@ -227,7 +221,7 @@ public class KyLinRuntime {
             this.classMap.put(name , kyLinClass);
             return;
         }
-        else if (words[0].equals("import") || keyword.equals("import"))
+        else if (words[0].equals("import"))
         {
             String lib = new KyLinExpression().getExpression(code.substring(7) , this);
             String lib_path = PathLoader.getLibName(lib);
