@@ -8,8 +8,6 @@ public class KyLinVal {
         String val  = code.substring(code.indexOf("=")+1).trim();
 
         String address = KyLinUseFunction.getAddress(name , kyLinRuntime).getContent().toString();
-        //System.out.println(address);
-        //System.out.println(mainApp.all_kylin_value_pointer+"\n");
         mainApp.all_kylin_value_pointer.get(address).setContent(new KyLinExpression().getExpression(val , kyLinRuntime) , kyLinRuntime);
     }
 }
