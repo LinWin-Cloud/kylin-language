@@ -144,7 +144,7 @@ public class KyLinExpression {
             return null;
         }
         catch (Exception exception) {
-            //exception.printStackTrace();
+            exception.printStackTrace();
             /**
              KylinRuntimeException kylinRuntimeException =
              new KylinRuntimeException("Expression error" , kylinRuntime.codeLine+1 , true);
