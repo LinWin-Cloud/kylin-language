@@ -5,6 +5,13 @@ class Httpserver: public
     public ip = null
     public server_path = get_path()
 
+    func debug() public
+        // 这个函数是用来调试开发这个函数的，这个不写入方法
+        print("Pointer: ")
+        print(get_pointer(port) , " " , get_pointer(ip) , " " , get_pointer(server_path))
+
+    end_func
+
     func set_port(in_port) public
         val port = in_port
     end_func
