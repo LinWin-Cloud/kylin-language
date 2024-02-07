@@ -145,3 +145,10 @@ kill_thread(a)
 var a = "1.0"
 print(toInt(a)) // 1
 ```
+
+### randomInt
+生成一个制定范围的 number 类型数字
+```dtd
+// 生成 100 - 1000 的数字
+print(randomInt(100, 1000))
+```
