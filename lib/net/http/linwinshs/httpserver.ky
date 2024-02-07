@@ -29,7 +29,7 @@ class Httpserver: public
         import "util.java.load_class"
         import "io.file"
 
-        var boot = get_path(),"/../lib/net/http/linwinshs/http_service.jar"
+        var boot = java_runtime(),"/../lib/net/http/linwinshs/http_service.jar"
         var in = port , " " , ip , " " , server_path
         //print(boot)
         //print(in)
