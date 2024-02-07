@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class KyLinUseFunction {
     public static String[] KylinKeyWord ={
@@ -39,6 +40,7 @@ public class KyLinUseFunction {
             "get_mouse_point",          // 20
             "toInt",                    // 21
             "rm",                       // 22
+            "randomInt",                // 23
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -84,6 +86,17 @@ public class KyLinUseFunction {
             value.setContent(baseFunction.input(new KyLinExpression().getExpression(split[0] , kylinRuntime)) , kylinRuntime);
             value.setIs_public(true);
 
+            return value;
+        }
+        else if (funcName.equals("randomInt")) {
+            KyLinValue value = new KyLinValue();
+            value.setType("num");
+
+            double a = Double.parseDouble(new KyLinExpression().getExpression(split[0],kylinRuntime));
+            double b = Double.parseDouble(new KyLinExpression().getExpression(split[1],kylinRuntime));
+
+            Random random = new Random();
+            value.setContent(random.nextInt((int) b - (int) a + 1) + ((int) a) , kylinRuntime);
             return value;
         }
         else if (funcName.equals("get_os")) {
