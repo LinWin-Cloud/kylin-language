@@ -15,7 +15,7 @@ public class MathExpressionEvaluator {
                 continue;
             }
             char c = token.charAt(0);
-            if (c == '+' || c == '-' || c == '*' || c == '/') {
+            if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
                 while (!operatorStack.isEmpty() && operatorPrecedence(operatorStack.peek()) >= operatorPrecedence(c)) {
                     processAnOperator(operandStack, operatorStack);
                 }
@@ -54,6 +54,11 @@ public class MathExpressionEvaluator {
             case '*':
                 operandStack.push(operand1 * operand2);
                 break;
+
+            case '%':
+                operandStack.push(operand1 % operand2);
+                break;
+
             case '/':
                 if (operand2 == 0) {
                     throw new ArithmeticException("Division by zero");

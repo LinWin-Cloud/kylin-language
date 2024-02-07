@@ -27,7 +27,7 @@ public class KyLinExpression {
                 }
                 else if (s.startsWith("\"") && s.endsWith("\"")) {
                     try {
-                        stringBuffer.append(this.returnString(s.substring(1,s.length() -1)));
+                        stringBuffer.append(s, 1, s.length() -1);
                         continue;
                     }catch (Exception exception) {
                         throw new Exception("string error.");
@@ -152,10 +152,6 @@ public class KyLinExpression {
              */
             throw new Exception(exception.getMessage());
         }
-    }
-    public String returnString(String str){
-        str = str.replace("\\n","\n");
-        return str;
     }
     public boolean isNumber(String s) {
         try {

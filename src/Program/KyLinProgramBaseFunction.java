@@ -34,7 +34,8 @@ public class KyLinProgramBaseFunction {
         "list_rm",
         "kill_thread",
         "gc",
-        "enterKey"
+        "enterKey",
+        "del"
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -47,6 +48,14 @@ public class KyLinProgramBaseFunction {
         if (function.equals("out") || function.equals("print")) {
             printStream.println(new KyLinExpression().getExpression(input , kylinRuntime));
             printStream.flush();
+            return true;
+        }
+        if (function.equals("del")) {
+            String pointer = new KyLinExpression().getExpression(input , kylinRuntime);
+            KyLinValue value = mainApp.all_kylin_value_pointer.get(pointer);
+            value = null;
+            //System.out.println(mainApp.all_kylin_value_pointer);
+            mainApp.all_kylin_value_pointer.remove(pointer);
             return true;
         }
         if (function.equals("while")) {

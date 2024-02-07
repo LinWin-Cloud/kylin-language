@@ -13,11 +13,11 @@ public class StringParser {
         Stack<Character> operatorStack = new Stack<>(); // Operator stack
 
         for (String token : tokens) {
-            if (token.length() == 0) {
+            if (token.isEmpty()) {
                 continue;
             }
             char c = token.charAt(0);
-            if (c == '+' || c == '-' || c == '*' || c == '/') {
+            if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
                 while (!operatorStack.isEmpty() && operatorPrecedence(operatorStack.peek()) >= operatorPrecedence(c)) {
                     processAnOperator(operandStack, operatorStack);
                 }
@@ -56,6 +56,9 @@ public class StringParser {
             case '*':
                 operandStack.push(operand1 * operand2);
                 break;
+            case '%':
+                operandStack.push(operand1 % operand2);
+                break;
             case '/':
                 if (operand2 == 0) {
                     throw new ArithmeticException("Division by zero");
@@ -72,6 +75,7 @@ public class StringParser {
                 return 1;
             case '*':
             case '/':
+            case '%':
                 return 2;
         }
         return -1;

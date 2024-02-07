@@ -31,6 +31,9 @@ public class KyLinValue {
         this.pointer = baseFunction.getRandomLong();
         mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);
     }
+    public void setPointer(long pointer) {
+        this.pointer = pointer;
+    }
     public void setIs_public(boolean isPublic) {
         this.is_public = isPublic;
     }

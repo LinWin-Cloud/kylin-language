@@ -1,12 +1,8 @@
 package Program;
 
-import Function.TypeOf;
 import main.PathLoader;
 import main.baseFunction;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,7 +39,7 @@ public class KyLinRuntime {
     public void exec(String code, int i) throws Exception
     {
         String[] words = code.trim().split(" ");
-        if (code.equals(""))
+        if (code.isEmpty())
         {
             return;
         }
@@ -72,6 +68,17 @@ public class KyLinRuntime {
          *             return;
          *         }
          */
+        else if (words[0].equals("ref")) {
+            /**
+             * 该标准在 kylin3.2 发布，用于共享指针和对象，就是两个变量用的是一个指针
+             * var a = 1
+             * ref b = a
+             *
+             * val b = 2
+             * print(a)         //输出 a 为 2
+             */
+            this.new_ref(code , true);
+        }
         else if (words[0].equals("val")) {
             new KyLinVal().Val(code,this);
         }
@@ -303,6 +310,43 @@ public class KyLinRuntime {
             return false;
         }
     }
+    public void new_ref(String code , boolean isPublic) throws Exception {
+        String name = code.substring(code.indexOf(" ")+1,code.indexOf("=")).trim();
+        String content = code.substring(code.indexOf("=")+1).trim();
+
+        if (this.ValueMap.containsKey(name)) {
+            throw new Exception("The Value: "+name+" was defined.");
+        }
+        else {
+            if (this.ValueMap.containsKey(content)) {
+                KyLinValue clone_value = this.ValueMap.get(content);
+                KyLinValue value = new KyLinValue();
+
+                value.setContent(clone_value.getContent() , this);
+                value.setType(clone_value.getType());
+                value.setName(name);
+                value.setIs_public(isPublic);
+                value.setPointer(clone_value.getPointer());
+
+                this.ValueMap.put(value.getName() , value);
+            }
+            else if (this.PublicRuntime != null && this.PublicRuntime.ValueMap.containsKey(content)) {
+                KyLinValue clone_value = this.PublicRuntime.ValueMap.get(content);
+                KyLinValue value = new KyLinValue();
+
+                value.setContent(clone_value.getContent() , this);
+                value.setType(clone_value.getType());
+                value.setName(name);
+                value.setIs_public(isPublic);
+                value.setPointer(clone_value.getPointer());
+
+                this.PublicRuntime.ValueMap.put(value.getName() , value);
+            }
+            else {
+                throw new Exception("No Value: "+content);
+            }
+        }
+    }
     public boolean new_class(String code , String content , boolean isPublic , KyLinRuntime kyLinRuntime) throws Exception {
         if (content.replace(" ","").startsWith("new(") && content.endsWith(")"))
         {
@@ -342,6 +386,7 @@ public class KyLinRuntime {
                     }
                 }
                 kyLinClass.run_init_();
+                this.ValueMap.put(name , value);
             }else {
                 throw new Exception("Can not init a new class: "+new_class);
             }

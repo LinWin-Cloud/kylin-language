@@ -36,6 +36,7 @@ public class mainApp {
     public static File file;
 
     public static void main(String[] args) throws Exception {
+        //System.out.println(jarDirectory);
         CACHE_DIR = jarDirectory+"/../cache/";
         int length = args.length;
         if (length == 0) {
