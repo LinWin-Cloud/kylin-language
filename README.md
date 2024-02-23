@@ -1,132 +1,75 @@
 # KyLin 编程语言Jvm版本
-###### 当前版本: 3.0 Public
-KyLin 是一款基于Jvm的跨平台高效的编程语言。面相对象和面向过程都是可以的，直译式编程语言
-其特点就是快速高效简单，语法设计降低或者避免```写出像shit一样的代码```，代码就像诗一样优美
-  
-同样，其设计成函数式，而且避免套嵌的写法，完全利用函数的调用，代码可读性十分的高，而且运行安全，基于Jvm，jvm有强大的内存安全管理机智
+###### 建议在 Linux 平台上使用该款软件，虽然设计考虑Windows，但是并未在Windows平台上做过测试.
 
-从功能和一些设计上是对标Python的，但是修改了Python一些不太合理的地方，同样借鉴了各个编程语言，修复了这些编程语言的不足之处。
+###### 当前版本: 3.2 Public
+- KyLin 是一款基于Java开发的跨平台高效的编程语言。面相对象和面向过程都是可以的，直译式编程语言，这是由作者在初三时期开发完成的.
 
-在 kylin 3.0 标准当中加入了指针特性，并且是一个重要的特性，不过这个指针是安全的，并且可以无视kylin标准变量
-中最高可调用当前函数运行环境下只能够获取到上一个运行环境中的变量
+- 其特点就是快速高效简单，语法设计降低或者避免```写出像shit一样的代码```，代码就像诗一样优美.
 
-## 发行版 https://gitee.com/LinwinSoft/kylin-language/releases
-## Kylin专用jdk: https://gitee.com/LinWin-Cloud/
+- Kylin编程语言的目标就是吸取各个编程语言的优点，快速高效的实现```自动化计算机操作```，```计算机编程快速教学```. ```计算机编程语言实现教学```.
 
-## 启动Kylin Jvm
-> # 先进入源代码目录
+#### 发行版 https://gitee.com/LinwinSoft/kylin-language/releases (下载务必到这个链接)
 
-> ./kylin [操作]
+#### 软件信息
+- 作者: 王相卿
+- 开发语言: Java
+- 平台: Windows , Linux
+- 面相群体：计算机初学者、办公人员、计算机专业学生.
+- 设计目标: ```自动化计算机操作```，```计算机编程快速教学```. ```计算机编程语言实现教学```.
 
-> ./kylin #可以查看帮助
+#### 语法改进
+- 面相对象的语法结构，但是摒弃了传统编程语言中继承的特性，陈年屎山不该困扰程序员.
+- 吸收了 python , vb, c , Linux shell的语法
+- 与Java紧密结合，背靠Java丰富生态.
+- 变量指针简单化、安全化，指针不再是难点，也不再是限制初学者的一道门槛.
 
-> ./kylin ./[源代码]
+#### 文档
+- https://gitee.com/LinWin-Cloud/kylin-language/wiki/
 
-## 关于Kylin Programing Language.
-Kylin是一款高级编程语言，其目的是为了解决现如今很多的编程语言语法不够简单，或者是简单的编程语言不够强大
-不能够让人能够快速理解的代码，其主要面向Web服务器、Web爬虫、大量的系统IO操作、自动化的游戏操作、和各种、
-编程语言交互运行。
+#### 安装
 
-你应该选择kyLin，不仅仅是因为他适合初学者，更重要的是，他的功能更加强大，他对标Python，在网页服务器方面
-KyLin可以超过Python甚至接近c++
+Windows 版本下载命令
 
-##  Kylin Jvm
-### 关键字
-1. ```if```
-2. ```else```
-3. ```var```
-4. ```new()```
-5. ```func```
-6. ```f```
-7. ```e_f```
-8. ```end_func```
-9. ```err```
-10. ```e_err```
-11. ```for```
-12. ```while```
-13. ```import```
-14. ```class```
-15. ```end_class```
-16. ```private```
-17. ```public```
-18. ```val```
+    git clone https://gitee.com/LinWin-Cloud/kylin-language -b windows_kylin
 
-### 内存溢出测试
-#### 无限递归
+Linux 版本下载命令
+
+    git clone https://gitee.com/LinWin-Cloud/kylin-language -b linux_kylin
+
+
+Windows版本直接cmd运行源代码目录内: ```.\kylin.bat 源代码目录```
+Linux则进行以下操作(进入目录):
 ```
-// Kylin代码
-func test() public
-	test()
-end_func
+sudo mkdir /usr/kylin
+sudo cp -r ./* /usr/kylin
+sudo echo '/usr/kylin/kylin $1 $2' > /bin/kylin
+sudo chmod +x /bin/kylin
+sudo chmod 777 /usr/kylin/* -R
 ```
-1. C (GCC) ❌
-2. GO (GCC) ❌
-3. Javascript ❌
-4. Kylin Go ❌
-5. Kylin Jvm (存活时间较长)  ❌ 
-
-## Kylin Go
-这个是```Kylin 编程语言``` 的一个分支项目，基于Go编写的解释器
-https://github.com/zmh-program/kylin-go/
-
-## 文档:-docx
-### 文档链接:
-1. <a href='https://gitee.com/Linwin-Cloud/kylin-language/tree/master/doc/Chinese'>中文文档</a>
-
-## 函数式编程
-1. 函数
-Kylin编程语言非常推荐开发者采用函数的形式等编写功能
-```
-`
-//这是一个标准的函数定义
-func main() public
-	out("hello world")
-end_func
-
-```
+安装成功后运行命令 ```kylin```
 ```
 
-//这是一个化简的函数定义，匿名内部类
-f main()
-	out(in) //输出in
-e_f
+Kylin Programming Language.
+   -version            Show the version information.
+   -console            Enter into the kylin console.
+kylin [resource file]
 
 ```
-
-2. 利用函数的代码规范
-
+输入 ```kylin -console``` 进入kylin编程语言控制台
 ```
-//main函数循环1000次
-for(main() , 1000)  
+ubuntu@ubuntu-linux:~$ kylin -console
+Kylin> print("hello world")
+hello world
+Kylin> 
 ```
 
-## 代码语法特点
-1. ```语法设计避免写出shit一样的代码```
-2. ```代码可读性很高，配合着内置的中文库，读代码就像读文章一样```
-3. ```代码像诗歌一样优美，语法设计尽量避免任何套嵌```
 
-### 借鉴了多个编程语言的语法
-1. Visual Basic
-2. Python
-3. C / C++
-4. Java
-5. HTML
-6. CSS
-7. Javascript
-8. SQL
-9. Linux Shell
-10. Go
-
-## 基于jvm的生态
-如果是kylin-jvm,那么KyLin编程语言同样是支持一些Java的类库的，就是说一些编程语言的类库可以直接调用Java的。
-
-## 目录结构
-### src ---源代码
-#### KylinException	---处理异常的代码
-#### main ---启动和主要参数
-#### Program ---KyLin运行环境主要代码
-
-### out ---输出的class
-### bin ---存放真正成型的jar和启动文件
-### head ---自定义头文件
-### kpt ---kpt包管理器
+#### 感谢伙伴
+1. Zmh-Program
+2. 应急食品
+3. 萤火科技 、营销云数据
+4. baig
+5. Program-Jim
+6. 网络风暴
+7. Fennd
+8. 魔都赵子龙
