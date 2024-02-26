@@ -9,6 +9,14 @@ public class KyLinValue {
     private Object content;
     private boolean is_public = true;
     private long pointer;
+    public boolean isNumber(String in) {
+        try {
+            Double.parseDouble(in);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -27,9 +35,15 @@ public class KyLinValue {
         if (kylinRuntime.classMap.containsKey(this.type)) {
             this.content = content;
         }
+        if (isNumber(content.toString())) {
+            this.type = "num";
+        }
         this.content = content;
         this.pointer = baseFunction.getRandomLong();
         mainApp.all_kylin_value_pointer.put(String.valueOf(this.pointer) , this);
+    }
+    public KyLinValue() {
+
     }
     public void setPointer(long pointer) {
         this.pointer = pointer;

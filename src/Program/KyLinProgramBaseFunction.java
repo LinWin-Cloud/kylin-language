@@ -132,48 +132,11 @@ public class KyLinProgramBaseFunction {
                 int length = getIn.length;
                 if (length == 2) {
                     try {
-                        String[] in = func.substring(func.indexOf("(")+1,func.lastIndexOf(")")).trim().split(",");
-                        String name = func.substring(0,func.indexOf("(")).trim();
-                        if(KyLinProgramBaseFunction.isRealDefinedFunction(func,kylinRuntime)) {
-                            KyLinFunction kylinFunction = kylinRuntime.FunctionMap.get(name);
-                            KyLinFunction PubFunc = null;
-                            String[] func_content = in;
-
-                            if (kylinFunction == null && (kylinRuntime.PublicRuntime!=null&&kylinRuntime.PublicRuntime.FunctionMap.containsKey(name))) {
-                                PubFunc = kylinRuntime.PublicRuntime.FunctionMap.get(name);
-                            }
-                            if (PubFunc == null) {
-
-                                for (int j = 0 ; j < kylinFunction.input.length ; j++) {
-                                    KyLinValue kylinValue = new KyLinValue();
-                                    kylinValue.setName(kylinFunction.input[j]);
-                                    kylinValue.setContent(func_content[j] , kylinRuntime);
-                                    kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
-                                }
-                                for (int i = 0 ; i < range ;i++) {
-                                    kylinFunction.kylinRuntime.run();
-                                }
-                            }
-                            else {
-                                for (int j = 0 ; j < PubFunc.input.length ; j++) {
-                                    KyLinValue kylinValue = new KyLinValue();
-                                    kylinValue.setName(PubFunc.input[j]);
-                                    kylinValue.setContent(func_content[j] , kylinRuntime);
-                                    PubFunc.kylinRuntime.ValueMap.put(PubFunc.input[j] , kylinValue);
-                                }
-                                for (int i = 0 ; i < range ;i++) {
-                                    PubFunc.kylinRuntime.run();
-                                }
-                            }
-                        }
-                        else if (KyLinProgramBaseFunction.isDefinedFunction(func) && KyLinUseFunction.isUseFunction(func , kylinRuntime)) {
-                            for (int i = 0 ; i < range ;i++) {
-                                KyLinUseFunction.UseFunction(func , kylinRuntime);
-                            }
+                        for (int i = 0 ; i < range ; i++) {
+                            kylinRuntime.exec(func , 0);
                         }
                     }
                     catch (Exception exception) {
-                        exception.printStackTrace();
                         throw new Exception(exception);
                     }
                     return true;

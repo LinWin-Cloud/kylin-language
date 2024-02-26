@@ -130,7 +130,7 @@ public class KyLinUseFunction {
         else if (funcName.equals("typeof")) {
             KyLinValue value = new KyLinValue();
             value.setType("string");
-            value.setContent(KyLinType.getType(content , kylinRuntime), kylinRuntime);
+            value.setContent(KyLinExpression.getValueFromRuntime(content , kylinRuntime).getType(), kylinRuntime);
             value.setIs_public(true);
             return value;
         }

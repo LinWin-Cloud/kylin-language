@@ -117,7 +117,7 @@ public class KyLinRuntime {
                             this.codeLine = j;
                             break;
                         }
-                        if (line.equals("")) {
+                        if (line.isEmpty()) {
                             continue;
                         }
                         functionCode.add(line);
@@ -130,7 +130,7 @@ public class KyLinRuntime {
                             this.codeLine = j;
                             break;
                         }
-                        if (line.equals("")) {
+                        if (line.isEmpty()) {
                             continue;
                         }
                         functionCode.add(line);
