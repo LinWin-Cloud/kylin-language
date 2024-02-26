@@ -3,18 +3,27 @@ package Program;
 
 import KylinException.KylinRuntimeException;
 
-import javax.script.ScriptException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class KyLinExpression {
-    public KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
+    public static KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
         if (runtime.ValueMap.containsKey(name)) {
             return runtime.ValueMap.get(name);
         }
         else if (!runtime.ValueMap.containsKey(name) && runtime.PublicRuntime != null) {
-            return this.getValueFromRuntime(name , runtime.PublicRuntime);
+            return getValueFromRuntime(name , runtime.PublicRuntime);
+        } else {
+            return null;
+        }
+    }
+
+    public static KyLinFunction getFunctionFromRuntime(String name , KyLinRuntime runtime) {
+        if (runtime.FunctionMap.containsKey(name)) {
+            return runtime.FunctionMap.get(name);
+        }
+        else if (!runtime.FunctionMap.containsKey(name) && runtime.PublicRuntime != null) {
+            return getFunctionFromRuntime(name , runtime.PublicRuntime);
         } else {
             return null;
         }
@@ -48,12 +57,13 @@ public class KyLinExpression {
                     try {
                         String function = code.substring(0 , code.indexOf("[")).trim();
                         String input = code.substring(code.indexOf("[")+1 , code.lastIndexOf("]")).trim();
-                        KyLinValue value = this.getValueFromRuntime(function , kylinRuntime);
+                        KyLinValue value = getValueFromRuntime(function , kylinRuntime);
                         try {
                             /**
                              * 这段代码真的是玄学，明明理论上运行没有问题，但是不加上这段 try - catch他可能就会处理成 string 类型的数据
                              * 怎么修复BUG都不行，那就将错就错吧，当try内的代码运行错误，那么就运行 string 处理程序.
                              */
+                            assert value != null;
                             KyLinList kyLinList = (KyLinList) value.getContent();
                             stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
                         }catch (Exception exception) {

@@ -274,10 +274,11 @@ public class KyLinRuntime {
         String function = code.substring(0, code.indexOf("(")).trim();
         String content = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")")).trim();
 
-        if (this.FunctionMap.containsKey(function)) {
+        if (KyLinExpression.getFunctionFromRuntime(function , this) != null) {
 
-            KyLinFunction kylinFunction = this.FunctionMap.get(function);
+            KyLinFunction kylinFunction = KyLinExpression.getFunctionFromRuntime(function , this);
             String[] split = content.split(",(?![^(]*\\))");
+            assert kylinFunction != null;
             int inputLength = kylinFunction.input.length;
 
             kylinFunction.kylinRuntime.FunctionMap.putAll(this.FunctionMap);
@@ -290,7 +291,9 @@ public class KyLinRuntime {
                 kylinFunction.kylinRuntime.ValueMap.put(input,kylinValue);
             }
             kylinFunction.kylinRuntime.run();
-        }else if (this.PublicRuntime != null && this.PublicRuntime.FunctionMap.containsKey(function)) {
+        }
+        /*
+        else if (this.PublicRuntime != null && this.PublicRuntime.FunctionMap.containsKey(function)) {
             KyLinFunction kylinFunction = this.PublicRuntime.FunctionMap.get(function);
             kylinFunction.kylinRuntime.PublicRuntime = this;
             String[] split = content.split(",(?![^(]*\\))");
@@ -304,6 +307,7 @@ public class KyLinRuntime {
             }
             kylinFunction.kylinRuntime.run();
         }
+         */
     }
     public void new_ref(String code , boolean isPublic) throws Exception {
         String name = code.substring(code.indexOf(" ")+1,code.indexOf("=")).trim();
