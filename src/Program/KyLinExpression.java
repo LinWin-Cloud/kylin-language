@@ -70,6 +70,10 @@ public class KyLinExpression {
                             String stringObject = (String) kylinRuntime.ValueMap.get(function).getContent();
                             String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
                             String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                            if (Integer.parseInt(input) >= split.length) {
+                                stringBuffer.append("null");
+                                return stringBuffer.toString();
+                            }
                             stringBuffer.append(split[Integer.parseInt(input)]);
                         }
                     }catch (Exception e) {
