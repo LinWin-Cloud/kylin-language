@@ -22,7 +22,7 @@ public class mainApp {
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
     private static String CACHE_DIR = "";
-    public static double version = 3.1;
+    public static double version = 4.0;
     public static String version_type = "Public";
 
     static {
@@ -47,6 +47,9 @@ public class mainApp {
             pathLoader.LoadNewPath();
 
             if (args[0].equals("-console")) {
+                /**
+                 * 参数是 -console , 进入调试控制台，不过这里不允许加入函数
+                 */
                 Scanner scanner = new Scanner(System.in);
                 KyLinRuntime kyLinRuntime = new KyLinRuntime("main");
                 kyLinRuntime.OnErrorExit = false;

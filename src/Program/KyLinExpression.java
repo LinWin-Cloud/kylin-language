@@ -6,8 +6,19 @@ import KylinException.KylinRuntimeException;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class KyLinExpression {
+    public KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
+        if (runtime.ValueMap.containsKey(name)) {
+            return runtime.ValueMap.get(name);
+        }
+        else if (!runtime.ValueMap.containsKey(name) && runtime.PublicRuntime != null) {
+            return this.getValueFromRuntime(name , runtime.PublicRuntime);
+        } else {
+            return null;
+        }
+    }
     public String getExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
         try {
             // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"
@@ -37,49 +48,35 @@ public class KyLinExpression {
                     try {
                         String function = code.substring(0 , code.indexOf("[")).trim();
                         String input = code.substring(code.indexOf("[")+1 , code.lastIndexOf("]")).trim();
-                        if (kylinRuntime.ValueMap.containsKey(function))
-                        {
-                            try {
-                                /**
-                                 * 这段代码真的是玄学，明明理论上运行没有问题，但是不加上这段 try - catch他可能就会处理成 string 类型的数据
-                                 * 怎么修复BUG都不行，那就将错就错吧，当try内的代码运行错误，那么就运行 string 处理程序.
-                                 */
-                                KyLinList kyLinList = (KyLinList) kylinRuntime.ValueMap.get(function).getContent();
-                                stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
-                            }catch (Exception exception) {
-                                String stringObject = (String) kylinRuntime.ValueMap.get(function).getContent();
-                                String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
-                                String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-                                stringBuffer.append(split[Integer.parseInt(input)]);
-                            }
-                        }
-                        else if (kylinRuntime.PublicRuntime != null && kylinRuntime.ValueMap.containsKey(function))
-                        {
-                            try {
-                                KyLinList kyLinList = (KyLinList) kylinRuntime.PublicRuntime.ValueMap.get(function).getContent();
-                                stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
-                            }catch (Exception exception) {
-                                String stringObject = (String) kylinRuntime.PublicRuntime.ValueMap.get(function).getContent();
-                                String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
-                                String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-                                stringBuffer.append(split[Integer.parseInt(input)]);
-                            }
+                        KyLinValue value = this.getValueFromRuntime(function , kylinRuntime);
+                        try {
+                            /**
+                             * 这段代码真的是玄学，明明理论上运行没有问题，但是不加上这段 try - catch他可能就会处理成 string 类型的数据
+                             * 怎么修复BUG都不行，那就将错就错吧，当try内的代码运行错误，那么就运行 string 处理程序.
+                             */
+                            KyLinList kyLinList = (KyLinList) value.getContent();
+                            stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+                        }catch (Exception exception) {
+                            String stringObject = (String) kylinRuntime.ValueMap.get(function).getContent();
+                            String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
+                            String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                            stringBuffer.append(split[Integer.parseInt(input)]);
                         }
                     }catch (Exception e) {
                         //e.printStackTrace();
                         throw new Exception(e);
                     }
                 }
-                else if (kylinRuntime.ValueMap.containsKey(s)) {
-                    KyLinValue kylinValue = kylinRuntime.ValueMap.get(s);
+                else if (getValueFromRuntime(s , kylinRuntime) != null) {
+                    KyLinValue kylinValue = getValueFromRuntime(s , kylinRuntime);
                     if (kylinValue == null) {
-                        throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.PublicRuntime.codeLine+1));
+                        throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.codeLine+1));
                     }
                     else if (kylinValue.getContent() == null ) {
                         stringBuffer.append("null");
                     }
                     else {
-                        stringBuffer.append(kylinRuntime.ValueMap.get(s).getContent());
+                        stringBuffer.append(kylinValue.getContent());
                     }
                     continue;
                 }
@@ -94,7 +91,7 @@ public class KyLinExpression {
                         PubFunc = kylinRuntime.PublicRuntime.FunctionMap.get(function);
                     }
                     if (PubFunc == null) {
-                        for (int j = 0 ; j < kylinFunction.input.length ; j++) {
+                        for (int j = 0; j < Objects.requireNonNull(kylinFunction).input.length ; j++) {
                             KyLinValue kylinValue = new KyLinValue();
                             kylinValue.setName(kylinFunction.input[j]);
                             kylinValue.setContent(func_content[j] , kylinRuntime);
@@ -119,18 +116,20 @@ public class KyLinExpression {
                     stringBuffer.append(KyLinUseFunction.UseFunction(s , kylinRuntime));
                     continue;
                 }
+                /*
                 else if (kylinRuntime.PublicRuntime != null
                     && kylinRuntime.PublicRuntime.ValueMap.containsKey(s)
                 ) {
                     stringBuffer.append(kylinRuntime.PublicRuntime.ValueMap.get(s).getContent());
                     continue;
                 }
+                 */
                 else {
                     try {
                         double math = this.evaluateExpression(s , kylinRuntime);
                         stringBuffer.append(math);
                     }catch (Exception exception) {
-                        stringBuffer.append(s);
+                        throw new Exception("Error Syntax: "+ s +" in "+code);
                     }
                     continue;
                 }
@@ -165,17 +164,7 @@ public class KyLinExpression {
         try {
             String function = code.substring(0 , code.indexOf("[")).trim();
             String input = code.substring(code.indexOf("[")+1 , code.lastIndexOf("]")).trim();
-
-            if (kyLinRuntime.ValueMap.containsKey(function))
-            {
-                return true;
-            }
-            else if (kyLinRuntime.PublicRuntime != null && kyLinRuntime.ValueMap.containsKey(function))
-            {
-                return true;
-            }else {
-                throw new Exception("No List: "+function);
-            }
+            return true;
         }catch (Exception exception) {
             return false;
         }

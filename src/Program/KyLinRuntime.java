@@ -186,7 +186,7 @@ public class KyLinRuntime {
                     this.codeLine = j;
                     break;
                 }
-                if (line.equals(""))
+                if (line.isEmpty())
                 {
                     continue;
                 }
@@ -213,7 +213,7 @@ public class KyLinRuntime {
             for (int j = i + 1 ; j < this.code.size() ; j++)
             {
                 String line = this.code.get(j).trim();
-                if (line.equals(""))
+                if (line.isEmpty())
                 {
                     continue;
                 }
@@ -270,7 +270,7 @@ public class KyLinRuntime {
             return false;
         }
     }
-    public boolean runFunction(String code) throws Exception {
+    public void runFunction(String code) throws Exception {
         String function = code.substring(0, code.indexOf("(")).trim();
         String content = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")")).trim();
 
@@ -290,7 +290,6 @@ public class KyLinRuntime {
                 kylinFunction.kylinRuntime.ValueMap.put(input,kylinValue);
             }
             kylinFunction.kylinRuntime.run();
-            return true;
         }else if (this.PublicRuntime != null && this.PublicRuntime.FunctionMap.containsKey(function)) {
             KyLinFunction kylinFunction = this.PublicRuntime.FunctionMap.get(function);
             kylinFunction.kylinRuntime.PublicRuntime = this;
@@ -304,10 +303,6 @@ public class KyLinRuntime {
                 kylinFunction.kylinRuntime.ValueMap.put(input,kylinValue);
             }
             kylinFunction.kylinRuntime.run();
-            return true;
-        }
-        else {
-            return false;
         }
     }
     public void new_ref(String code , boolean isPublic) throws Exception {
