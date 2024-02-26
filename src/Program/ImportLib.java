@@ -1,12 +1,14 @@
 package Program;
 
 import main.baseFunction;
+import main.mainApp;
 
 import java.io.File;
 
 public class ImportLib {
     public static void lib_import(String expression , KyLinRuntime kylinRuntime) throws Exception
     {
+        //System.out.println(mainApp.jarDirectory);
         String path = main.mainApp.jarDirectory + "/../lib/";
         if (expression.equals("httpserver")) {
             path += "net/http/linwinshs/";
