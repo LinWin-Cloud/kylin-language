@@ -1,0 +1,15 @@
+
+class basemap: public
+    public list_dom_key = list()
+    public list_dom_value = list()
+
+    func add(key,value) public
+        list_add(list_dom_key , key)
+        list_add(list_dom_value , value)
+    end_func
+
+    func get(key) public
+        var index_key = index_list(list_dom_key , key)
+        return list_dom_value[index_key]
+    end_func
+end_class
