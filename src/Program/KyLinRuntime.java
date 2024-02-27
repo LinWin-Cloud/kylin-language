@@ -48,6 +48,11 @@ public class KyLinRuntime {
             // 这条是处理注释，是注释的直接过去
             return;
         }
+        if (code.startsWith("#"))
+        {
+            // 这条是处理注释，是注释的直接过去
+            return;
+        }
         if (words[0].equals("var"))
         {
             this.new_value(code,true);
@@ -402,17 +407,19 @@ public class KyLinRuntime {
             KyLinList kyLinList = new KyLinList();
             kyLinList.name = name;
 
-            String[] tmp = new_list.split(",(?![^(]*\\))");
             ArrayList<KyLinValue> arrayList = new ArrayList<>();
-            for (String i : tmp)
-            {
-                KyLinValue new_var = new KyLinValue();
-                new_var.setName(i);
-                new_var.setIs_public(false);
-                new_var.setType(KyLinType.getType(i , kyLinRuntime));
-                new_var.setContent(new KyLinExpression().getExpression(i , this) , kyLinRuntime);
+            if (!new_list.isEmpty()) {
+                String[] tmp = new_list.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                for (String i : tmp)
+                {
+                    KyLinValue new_var = new KyLinValue();
+                    new_var.setName(i);
+                    new_var.setIs_public(false);
+                    new_var.setType(KyLinType.getType(i , kyLinRuntime));
+                    new_var.setContent(new KyLinExpression().getExpression(i , this) , kyLinRuntime);
 
-                arrayList.add(new_var);
+                    arrayList.add(new_var);
+                }
             }
             kyLinList.arrayList = arrayList;
 

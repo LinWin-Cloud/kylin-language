@@ -71,47 +71,39 @@ public class KyLinUseFunction {
          * 调用的 函数
          * 就是调用这些函数，这些都是内置的.
          */
-        String funcName = expression.substring(0,expression.indexOf("(")).trim();
-        String content = expression.substring(expression.indexOf("(")+1 , expression.lastIndexOf(")")).trim();
+        String funcName = expression.substring(0, expression.indexOf("(")).trim();
+        String content = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")")).trim();
         String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
 
+        KyLinValue value = new KyLinValue();
         switch (funcName) {
-            case "index_list" -> {
-                KyLinList list = (KyLinList) Objects.requireNonNull(KyLinExpression.getValueFromRuntime(split[0], kylinRuntime)).getContent();
-                KyLinValue value = new KyLinValue();
+            case "index_list":
+                KyLinList list = (KyLinList) Objects.requireNonNull(KyLinExpression.getValueFromRuntime(split[0].trim(), kylinRuntime)).getContent();
                 value.setType("num");
                 //System.out.println(split[1]);
                 int index = -1;
                 int j = 0;
                 for (KyLinValue v : list.arrayList) {
-                    if (v.getContent().equals(new KyLinExpression().getExpression(split[1] , kylinRuntime))) {
+                    if (v.getContent().equals(new KyLinExpression().getExpression(split[1].trim(), kylinRuntime))) {
                         index = j;
                         break;
                     }
                     j++;
                 }
-                value.setContent(index , kylinRuntime);
+                value.setContent(index, kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "getTime" -> {
-                KyLinValue value = new KyLinValue();
+            case "getTime":
                 value.setType("string");
                 value.setContent(baseFunction.getTime(), kylinRuntime);
                 value.setIs_public(true);
-
                 return value;
-            }
-            case "input" -> {
-                KyLinValue value = new KyLinValue();
+            case "input":
                 value.setType("string");
                 value.setContent(baseFunction.input(new KyLinExpression().getExpression(split[0], kylinRuntime)), kylinRuntime);
                 value.setIs_public(true);
-
                 return value;
-            }
-            case "randomInt" -> {
-                KyLinValue value = new KyLinValue();
+            case "randomInt":
                 value.setType("num");
 
                 double a = Double.parseDouble(new KyLinExpression().getExpression(split[0], kylinRuntime));
@@ -120,143 +112,114 @@ public class KyLinUseFunction {
                 Random random = new Random();
                 value.setContent(random.nextInt((int) b - (int) a + 1) + ((int) a), kylinRuntime);
                 return value;
-            }
-            case "get_os" -> {
-                KyLinValue value = new KyLinValue();
+            case "get_os":
                 value.setType("string");
                 value.setContent(System.getProperty("os.name"), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "get_path" -> {
-                KyLinValue value = new KyLinValue();
+            case "get_path":
                 value.setType("string");
                 value.setContent(System.getProperty("user.dir"), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "long_time" -> {
-                KyLinValue value = new KyLinValue();
+            case "long_time":
                 value.setType("num");
                 value.setContent(System.currentTimeMillis(), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "bool" -> {
-                KyLinValue value = new KyLinValue();
+            case "bool":
                 value.setType("bool");
                 value.setContent(new KyLinBoolean().isBool(content, kylinRuntime), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "typeof" -> {
-                KyLinValue value = new KyLinValue();
+            case "typeof":
                 value.setType("string");
                 value.setContent(KyLinExpression.getValueFromRuntime(content, kylinRuntime).getType(), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "file_exists" -> {
-                KyLinValue value = new KyLinValue();
+            case "file_exists":
                 value.setType("bool");
                 value.setContent(new File(new KyLinExpression().getExpression(content, kylinRuntime)).exists(), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "get_file_content" -> {
-                KyLinValue value = new KyLinValue();
+            case "get_file_content":
                 value.setType("string");
                 value.setContent(new KyLin_GetFileContent().get_file_content(new KyLinExpression().getExpression(content, kylinRuntime)), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "java_runtime" -> {
-                KyLinValue value = new KyLinValue();
+            case "java_runtime":
                 value.setType("string");
                 value.setContent(mainApp.jarDirectory, kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "length" -> {
+            case "length":
                 String type = TypeOf.typeOf(content, kylinRuntime);
                 if (type.equals("list")) {
                     //System.out.println(Arrays.toString(baseFunction.getValueContent(content, kylinRuntime).toString().split(",(?![^(]*\\))")));
                     ArrayList<KyLinValue> arrayList = ((KyLinList) baseFunction.getValueContent(content, kylinRuntime)).arrayList;
-                    KyLinValue value = new KyLinValue();
                     value.setType("list");
                     value.setContent(arrayList.size(), kylinRuntime);
                     value.setIs_public(true);
                     return value;
                 } else {
-                    KyLinValue value = new KyLinValue();
                     value.setType("num");
                     value.setContent(new KyLinExpression().getExpression(content, kylinRuntime).length(), kylinRuntime);
                     value.setIs_public(true);
                     return value;
                 }
-            }
-            case "pow" -> {
-                double a = Double.parseDouble(new KyLinExpression().getExpression(split[0], kylinRuntime));
-                double b = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
-                KyLinValue value = new KyLinValue();
+            case "pow":
+                double a_1 = Double.parseDouble(new KyLinExpression().getExpression(split[0], kylinRuntime));
+                double b_1 = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
                 value.setType("num");
-                value.setContent(Math.pow(a, b), kylinRuntime);
+                value.setContent(Math.pow(a_1, b_1), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "sub" -> {
+            case "sub":
                 String string = new KyLinExpression().getExpression(split[0], kylinRuntime);
-                double a = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
-                double b = Double.parseDouble(new KyLinExpression().getExpression(split[2], kylinRuntime));
-                KyLinValue value = new KyLinValue();
+                double a_2 = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
+                double b_2 = Double.parseDouble(new KyLinExpression().getExpression(split[2], kylinRuntime));
                 value.setType("num");
-                value.setContent(string.substring((int) a, (int) b), kylinRuntime);
+                value.setContent(string.substring((int) a_2, (int) b_2), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "index" -> {
-                String string = new KyLinExpression().getExpression(split[0], kylinRuntime);
+            case "index":
+                String string_1 = new KyLinExpression().getExpression(split[0], kylinRuntime);
                 String charset = new KyLinExpression().getExpression(split[1], kylinRuntime);
 
                 //System.out.println(string+" "+charset+" "+string.indexOf(charset));
-
-                KyLinValue value = new KyLinValue();
                 value.setType("num");
-                value.setContent(string.indexOf(charset), kylinRuntime);
+                value.setContent(string_1.indexOf(charset), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "lastindex" -> {
-                String string = new KyLinExpression().getExpression(split[0], kylinRuntime);
-                String charset = new KyLinExpression().getExpression(split[1], kylinRuntime);
-                KyLinValue value = new KyLinValue();
+            case "lastindex":
+                String strings = new KyLinExpression().getExpression(split[0], kylinRuntime);
+                String charsets = new KyLinExpression().getExpression(split[1], kylinRuntime);
                 value.setType("string");
-                value.setContent(String.valueOf(string.lastIndexOf(charset)), kylinRuntime);
+                value.setContent(String.valueOf(strings.lastIndexOf(charsets)), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "delete", "rm" -> {
+            case "delete":
                 File file = new File(new KyLinExpression().getExpression(split[0], kylinRuntime));
-                KyLinValue value = new KyLinValue();
                 value.setType("string");
                 value.setContent(String.valueOf(file.delete()), kylinRuntime);
                 value.setIs_public(true);
                 return value;
-            }
-            case "get_pointer" -> {
+            case "rm":
+                File frm = new File(new KyLinExpression().getExpression(split[0], kylinRuntime));
+                value.setType("string");
+                value.setContent(String.valueOf(frm.delete()), kylinRuntime);
+                value.setIs_public(true);
+                return value;
+            case "get_pointer":
                 //System.out.println(mainApp.all_kylin_value_pointer);
                 return getAddress(content, kylinRuntime);
-            }
-            case "toVal" -> {
-                KyLinValue value = new KyLinValue();
+            case "toVal":
                 value.setType("string");
                 value.setIs_public(true);
                 //System.out.println(new KyLinExpression().getExpression(content,kylinRuntime));
                 value.setContent(mainApp.all_kylin_value_pointer.get(new KyLinExpression().getExpression(content, kylinRuntime)), kylinRuntime);
                 return value;
-            }
-            case "shell_output" -> {
-                KyLinValue value = new KyLinValue();
+            case "shell_output":
                 value.setType("string");
                 value.setIs_public(true);
                 // 执行Shell命令
@@ -279,9 +242,7 @@ public class KyLinUseFunction {
                 }
                 value.setContent(stringBuilder.toString(), kylinRuntime);
                 return value;
-            }
-            case "new_thread" -> {
-                KyLinValue value = new KyLinValue();
+            case "new_thread":
                 value.setType("thread");
                 value.setIs_public(true);
                 String pointer = String.valueOf(baseFunction.getRandomLong());
@@ -300,14 +261,12 @@ public class KyLinUseFunction {
 
                 mainApp.all_kylin_value_pointer.put(pointer, value);
                 return value;
-            }
-            case "get_mouse_point" -> {
-                KyLinValue value = new KyLinValue();
+            case "get_mouse_point":
                 value.setIs_public(true);
                 Point point = MouseInfo.getPointerInfo().getLocation();
 
-                KyLinList list = new KyLinList();
-                list.arrayList = new ArrayList<>();
+                KyLinList list_1 = new KyLinList();
+                list_1.arrayList = new ArrayList<>();
                 Integer x = point.x;
                 Integer y = point.y;
 
@@ -328,23 +287,19 @@ public class KyLinUseFunction {
                 (kylinRuntime.ValueMap).put(pointer_1, x_v);
                 (kylinRuntime.ValueMap).put(pointer_2, y_v);
 
-                list.arrayList.add(x_v);
-                list.arrayList.add(y_v);
-                value.setContent(list, kylinRuntime);
+                list_1.arrayList.add(x_v);
+                list_1.arrayList.add(y_v);
+                value.setContent(list_1, kylinRuntime);
                 //System.out.println(value.getPointer());
                 value.setType("list");
                 return value;
-            }
-            case "toInt" -> {
-                KyLinValue value = new KyLinValue();
+            case "toInt":
                 value.setIs_public(true);
                 double d = Double.parseDouble(new KyLinExpression().getExpression(content, kylinRuntime));
                 value.setContent((int) d, kylinRuntime);
                 return value;
-            }
-            default -> {
+            default:
                 return null;
-            }
         }
     }
     public static KyLinValue getAddress(String content , KyLinRuntime kylinRuntime) throws Exception {

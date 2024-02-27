@@ -128,7 +128,9 @@ public class KyLinProgramBaseFunction {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             try {
                 String func = getIn[0];
-                int range = Integer.parseInt(getIn[1].trim());
+                //System.out.println(new KyLinExpression().getExpression(getIn[1] , kylinRuntime)+";");
+                int range = (int) Double.parseDouble(new KyLinExpression().getExpression(getIn[1] , kylinRuntime));
+                System.out.println(range+";");
                 int length = getIn.length;
                 if (length == 2) {
                     try {
@@ -137,12 +139,13 @@ public class KyLinProgramBaseFunction {
                         }
                     }
                     catch (Exception exception) {
+                        //exception.printStackTrace();
                         throw new Exception(exception);
                     }
                     return true;
                 }
                 else if (length == 3) {
-                    boolean fast = getIn[2].equalsIgnoreCase("true");
+                    boolean fast = new KyLinExpression().getExpression(getIn[2] , kylinRuntime).equalsIgnoreCase("true");
                     if (fast) {
                         ExecutorService executorService = Executors.newFixedThreadPool(100);
                         Future<Integer> future = null;

@@ -65,16 +65,16 @@ public class KyLinExpression {
                              */
                             assert value != null;
                             KyLinList kyLinList = (KyLinList) value.getContent();
-                            stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(input)).getContent());
+
+                            stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(this.getExpression(input,kylinRuntime))).getContent());
                         }catch (Exception exception) {
-                            String stringObject = (String) kylinRuntime.ValueMap.get(function).getContent();
-                            String content = stringObject.substring(stringObject.indexOf("[")+1 , stringObject.lastIndexOf("]"));
-                            String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-                            if (Integer.parseInt(input) >= split.length) {
+                            KyLinList sObject = (KyLinList) Objects.requireNonNull(getValueFromRuntime(function, kylinRuntime)).getContent();
+                            int i = (int) Double.parseDouble(this.getExpression(input,kylinRuntime));
+                            if (i >= sObject.arrayList.size()) {
                                 stringBuffer.append("null");
                                 return stringBuffer.toString();
                             }
-                            stringBuffer.append(split[Integer.parseInt(input)]);
+                            stringBuffer.append(sObject.arrayList.get(i));
                         }
                     }catch (Exception e) {
                         //e.printStackTrace();
@@ -143,7 +143,8 @@ public class KyLinExpression {
                         double math = this.evaluateExpression(s , kylinRuntime);
                         stringBuffer.append(math);
                     }catch (Exception exception) {
-                        throw new Exception("Error Syntax: "+ s +" in "+code);
+                        //System.out.println(code);
+                        throw new Exception("Error Syntax: '"+ s +"' in "+code);
                     }
                     continue;
                 }
