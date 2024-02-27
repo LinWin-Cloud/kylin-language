@@ -11,6 +11,7 @@ class basemap: public
     public list_dom_value = list()
 
     func add(key,value) public
+        # print("Input=",key," ; Value=",value)
         list_add(list_dom_key , key)
         list_add(list_dom_value , value)
     end_func
@@ -28,7 +29,6 @@ class basemap: public
 
     func to_str() public
         var len = length(list_dom_key)
-        val len = len - 1
         var i = 0
         var s = "{ "
         f view_list()
