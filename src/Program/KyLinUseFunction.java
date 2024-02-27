@@ -83,13 +83,16 @@ public class KyLinUseFunction {
                 //System.out.println(split[1]);
                 int index = -1;
                 int j = 0;
+                //System.out.println(list.arrayList);
+                System.out.println(split[1]+" "+new KyLinExpression().getExpression(split[1], kylinRuntime));
                 for (KyLinValue v : list.arrayList) {
-                    if (v.getContent().equals(new KyLinExpression().getExpression(split[1].trim(), kylinRuntime))) {
+                    if (v.getName().equals(new KyLinExpression().getExpression(split[1].trim(), kylinRuntime))) {
                         index = j;
                         break;
                     }
                     j++;
                 }
+                //System.out.println(index);
                 value.setContent(index, kylinRuntime);
                 value.setIs_public(true);
                 return value;

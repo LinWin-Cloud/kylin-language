@@ -35,7 +35,7 @@ public class KyLinProgramBaseFunction {
         "kill_thread",
         "gc",
         "enterKey",
-        "del"
+        "del",
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -86,7 +86,7 @@ public class KyLinProgramBaseFunction {
         if (function.equals("list_rm")) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String list_object = getIn[0].trim();
-            int rm_object = Integer.parseInt(getIn[1].trim());
+            int rm_object = (int) Double.parseDouble(new KyLinExpression().getExpression(getIn[1].trim() , kylinRuntime));
             String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
             KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
             if (k.getType().equals("list")) {
@@ -130,7 +130,7 @@ public class KyLinProgramBaseFunction {
                 String func = getIn[0];
                 //System.out.println(new KyLinExpression().getExpression(getIn[1] , kylinRuntime)+";");
                 int range = (int) Double.parseDouble(new KyLinExpression().getExpression(getIn[1] , kylinRuntime));
-                System.out.println(range+";");
+                //System.out.println(range+";");
                 int length = getIn.length;
                 if (length == 2) {
                     try {
