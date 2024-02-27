@@ -1,4 +1,11 @@
 
+#
+# -basemap application-
+# author: LinWin-Cloud
+# write by: 2024.2.27
+# basemap is a base lib in kylin programing language.
+# you can use basemap to add a lot of dom to this map and get.
+
 class basemap: public
     public list_dom_key = list()
     public list_dom_value = list()
@@ -11,5 +18,29 @@ class basemap: public
     func get(key) public
         var index_key = index_list(list_dom_key , key)
         return list_dom_value[index_key]
+    end_func
+
+    func rm(key) public
+        var index_key = index_list(list_dom_key , key)
+        list_rm(list_dom_key,index_key)
+        list_rm(list_dom_value,index_key)
+    end_func
+
+    func to_str() public
+        var len = length(list_dom_key)
+        val len = len - 1
+        var i = 0
+        var s = "{ "
+        f view_list()
+            var key_name = list_dom_key[i]
+            var value_name = list_dom_value[i]
+            var one_dom = key_name , "=" , value_name, " , "
+            val s = s , one_dom
+            val i = i + 1
+        e_f
+        for (view_list() , len)
+        val s = sub(s , 0 , lastindex(s , ","))
+        val s = s , "}"
+        return s
     end_func
 end_class
