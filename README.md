@@ -1,7 +1,7 @@
 # KyLin 编程语言Jvm版本
 ###### 建议在 Linux 平台上使用该款软件，虽然设计考虑Windows，但是并未在Windows平台上做过测试.
 
-###### 当前版本: 3.2 Public
+###### 当前版本: 4.0 Public
 - KyLin 是一款基于Java开发的跨平台高效的编程语言。面相对象和面向过程都是可以的，直译式编程语言，这是由作者在初三时期开发完成的.
 
 - 其特点就是快速高效简单，语法设计降低或者避免```写出像shit一样的代码```，代码就像诗一样优美.
@@ -28,16 +28,8 @@
 
 #### 安装
 
-Windows 版本下载命令
 
-    git clone https://gitee.com/LinWin-Cloud/kylin-language -b windows_kylin
-
-Linux 版本下载命令
-
-    git clone https://gitee.com/LinWin-Cloud/kylin-language -b linux_kylin
-
-
-Windows版本直接cmd运行源代码目录内: ```.\kylin.bat 源代码目录```
+Windows版本直接cmd运行源代码目录内: ```.\kylin.bat [要运行的kylin脚本]```
 Linux则进行以下操作(进入目录):
 ```
 sudo mkdir /usr/kylin
