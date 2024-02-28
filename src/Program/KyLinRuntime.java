@@ -3,6 +3,7 @@ package Program;
 import main.PathLoader;
 import main.baseFunction;
 
+import java.io.File;
 import java.util.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,6 +31,7 @@ public class KyLinRuntime {
     private boolean IF_OK = false;                                              // if语句是否结束
     public Map<String , KyLinClass> classMap = new HashMap<>();                 // 本运行环境下的 类 储存
     public boolean OnErrorExit = true;
+    public File code_file = null;                                               // 该运行环境的文件
     public KyLinRuntime(String name) {
         this.name = name;
     }

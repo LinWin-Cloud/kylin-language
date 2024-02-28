@@ -22,7 +22,6 @@ public class mainApp {
     public static HashMap<String , String> import_lib_value = new HashMap<>();
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
-    private static String CACHE_DIR = "";
     public static double version = 4.0;
     public static String version_type = "Public";
 
@@ -38,7 +37,6 @@ public class mainApp {
 
     public static void main(String[] args) throws Exception {
         //System.out.println(jarDirectory);
-        CACHE_DIR = jarDirectory+"/../cache/";
         int length = args.length;
         if (length == 0) {
             System.out.println(MyHelpInformation);
@@ -90,6 +88,7 @@ public class mainApp {
                 if (target.exists() && target.isFile() && target.canRead()) {
                     //设置新的运行环境 main
                     KyLinRuntime main = new KyLinRuntime("main");
+                    main.code_file = new File(target.getAbsolutePath());
                     try {
                         //long s = System.currentTimeMillis();
                         main.code = baseFunction.getScript(target.getAbsolutePath()); //把代码加载进入运行环境
