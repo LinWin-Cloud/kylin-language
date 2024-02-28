@@ -16,6 +16,7 @@ public class mainApp {
     public static String MyHelpInformation = "\n" +
             "Kylin Programming Language.\n" + "" +
             "   -version            Show the version information.\n" +
+	    "   -r [kylin code]	    Run the kylin code." +
             "   -console            Enter into the kylin console.\n" + "kylin [resource file]";
     public static String jarDirectory = null;
     public static HashMap<String , String> import_lib_value = new HashMap<>();
@@ -45,7 +46,18 @@ public class mainApp {
         else {
             PathLoader pathLoader = new PathLoader();
             pathLoader.LoadNewPath();
-
+	        if(args[0].equals("-r")) {
+                //System.out.println(args[0]);
+                //System.out.println(args[1]);
+	    	    try {
+			        KyLinRuntime main = new KyLinRuntime("main");
+                    main.exec(args[1] , 0);
+		        }catch(Exception e) {
+			        e.printStackTrace();
+                    System.out.println("[ERR] Must input kylin code.");
+		        }
+                return;
+	        }
             if (args[0].equals("-console")) {
                 /**
                  * 参数是 -console , 进入调试控制台，不过这里不允许加入函数

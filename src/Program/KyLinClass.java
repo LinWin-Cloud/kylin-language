@@ -76,7 +76,7 @@ public class KyLinClass {
                             i = j;
                             break;
                         }
-                        if (line_1.equals("")) {
+                        if (line_1.isEmpty()) {
                             continue;
                         }
                         functionCode.add(line_1);
@@ -89,7 +89,7 @@ public class KyLinClass {
                             i = j;
                             break;
                         }
-                        if (line_1.equals("")) {
+                        if (line_1.isEmpty()) {
                             continue;
                         }
                         functionCode.add(line_1);

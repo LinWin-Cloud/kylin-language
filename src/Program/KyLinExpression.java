@@ -28,6 +28,11 @@ public class KyLinExpression {
             return null;
         }
     }
+    public static String init_str(String str) {
+        String s = str.replace("\\'","\"");
+        s = s.replace("\\n", "\n");
+        return s;
+    }
     public String getExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
         try {
             // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"
@@ -47,7 +52,8 @@ public class KyLinExpression {
                 }
                 else if (s.startsWith("\"") && s.endsWith("\"")) {
                     try {
-                        stringBuffer.append(s, 1, s.length() -1);
+                        String ss = s.substring(1,s.length()-1);
+                        stringBuffer.append(init_str(ss));
                         continue;
                     }catch (Exception exception) {
                         throw new Exception("string error.");

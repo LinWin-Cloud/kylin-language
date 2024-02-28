@@ -43,6 +43,7 @@ public class KyLinUseFunction {
             "rm",                       // 22
             "randomInt",                // 23
             "index_list",               // 24
+            "isnumber",                 // 25
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -77,6 +78,18 @@ public class KyLinUseFunction {
 
         KyLinValue value = new KyLinValue();
         switch (funcName) {
+            case "isnumber":
+                value.setIs_public(true);
+                boolean content_3 = false;
+                try {
+                    double d = Double.parseDouble(new KyLinExpression().getExpression(content, kylinRuntime));
+                    int a_3 = (int) d;
+                    content_3 = true;
+                }catch (Exception exception) {
+                    content_3 = false;
+                }
+                value.setContent(content_3 , kylinRuntime);
+                return value;
             case "index_list":
                 KyLinList list = (KyLinList) Objects.requireNonNull(KyLinExpression.getValueFromRuntime(split[0].trim(), kylinRuntime)).getContent();
                 value.setType("num");
@@ -84,9 +97,11 @@ public class KyLinUseFunction {
                 int index = -1;
                 int j = 0;
                 //System.out.println(list.arrayList);
-                System.out.println(split[1]+" "+new KyLinExpression().getExpression(split[1], kylinRuntime));
+                String s = new KyLinExpression().getExpression(split[1].trim(), kylinRuntime);
+                s = new KyLinExpression().getExpression(s, kylinRuntime);
                 for (KyLinValue v : list.arrayList) {
-                    if (v.getName().equals(new KyLinExpression().getExpression(split[1].trim(), kylinRuntime))) {
+                    //System.out.println(v.getName()+" "+s);
+                    if (v.getContent().equals(s)) {
                         index = j;
                         break;
                     }
