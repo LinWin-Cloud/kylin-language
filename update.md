@@ -7,14 +7,14 @@
 ### 新增内容
 - del 关键字, 删除变量
 - basemap 基础集合(纯kylin内部库实现)
-- 列表操作api
+- 列表操作api更新
 - 基础桌面程序调用api(浏览器,文件管理器等)
 - http request api,允许请求其他服务器
 - 更改特性 ```只能获取本环境与父环境的变量和函数```，变更为可以获取全局的变量和函数.
 - 允许表达式处理对象
 - 更新 kylin命令
-- 开放允许```Python```程序加入Kylin类库系统,kylin将会支持python
 - kylin basemap数据结构转 json结构api支持
+- 更新kylin结构，支持自定义jdk版本和内容
 
 # Kylin3.2
 - ref关键字，变量可以共享指针,修改一个指针可以
