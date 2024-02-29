@@ -2,6 +2,7 @@ package Program;
 
 import Function.TypeOf;
 import KylinException.KylinRuntimeException;
+import api.HttpRequests;
 import api.KyLin_GetFileContent;
 import main.baseFunction;
 import main.mainApp;
@@ -44,6 +45,7 @@ public class KyLinUseFunction {
             "randomInt",                // 23
             "index_list",               // 24
             "isnumber",                 // 25
+            "http_requests",            // 26
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -78,6 +80,10 @@ public class KyLinUseFunction {
 
         KyLinValue value = new KyLinValue();
         switch (funcName) {
+            case "http_requests":
+                value.setIs_public(true);
+                value.setContent(new HttpRequests().GET_Requests(new KyLinExpression().getExpression(content, kylinRuntime)), kylinRuntime);
+                return value;
             case "isnumber":
                 value.setIs_public(true);
                 boolean content_3 = false;

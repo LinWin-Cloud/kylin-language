@@ -35,6 +35,7 @@ public class KyLinProgramBaseFunction {
         "gc",
         "enterKey",
         "del",
+        "start_browser"
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -47,6 +48,16 @@ public class KyLinProgramBaseFunction {
         if (function.equals("out") || function.equals("print")) {
             printStream.println(new KyLinExpression().getExpression(input , kylinRuntime));
             printStream.flush();
+            return true;
+        }
+        if (function.equals("start_browser")) {
+            String url = new KyLinExpression().getExpression(input, kylinRuntime);
+            java.net.URI uri = java.net.URI.create(url);
+            java.awt.Desktop dp = java.awt.Desktop.getDesktop();
+            if (dp.isSupported(java.awt.Desktop.Action.BROWSE)) {
+                // 获取系统默认浏览器打开链接
+                dp.browse(uri);
+            }
             return true;
         }
         if (function.equals("del")) {
