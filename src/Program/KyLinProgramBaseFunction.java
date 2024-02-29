@@ -8,7 +8,6 @@ import main.baseFunction;
 import main.mainApp;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -286,13 +285,22 @@ public class KyLinProgramBaseFunction {
     public static boolean isRealDefinedFunction(String code , KyLinRuntime kylinRuntime) {
         try {
             String function = code.substring(0 , code.indexOf("(")).trim();
+            /* 
             return (isDefinedFunction(code) &&
                     kylinRuntime.FunctionMap.containsKey(function)) ||
                     (isDefinedFunction(code) &&
                             kylinRuntime.isFunction &&
                             kylinRuntime.PublicRuntime.FunctionMap.containsKey(function)) &&
                     Arrays.asList(KyLinUseFunction.KylinKeyWord).contains(function);
+            */
+            //if (code.equals("map.to_str()")) {
+            //    System.out.println(code +";"+isDefinedFunction(code)+";"+String.valueOf(KyLinExpression.getFunctionFromRuntime(function, kylinRuntime)!=null));
+            //    System.out.println((isDefinedFunction(code) && KyLinExpression.getFunctionFromRuntime(function, kylinRuntime) != null));
+            //}
+            //System.out.println((isDefinedFunction(code) && KyLinExpression.getFunctionFromRuntime(function, kylinRuntime) != null)+" "+code);
+            return (isDefinedFunction(code) && KyLinExpression.getFunctionFromRuntime(function, kylinRuntime) != null);
         }catch (Exception exception) {
+            //exception.printStackTrace();
             return false;
         }
     }

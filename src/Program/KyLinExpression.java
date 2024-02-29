@@ -3,7 +3,9 @@ package Program;
 
 import KylinException.KylinRuntimeException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class KyLinExpression {
@@ -39,10 +41,12 @@ public class KyLinExpression {
             //System.out.println(this.isList(code , kylinRuntime)+" "+code);
             String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             StringBuilder stringBuffer = new StringBuilder();
-
+            //System.out.println(Arrays.asList(tokens));
             for (String s : tokens)
             {
                 s = s.trim();
+                //System.out.println(KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime));
+                //System.out.println(s + "     "+KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)+"\n");
                 if (s.isEmpty()) {
                     continue;
                 }
@@ -100,36 +104,21 @@ public class KyLinExpression {
                     }
                     continue;
                 }
-                else if(KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime)) {
-                    String function = code.substring(0 , code.indexOf("(")).trim();
-                    String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-                    KyLinFunction kylinFunction = kylinRuntime.FunctionMap.get(function);
-                    KyLinFunction PubFunc = null;
-                    String[] func_content = input.split(",\\s*");
-
-                    if (kylinFunction == null && (kylinRuntime.PublicRuntime!=null&&kylinRuntime.PublicRuntime.FunctionMap.containsKey(function))) {
-                        PubFunc = kylinRuntime.PublicRuntime.FunctionMap.get(function);
+                else if(KyLinProgramBaseFunction.isRealDefinedFunction(s,kylinRuntime)) {
+                    //System.out.println(1);
+                    String function = s.substring(0 , s.indexOf("(")).trim();
+                    String input = s.substring(s.indexOf("(")+1 , s.lastIndexOf(")")).trim();
+                    KyLinFunction kylinFunction = KyLinExpression.getFunctionFromRuntime(function, kylinRuntime);
+                    String[] func_content = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                    //System.out.println(kylinFunction);
+                    for (int j = 0; j < Objects.requireNonNull(kylinFunction).input.length ; j++) {
+                        KyLinValue kylinValue = new KyLinValue();
+                        kylinValue.setName(kylinFunction.input[j]);
+                        kylinValue.setContent(func_content[j] , kylinRuntime);
+                        kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
                     }
-                    if (PubFunc == null) {
-                        for (int j = 0; j < Objects.requireNonNull(kylinFunction).input.length ; j++) {
-                            KyLinValue kylinValue = new KyLinValue();
-                            kylinValue.setName(kylinFunction.input[j]);
-                            kylinValue.setContent(func_content[j] , kylinRuntime);
-                            kylinFunction.kylinRuntime.ValueMap.put(kylinFunction.input[j] , kylinValue);
-                        }
-                        kylinFunction.kylinRuntime.run();
-                        stringBuffer.append(kylinFunction.kylinRuntime.getResult());
-                    }
-                    else {
-                        for (int j = 0 ; j < PubFunc.input.length ; j++) {
-                            KyLinValue kylinValue = new KyLinValue();
-                            kylinValue.setName(PubFunc.input[j]);
-                            kylinValue.setContent(func_content[j] , kylinRuntime);
-                            PubFunc.kylinRuntime.ValueMap.put(PubFunc.input[j] , kylinValue);
-                        }
-                        PubFunc.kylinRuntime.run();
-                        stringBuffer.append(PubFunc.kylinRuntime.getResult());
-                    }
+                    kylinFunction.kylinRuntime.run();
+                    stringBuffer.append(kylinFunction.kylinRuntime.getResult());
                     continue;
                 }
                 else if (KyLinProgramBaseFunction.isDefinedFunction(code) && KyLinUseFunction.isUseFunction(s , kylinRuntime)) {
@@ -150,6 +139,7 @@ public class KyLinExpression {
                         stringBuffer.append(math);
                     }catch (Exception exception) {
                         //System.out.println(code);
+                        //exception.printStackTrace();
                         throw new Exception("Error Syntax: '"+ s +"' in "+code);
                     }
                     continue;

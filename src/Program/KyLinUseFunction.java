@@ -197,6 +197,8 @@ public class KyLinUseFunction {
                 double a_2 = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
                 double b_2 = Double.parseDouble(new KyLinExpression().getExpression(split[2], kylinRuntime));
                 value.setType("num");
+                //System.out.println(string);
+
                 value.setContent(string.substring((int) a_2, (int) b_2), kylinRuntime);
                 value.setIs_public(true);
                 return value;
