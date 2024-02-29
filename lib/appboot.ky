@@ -1,0 +1,4 @@
+
+func start_app(app_name ,args) public
+
+end_func
