@@ -36,7 +36,7 @@ class basemap: public
         list_rm(list_dom_value,index_key)
     end_func
 
-    func to_str() public
+    func map_to_str() private
         var len = length(list_dom_key)
         var i = 0
         var s = "{ "
@@ -53,6 +53,18 @@ class basemap: public
         return s
     end_func
 
+    func to_str() public
+        var r = ""
+        err on_error(e) 
+            val r = "{}"
+        e_err
+        f run_map_str()
+            val r = map_to_str()
+        e_f
+        except(run_map_str() , on_error())
+        return r
+    end_func
+
     func to_json() public
         var len = length(list_dom_key)
         var i = 0
@@ -60,7 +72,7 @@ class basemap: public
         f view_list()
             var key_name = list_dom_key[i]
             var value_name = list_dom_value[i]
-	        var one_dom = "    \'", key_name , "\'" , " : " , "\'", value_name,"\'", ",\n"
+	        var one_dom = "    \'",key_name,"\'"," : ","\'",value_name,"\'",",\n"
             val s = s , one_dom
             val i = i + 1
         e_f
