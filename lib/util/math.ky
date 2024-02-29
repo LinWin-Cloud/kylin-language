@@ -19,3 +19,7 @@ end_func
 func division(x,y) public
     return x / y
 end_func
+
+func eval(expression) public
+    return expression
+end_func
