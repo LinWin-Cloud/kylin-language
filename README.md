@@ -25,6 +25,11 @@
 
 #### 文档
 - https://gitee.com/LinWin-Cloud/kylin-language/wiki/
+- 如果说有的时候启动脚本可能出问题，那么运行脚本就运行一下命令:
+```
+java -jar release/kylin_language.jar 你的kylin脚本路径
+```
+
 
 #### 安装
 
