@@ -1,29 +1,4 @@
 # 基础可调用函数
-```
-"getTime",                  // 0
-"input",                    // 1
-"get_os",                   // 2
-"get_path",                 // 3
-"long_time",                // 4
-"bool",                     // 5
-"typeof",                   // 6
-"file_exists",              // 7
-"get_file_content",         // 8
-"java_runtime",             // 9
-"length",                   // 10
-"pow",                      // 11
-"sub",                      // 12
-"index",                    // 13
-"lastindex",                // 14
-"delete",                   // 15
-"get_pointer",              // 16
-"toVal",                    // 17
-"shell_output",             // 18
-"new_thread",               // 19
-"get_mouse_point",          // 20
-"toInt",                    // 21
-"rm",                       // 22
-```
 
 ### getTime
 获取当前时间
@@ -151,4 +126,37 @@ print(toInt(a)) // 1
 ```dtd
 // 生成 100 - 1000 的数字
 print(randomInt(100, 1000))
+```
+
+### start_browser
+打开浏览器链接,以下示例为 百度.
+```
+start_browser("https://www.baidu.com/")
+```
+
+### index_list
+获取一个列表内的指定元素的位置
+```
+var list = list("hello" , "world")
+# 输出的是 0 , 因为 hello元素在列表内的位置是 0
+print(index_list(list , "hello"))
+```
+
+### isnumber
+确定字符串是否是数字
+```
+var a = "1000"
+# 输出 true
+print(isnumber(a))
+var b = "as"
+# 输出 false
+print(isnumber(b))
+```
+
+### http_requests
+向指定网址发送一个 get 请求
+```
+var a = http_requests("https://www.baidu.com/")
+# 输出 百度 首页的html代码.
+print(a)
 ```
