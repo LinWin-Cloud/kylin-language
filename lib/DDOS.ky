@@ -1,0 +1,20 @@
+
+class DDOS: public
+    private number = 1000
+    private data = 10
+
+    func set_user(num) public
+        val number = num
+    end_func
+
+    func set_data(num) public
+        val data = num
+    end_func
+
+    func attack(target) public
+        f attack_user()
+            for (http_requests(target) , data)
+        e_f
+        for (attack_user() , number)
+    end_func
+end_class
