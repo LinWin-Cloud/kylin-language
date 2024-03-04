@@ -1,7 +1,7 @@
 # KyLin 编程语言Jvm版本
 ###### 建议在 Linux 平台上使用该款软件，虽然设计考虑Windows，但是并未在Windows平台上做过测试.
 
-###### 当前版本: 4.0 Public
+###### 当前版本: 4.3 Public
 - KyLin 是一款基于Java开发的跨平台高效的编程语言。面相对象和面向过程都是可以的，直译式编程语言，这是由作者在初三时期开发完成的.
 
 - 其特点就是快速高效简单，语法设计降低或者避免```写出像shit一样的代码```，代码就像诗一样优美.
@@ -15,7 +15,7 @@
 - 开发语言: Java
 - 平台: Windows , Linux
 - 面相群体：计算机初学者、办公人员、计算机专业学生.
-- 设计目标: ```自动化计算机操作```，```计算机编程快速教学```. ```计算机编程语言实现教学```.
+- 设计目标: ```自动化计算机操作```.```计算机编程快速教学```. ```计算机编程语言实现教学```.```自动化渗透```
 
 #### 语法改进
 - 面相对象的语法结构，但是摒弃了传统编程语言中继承的特性，陈年屎山不该困扰程序员.
@@ -23,13 +23,26 @@
 - 与Java紧密结合，背靠Java丰富生态.
 - 变量指针简单化、安全化，指针不再是难点，也不再是限制初学者的一道门槛.
 
+#### kylin编程语言包管理器kpt
+```
+ Kpt:
+ -n [name]              Create a new package.
+ -i [package path]      Install a package on system.
+ -version               Show the version information.
+ -list                  List all the install package.
+```
+> kpt -i [name]     #从本地安装一个包
+> 
+> kpt -n [name]     #创建一个kpt包
+> 
+> kpt -list         #查看kpt版本
+
 #### 文档
 - https://gitee.com/LinWin-Cloud/kylin-language/wiki/
 - 如果说有的时候启动脚本可能出问题，那么运行脚本就运行一下命令:
 ```
 java -jar release/kylin_language.jar 你的kylin脚本路径
 ```
-
 
 #### 安装
 
@@ -58,6 +71,43 @@ ubuntu@ubuntu-linux:~$ kylin -console
 Kylin> print("hello world")
 hello world
 Kylin> 
+```
+
+#### 基础语法
+1. hello world程序，虽然和python一样
+```dtd
+print("hello world")
+```
+
+2. 数学解析式程序
+```dtd
+var a = 1
+print(1 + 1 * (10 / 100) * a)
+```
+
+3. 函数
+```dtd
+f main()
+    print("hello world")
+e_f
+```
+```dtd
+func main() public
+    print("hello world")
+end_func
+```
+4. http api
+```dtd
+http_requests("https://www.baidu.com/")
+```
+5. class类，下面演示的是内置httpserver库的使用
+```dtd
+import "httpserver"
+var http = new(Httpserver)
+http.set_port(8080)
+http.set_ip("0.0.0.0")
+http.set_path("/")
+http.start()
 ```
 
 
