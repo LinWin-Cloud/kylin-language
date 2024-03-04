@@ -1,4 +1,7 @@
 
+# author: linwin-cloud
+# ddos attack
+
 class DDOS: public
     private number = 1000
     private data = 10
@@ -12,9 +15,11 @@ class DDOS: public
     end_func
 
     func attack(target) public
+        print("[INFO] Start attack ==>")
         f attack_user()
             for (http_requests(target) , data)
         e_f
-        for (attack_user() , number)
+        for (new_thread(attack_user()) , number)
+
     end_func
 end_class
