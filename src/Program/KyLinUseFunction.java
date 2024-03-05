@@ -4,6 +4,7 @@ import Function.TypeOf;
 import KylinException.KylinRuntimeException;
 import api.HttpRequests;
 import api.KyLin_GetFileContent;
+import api.OperatingSystemCheck;
 import main.baseFunction;
 import main.mainApp;
 
@@ -46,6 +47,7 @@ public class KyLinUseFunction {
             "index_list",               // 24
             "isnumber",                 // 25
             "http_requests",            // 26
+            "is_app_install",           // 27
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -80,6 +82,21 @@ public class KyLinUseFunction {
 
         KyLinValue value = new KyLinValue();
         switch (funcName) {
+            case "is_app_install":
+                value.setIs_public(true);
+                try {
+                    if (OperatingSystemCheck.getOperatingSystem().equals("Windows")) {
+                        File f = new File(new KyLinExpression().getExpression(content , kylinRuntime));
+                        value.setContent(f.exists() , kylinRuntime);
+                    }
+                    else {
+                        File f = new File("/bin/"+new KyLinExpression().getExpression(content , kylinRuntime));
+                        value.setContent(f.exists() , kylinRuntime);
+                    }
+                }catch (Exception e) {
+                    value.setContent(false , kylinRuntime);
+                }
+                return value;
             case "http_requests":
                 value.setIs_public(true);
                 value.setContent(new HttpRequests().GET_Requests(new KyLinExpression().getExpression(content, kylinRuntime)), kylinRuntime);

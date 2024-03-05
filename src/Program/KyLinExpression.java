@@ -136,9 +136,11 @@ public class KyLinExpression {
                         double math = this.evaluateExpression(s , kylinRuntime);
                         stringBuffer.append(math);
                     }catch (Exception exception) {
-                        //System.out.println(code);
-                        //exception.printStackTrace();
-                        throw new Exception("Error Syntax: '"+ s +"' in "+code);
+                        if (s.equals("true") || s.equals("false")) {
+                            stringBuffer.append(s);
+                        }else {
+                            throw new Exception("Error Syntax: '"+ s +"' in "+code);
+                        }
                     }
                     continue;
                 }

@@ -22,7 +22,7 @@ public class mainApp {
     public static HashMap<String , String> import_lib_value = new HashMap<>();
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
-    public static double version = 4.0;
+    public static double version = 4.3;
     public static String version_type = "Public";
 
     static {
