@@ -1,1 +1,25 @@
-import ""
+import "util.java.load_class"
+
+# linwinshs http_proxy
+# you can proxy a url.
+
+class http_proxy: public
+    private port = 8080
+    private proxy_target = null
+
+    func set_port(p) public
+        val port = p
+    end_func
+
+    func set_target(target) public
+        val proxy_target = target
+    end_func
+
+    func run() public
+    import "util.java.load_class"
+
+        var boot = java_runtime(),"/../lib/http_proxy/http_proxy.jar"
+        var in = port , " ",proxy_target
+        load_class.run_jar(boot , in)
+    end_func
+end_class
