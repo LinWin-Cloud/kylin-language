@@ -103,3 +103,10 @@ gc()
 ```dtd
 enterKey("a") //按下a键
 ```
+
+### is_app_install
+确认一个命令行程序是否安装
+```
+# 检查python3是否安装.
+print(is_app_install("python3"))
+```
