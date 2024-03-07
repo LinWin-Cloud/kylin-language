@@ -5,6 +5,9 @@
 1. set_path(path)
 2. exists()
 3. get_content()
+4. create_f() 
+5. create_d()
+
 
 > // 在使用这个类库之前必须调用 set_path输入要操作的文件路径
 
@@ -17,6 +20,10 @@
 > print(f.exists())             // 检查文件或者文件夹是否是否存在
 
 > print(f.get_file_content())   // 获取文件的内容，如果得不到会报错
+
+> f.create_f() # 创建文件
+
+> f.create_d() # 创建目录
 
 ### net.http.linwinshs.httpserver 或者是 httpserver
 提供Web网页服务器方法
