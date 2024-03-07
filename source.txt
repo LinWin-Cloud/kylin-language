@@ -12,6 +12,7 @@ src/./KylinException/KylinRuntimeException.java
 src/./Main.java
 src/./Program/KyLinList.java
 src/./Program/KyLinVal.java
+src/./Program/Lexer.java
 src/./Program/KyLinProgramBaseFunction.java
 src/./Program/KyLinValue.java
 src/./Program/KyLinType.java
