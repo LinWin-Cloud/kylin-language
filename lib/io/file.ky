@@ -15,4 +15,14 @@ class file : public
         return get_file_content(target_path)
     end_func
 
+    func create_f() public
+        # create a new file.
+        var s = shell_output("touch " , target_path)
+    end_func
+
+    func create_d() public
+        # create a new dictionary.
+        var s = shell_output("mkdir " , target_path)
+    end_func
+
 end_class

@@ -1,0 +1,9 @@
+
+func G(m) public
+    # Default: G: N , m: kg
+    return 9.8 * m
+end_func
+
+func density(v, m) public
+    return m / v
+end_func
