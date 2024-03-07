@@ -4,7 +4,9 @@ package Program;
 import KylinException.KylinRuntimeException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 public class KyLinExpression {
     public static KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
@@ -38,6 +40,7 @@ public class KyLinExpression {
             // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"
             //System.out.println(this.isList(code , kylinRuntime)+" "+code);
             String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+            //System.out.println(Arrays.asList(tokens));
             StringBuilder stringBuffer = new StringBuilder();
             //System.out.println(Arrays.asList(tokens));
             for (String s : tokens)
