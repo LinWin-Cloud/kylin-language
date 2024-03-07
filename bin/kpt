@@ -1,0 +1,4 @@
+#! /bin/bash
+
+script_dir=$(cd $(dirname $0);pwd)
+$script_dir/../jdk/bin/java -jar $script_dir/../release/kpt.jar $1 $2 $3
