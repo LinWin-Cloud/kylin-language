@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static main.mainApp.import_lib_value;
 import static main.mainApp.printStream;
 
 public class KyLinProgramBaseFunction {
@@ -38,9 +39,10 @@ public class KyLinProgramBaseFunction {
         "start_browser"
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
-        String function = code.substring(0 , code.indexOf("(")).trim();
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-        String keyword = "";
+        //System.out.println(input);
+        String function = code.substring(0 , code.indexOf("(")).trim();
+        //System.out.println(function);
         //String keyword = kylinRuntime.defined_func.get(function);
         //if (keyword == null) {
         //    keyword = "";
@@ -77,6 +79,7 @@ public class KyLinProgramBaseFunction {
                 while (new KyLinBoolean().isBool(con,kylinRuntime)) {
                     kylinRuntime.exec(func , kylinRuntime.codeLine);
                 }
+                return true;
             }catch (Exception exception) {
                 KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1,true);
                 kylinRuntimeException.PrintErrorMessage(kylinRuntime);
@@ -87,11 +90,13 @@ public class KyLinProgramBaseFunction {
         if (function.equals("enterKey")) {
             String key = new KyLinExpression().getExpression(input , kylinRuntime);
             RobotOptions.enterKey(key);
+            return true;
         }
         if (function.equals("kill_thread")) {
             String pointer = new KyLinExpression().getExpression(input , kylinRuntime);
             mainApp.all_kylin_thread_map.get(pointer).interrupt();
             mainApp.all_kylin_thread_map.remove(pointer);
+            return true;
         }
         if (function.equals("list_rm")) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -104,6 +109,7 @@ public class KyLinProgramBaseFunction {
                 kyLinList.arrayList.remove(rm_object);
                 k.setContent(kyLinList , kylinRuntime);
                 mainApp.all_kylin_value_pointer.put(address , k);
+                return true;
             }else {
                 throw new RuntimeException("TypeError");
             }
@@ -127,12 +133,14 @@ public class KyLinProgramBaseFunction {
                 k.setContent(kyLinList , kylinRuntime);
                 k.setType("list");
                 mainApp.all_kylin_value_pointer.put(address , k);
+                return true;
             }else {
                 throw new RuntimeException("TypeError");
             }
         }
         if (function.equals("gc")) {
             System.gc();
+            return true;
         }
         if (function.equals("for")) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -149,7 +157,7 @@ public class KyLinProgramBaseFunction {
                         }
                     }
                     catch (Exception exception) {
-                        //exception.printStackTrace();
+                        exception.printStackTrace();
                         throw new Exception(exception);
                     }
                     return true;
@@ -181,10 +189,8 @@ public class KyLinProgramBaseFunction {
                     throw new Exception("Syntax error");
                 }
             }catch (Exception exception) {
-                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1,true);
-                kylinRuntimeException.PrintErrorMessage(kylinRuntime);
-                System.exit(1);
-                return false;
+                //exception.printStackTrace();
+                throw new Exception(exception.getMessage());
             }
         }
         if (function.equals("clear")) {
@@ -195,6 +201,7 @@ public class KyLinProgramBaseFunction {
             else {
                 Runtime.getRuntime().exec("/bin/sh -c clear");
             }
+            return true;
         }
         if (function.equals("shell")) {
             String os = System.getProperty("os.name");
@@ -213,7 +220,7 @@ public class KyLinProgramBaseFunction {
             while ((outputLine = stdError.readLine()) != null) {
                 System.out.println("Error: " + outputLine);
             }
-
+            return true;
         }
         if (function.equals("exception") || function.equals("except")) {
             String[] splitIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -242,6 +249,7 @@ public class KyLinProgramBaseFunction {
                     throw new Exception(exception1);
                 }
             }
+            return true;
         }
         if (function.equals("write")) {
             String[] splitIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -249,36 +257,27 @@ public class KyLinProgramBaseFunction {
             String content = new KyLinExpression().getExpression(splitIn[1] , kylinRuntime);
             boolean isCover = new KyLinBoolean().isBool(splitIn[2],kylinRuntime);
             new Write().write(path,content,isCover);
+            return true;
         }
         if (function.equals("throw_error")) {
             throw new Exception(new KyLinExpression().getExpression(input,kylinRuntime));
         }
         if (function.equals("exit")) {
-            if (input.equals("")) {
+            if (input.isEmpty()) {
                 System.exit(0);
             }
             System.exit(Integer.parseInt(new KyLinExpression().getExpression(input,kylinRuntime)));
+            return true;
         }
         /**
          * 当 function 的名字是使用函数的时候调用 KyLinUseFunction .
          */
-        if (Arrays.asList(KyLinUseFunction.KylinKeyWord).contains(function)) {
-            //System.out.println(1);
-            //int index = Arrays.asList(KyLinUseFunction.KylinKeyWord).indexOf(function);
-            KyLinUseFunction.UseFunction(code , kylinRuntime);
-        }
-        return true;
+        KyLinUseFunction.UseFunction(code , kylinRuntime);
+        return false;
     }
     public static boolean isProgramBaseFunction(String code , KyLinRuntime kylinRuntime) {
         try {
-            String function = code.substring(0 , code.indexOf("(")).trim();
-            String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-            for (String i : base) {
-                if (i.equals(function)) {
-                    return true;
-                }
-            }
-            return Arrays.asList(KyLinUseFunction.KylinKeyWord).contains(function);
+            return runProgramBaseFunction(code, kylinRuntime);
         }catch (Exception exception) {
             return false;
         }

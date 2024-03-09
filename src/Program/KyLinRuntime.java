@@ -40,7 +40,6 @@ public class KyLinRuntime {
 
     public void exec(String code, int i) throws Exception
     {
-        String[] words = code.trim().split(" ");
         if (code.isEmpty())
         {
             return;
@@ -55,19 +54,19 @@ public class KyLinRuntime {
             // 这条是处理注释，是注释的直接过去
             return;
         }
-        if (words[0].equals("var"))
+        if (code.startsWith("var "))
         {
             this.new_value(code,true);
             return;
         }
-        if (isFunction && (words[0].equals("return")))
+        if (isFunction && (code.startsWith("return ")))
         {
             this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             return;
         }
         /**
          *  在 kylin 编程语言 3.0 中删除对 #func 和 #defined 的支持，因为这些特性用处不大而且极大地拖慢了 kylin vm的运行速度.
-         *         else if (words[0].equals("#func") || keyword.equals("#func"))
+         *         else if (code.startsWith("#func") || keyword.equals("#func"))
          *         {
          *             String key = words[1];
          *             String value = words[2];
@@ -75,7 +74,7 @@ public class KyLinRuntime {
          *             return;
          *         }
          */
-        else if (words[0].equals("ref")) {
+        else if (code.startsWith("ref ")) {
             /**
              * 该标准在 kylin3.2 发布，用于共享指针和对象，就是两个变量用的是一个指针
              * var a = 1
@@ -86,10 +85,10 @@ public class KyLinRuntime {
              */
             this.new_ref(code , true);
         }
-        else if (words[0].equals("val")) {
+        else if (code.startsWith("val ")) {
             new KyLinVal().Val(code,this);
         }
-        else if (words[0].equals("func") || words[0].equals("f")) {
+        else if (code.startsWith("func ") || code.startsWith("f ")) {
             /**
              * func func_name (a ,b) public
              *      return <a + b>
@@ -103,7 +102,7 @@ public class KyLinRuntime {
                 String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
 
-                if (words[0].equals("func"))
+                if (code.startsWith("func"))
                 {
                     isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
                 }else
@@ -116,7 +115,7 @@ public class KyLinRuntime {
                 kylinFunction.setInput(inputContent.split(","));
 
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (words[0].equals("func"))
+                if (code.startsWith("func "))
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line = this.code.get(j).trim();
@@ -148,7 +147,7 @@ public class KyLinRuntime {
                 this.FunctionMap.put(name , kylinFunction);
                 return;
         }
-        else if (words[0].equals("if"))
+        else if (code.startsWith("if "))
         {
             this.isIf = true;
             String[] splitArray = code.split("\\)\\s");
@@ -168,13 +167,13 @@ public class KyLinRuntime {
             }
             return;
         }
-        else if (words[0].equals("else") && this.isIf && !this.IF_OK)
+        else if (code.startsWith("else ") && this.isIf && !this.IF_OK)
         {
             this.isIf = false;
             String func = code.substring(code.indexOf(" ")+1);
             new KyLinExpression().getExpression(func,this);
         }
-        else if (words[0].equals("err"))
+        else if (code.startsWith("err "))
         {
             //定义异常处理函数
             String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
@@ -209,7 +208,7 @@ public class KyLinRuntime {
             this.ExceptionMap.put(name , kylinFunction);
             return;
         }
-        else if (words[0].equals("class"))
+        else if (code.startsWith("class "))
         {
             String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
             boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")+1).trim());
@@ -235,26 +234,26 @@ public class KyLinRuntime {
             this.classMap.put(name , kyLinClass);
             return;
         }
-        else if (words[0].equals("import"))
+        else if (code.startsWith("import "))
         {
             String lib = new KyLinExpression().getExpression(code.substring(7) , this);
             String lib_path = PathLoader.getLibName(lib);
             ImportLib.lib_import(lib_path,this);
             return;
         }
-        else if (code.startsWith("#include"))
+        else if (code.startsWith("#include "))
         {
             main.baseFunction.include(code , this);
+            return;
+        }
+        else if (KyLinProgramBaseFunction.runProgramBaseFunction(code , this))
+        {
             return;
         }
         else if (isFunction(code))
         {
             runFunction(code);
             return;
-        }
-        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code , this))
-        {
-            KyLinProgramBaseFunction.runProgramBaseFunction(code,this);
         }
         else {
             KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,OnErrorExit);

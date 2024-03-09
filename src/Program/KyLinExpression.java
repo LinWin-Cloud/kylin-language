@@ -2,13 +2,12 @@ package Program;
 
 
 import KylinException.KylinRuntimeException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
-public class KyLinExpression {
+public class KyLinExpression{
     public static KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
         if (runtime.ValueMap.containsKey(name)) {
             return runtime.ValueMap.get(name);
@@ -37,12 +36,9 @@ public class KyLinExpression {
     }
     public String getExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
         try {
-            // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"
-            //System.out.println(this.isList(code , kylinRuntime)+" "+code);
             String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-            //System.out.println(Arrays.asList(tokens));
             StringBuilder stringBuffer = new StringBuilder();
-            //System.out.println(Arrays.asList(tokens));
+
             for (String s : tokens)
             {
                 s = s.trim();
