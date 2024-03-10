@@ -10,15 +10,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.*;
 
 public class mainApp {
     public static PrintStream printStream = new PrintStream(System.out);
     public static String MyHelpInformation = "\n" +
             "Kylin Programming Language.\n" + "" +
             "   -version            Show the version information.\n" +
-	    "   -r [kylin code]	    Run the kylin code." +
+	        "   -r [kylin code]	    Run the kylin code.\n" +
             "   -console            Enter into the kylin console.\n" + "kylin [resource file]";
     public static String jarDirectory = null;
+    public static Pattern pattern_split_expression = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
     public static HashMap<String , String> import_lib_value = new HashMap<>();
     public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();

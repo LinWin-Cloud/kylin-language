@@ -147,6 +147,10 @@ public class KyLinRuntime {
                 this.FunctionMap.put(name , kylinFunction);
                 return;
         }
+        else if (KyLinProgramBaseFunction.runProgramBaseFunction(code , this))
+        {
+            return;
+        }
         else if (code.startsWith("if "))
         {
             this.isIf = true;
@@ -244,10 +248,6 @@ public class KyLinRuntime {
         else if (code.startsWith("#include "))
         {
             main.baseFunction.include(code , this);
-            return;
-        }
-        else if (KyLinProgramBaseFunction.runProgramBaseFunction(code , this))
-        {
             return;
         }
         else if (isFunction(code))

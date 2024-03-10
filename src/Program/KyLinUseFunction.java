@@ -13,10 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class KyLinUseFunction {
     public static String[] KylinKeyWord ={
@@ -59,7 +56,7 @@ public class KyLinUseFunction {
              */
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
-            for (String s : KylinKeyWord) {
+            for (String s : new HashSet<String>(Arrays.asList(KylinKeyWord))) {
                 if (s.equals(funcName))
                 {
                     is = true;

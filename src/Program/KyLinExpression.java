@@ -2,10 +2,13 @@ package Program;
 
 
 import KylinException.KylinRuntimeException;
+import main.mainApp;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 
 public class KyLinExpression{
     public static KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
@@ -36,10 +39,12 @@ public class KyLinExpression{
     }
     public String getExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
         try {
-            String[] tokens = code.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+            // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"
+            Matcher matcher = mainApp.pattern_split_expression.matcher(code);
+            String[] tokens = matcher.pattern().split(code);
             StringBuilder stringBuffer = new StringBuilder();
 
-            for (String s : tokens)
+            for(String s : tokens)
             {
                 s = s.trim();
                 //System.out.println(KyLinProgramBaseFunction.isRealDefinedFunction(code,kylinRuntime));
