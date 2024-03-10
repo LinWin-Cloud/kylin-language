@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.*;
 
@@ -22,7 +23,7 @@ public class mainApp {
     public static String jarDirectory = null;
     public static Pattern pattern_split_expression = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
     public static HashMap<String , String> import_lib_value = new HashMap<>();
-    public static ConcurrentHashMap<String , KyLinValue> all_kylin_value_pointer = new ConcurrentHashMap<>();
+    public static HashMap<String , KyLinValue> all_kylin_value_pointer = new HashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
     public static double version = 4.3;
     public static String version_type = "Public";

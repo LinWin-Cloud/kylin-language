@@ -7,7 +7,7 @@ public class KyLinType {
     public static String getType(String content, KyLinRuntime kylinRuntime) {
         try {
             String address = KyLinUseFunction.getAddress(content , kylinRuntime).toString();
-            if (mainApp.all_kylin_value_pointer.contains(address))
+            if (mainApp.all_kylin_value_pointer.containsKey(address))
             {
                 return mainApp.all_kylin_value_pointer.get(address).getType();
             }

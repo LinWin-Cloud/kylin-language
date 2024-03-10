@@ -347,15 +347,9 @@ public class KyLinUseFunction {
     public static KyLinValue getAddress(String content , KyLinRuntime kylinRuntime) throws Exception {
         KyLinValue value = new KyLinValue();
         value.setType("string");
-
-        KyLinRuntime sub_runtime = kylinRuntime.PublicRuntime;
-        if (kylinRuntime.ValueMap.containsKey(content)) {
-            KyLinValue k = kylinRuntime.ValueMap.get(content);
-            value.setContent(String.valueOf(k.getPointer()), kylinRuntime);
-        }
-        else if (sub_runtime != null && sub_runtime.ValueMap.containsKey(content)) {
-            KyLinValue k = sub_runtime.ValueMap.get(content);
-            value.setContent(String.valueOf(k.getPointer()), kylinRuntime);
+        KyLinValue v = KyLinExpression.getValueFromRuntime(content, kylinRuntime);
+        if (v != null) {
+            value.setContent(v.getPointer() , kylinRuntime);
         }
         else {
             throw new Exception("KyLin Pointer Error: No Pointer");
