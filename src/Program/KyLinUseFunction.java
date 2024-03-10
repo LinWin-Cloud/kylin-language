@@ -45,7 +45,6 @@ public class KyLinUseFunction {
             "isnumber",                 // 25
             "http_requests",            // 26
             "is_app_install",           // 27
-            "",                         // 28
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {

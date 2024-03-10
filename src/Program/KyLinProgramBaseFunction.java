@@ -36,7 +36,8 @@ public class KyLinProgramBaseFunction {
         "gc",
         "enterKey",
         "del",
-        "start_browser"
+        "start_browser",
+        "app_output",
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
@@ -47,6 +48,35 @@ public class KyLinProgramBaseFunction {
         //if (keyword == null) {
         //    keyword = "";
         //}
+        if (function.equals("app_output")) {
+            try {
+                String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+                String func = getIn[1].trim();
+                String funcName = func.substring(0,func.indexOf("(")).trim();
+                Process process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(getIn[0] , kylinRuntime));
+                InputStream inputStream = process.getErrorStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                while (true) {
+                    String line = bufferedReader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    //System.out.println(line);
+                    KyLinFunction kyLinFunction = KyLinExpression.getFunctionFromRuntime(funcName , kylinRuntime);
+                    assert kyLinFunction != null;
+                    kyLinFunction.kylinRuntime.isStream = true;
+                    String get_code_name = kyLinFunction.input[0];
+                    kyLinFunction.kylinRuntime.ValueMap.get(get_code_name).setContent(line,kylinRuntime);
+                    kyLinFunction.kylinRuntime.run();
+                }
+                bufferedReader.close();
+                inputStream.close();
+                process.destroy();
+            }catch (Exception exception) {
+                throw new Exception(exception);
+            }
+            return true;
+        }
         if (function.equals("out") || function.equals("print")) {
             printStream.println(new KyLinExpression().getExpression(input , kylinRuntime));
             printStream.flush();

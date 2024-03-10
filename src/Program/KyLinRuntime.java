@@ -36,7 +36,7 @@ public class KyLinRuntime {
         this.name = name;
     }
     public boolean isClass = false;
-
+    public boolean isStream = false;
 
     public void exec(String code, int i) throws Exception
     {
