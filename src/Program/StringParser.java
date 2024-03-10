@@ -1,14 +1,14 @@
 package Program;
 
-import java.util.Arrays;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 public class StringParser {
-
+    public static Pattern pattern_eval_math = Pattern.compile("((?<=\\+)|(?=\\+))|((?<=-)|(?=-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\)))");
 
     public static double evaluateExpression(String expression) {
         expression = expression.replaceAll(" ", ""); // Remove whitespace
-        String[] tokens = expression.split("((?<=\\+)|(?=\\+))|((?<=-)|(?=-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\)))"); // Split expression into numbers and operators
+        String[] tokens = pattern_eval_math.split(expression); // Split expression into numbers and operators
         Stack<Double> operandStack = new Stack<>(); // Operand stack
         Stack<Character> operatorStack = new Stack<>(); // Operator stack
 

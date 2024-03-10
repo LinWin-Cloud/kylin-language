@@ -87,6 +87,7 @@ public class KyLinRuntime {
         }
         else if (code.startsWith("val ")) {
             new KyLinVal().Val(code,this);
+            return;
         }
         else if (code.startsWith("func ") || code.startsWith("f ")) {
             /**

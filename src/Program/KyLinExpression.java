@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class KyLinExpression{
     public static KyLinValue getValueFromRuntime(String name , KyLinRuntime runtime) {
@@ -197,26 +198,25 @@ public class KyLinExpression{
             return null;
         }
     }
+    public static Pattern pattern_math_exp = Pattern.compile("(?=[+\\-*/()])|(?<=[+\\-*/()])");
     public double evaluateExpression(String expression , KyLinRuntime kylinRuntime) throws Exception {
         try {
-            String[] exp = expression.split("(?=[+\\-*/()])|(?<=[+\\-*/()])");
+            String[] exp = pattern_math_exp.split(expression);
 
             StringBuilder stringBuffer = new StringBuilder();
             for (String s:exp) {
                 s = s.trim();
+                KyLinValue v = getValueFromRuntime(s , kylinRuntime);
                 if (s.isEmpty()) {
                     continue;
                 }
-                else if (kylinRuntime.ValueMap.containsKey(s)) {
-                    KyLinValue kylinValue = kylinRuntime.ValueMap.get(s);
-                    if (kylinValue == null) {
-                        throw new Exception("ERR Value: "+s+" . At Line: "+(kylinRuntime.PublicRuntime.codeLine+1));
-                    }
-                    else if (kylinValue.getContent() == null) {
-                        stringBuffer.append("");
+                else if (v != null) {
+                    //System.out.println(v);
+                    if (v.getContent() == null) {
+                        continue;
                     }
                     else {
-                        stringBuffer.append(kylinRuntime.ValueMap.get(s).getContent());
+                        stringBuffer.append(v.getContent());
                     }
                     continue;
                 }
@@ -238,12 +238,6 @@ public class KyLinExpression{
                 }
                 else if (KyLinProgramBaseFunction.isDefinedFunction(expression) && KyLinUseFunction.isUseFunction(s,kylinRuntime)) {
                     stringBuffer.append(KyLinUseFunction.UseFunction(s , kylinRuntime));
-                    continue;
-                }
-                else if (kylinRuntime.PublicRuntime != null
-                        && kylinRuntime.PublicRuntime.ValueMap.containsKey(s)
-                ) {
-                    stringBuffer.append(kylinRuntime.PublicRuntime.ValueMap.get(s).getContent());
                     continue;
                 }
                 else {

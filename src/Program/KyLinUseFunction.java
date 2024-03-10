@@ -54,6 +54,7 @@ public class KyLinUseFunction {
              * 判断是否是可调用的 函数
              *
              */
+            //System.out.println(1);
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
             for (String s : new HashSet<String>(Arrays.asList(KylinKeyWord))) {
