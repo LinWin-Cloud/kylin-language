@@ -42,6 +42,7 @@ public class KyLinProgramBaseFunction {
         "exec",
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
+        //System.out.println(code);
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
         //System.out.println(input);
         String function = code.substring(0 , code.indexOf("(")).trim();
@@ -68,6 +69,7 @@ public class KyLinProgramBaseFunction {
         }
         if (function.equals("app_output")) {
             try {
+                //System.out.println(kylinRuntime.FunctionMap);;
                 String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
                 String func = getIn[1].trim();
                 String funcName = func.substring(0,func.indexOf("(")).trim();
@@ -80,7 +82,6 @@ public class KyLinProgramBaseFunction {
                         if (line == null) {
                             break;
                         }
-                                            //System.out.println(line);
                                             KyLinFunction kyLinFunction = KyLinExpression.getFunctionFromRuntime(funcName , kylinRuntime);
                                             assert kyLinFunction != null;
                                             kyLinFunction.kylinRuntime.isStream = true;
@@ -100,6 +101,7 @@ public class KyLinProgramBaseFunction {
                     return true;
                 }
             }catch (Exception exception) {
+                exception.printStackTrace();
                 throw new Exception(exception);
             }
             return true;

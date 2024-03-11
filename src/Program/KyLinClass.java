@@ -65,7 +65,7 @@ public class KyLinClass {
 
                 KyLinFunction kylinFunction = new KyLinFunction(name);
                 kylinFunction.isPublic = isPublic;
-                kylinFunction.setInput(inputContent.split(","));
+                kylinFunction.setInput(inputContent.split(","),kyLinRuntime);
 
                 ArrayList<String> functionCode = new ArrayList<>();
                 if (words[0].equals("func"))

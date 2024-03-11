@@ -5,7 +5,6 @@ import main.baseFunction;
 
 import java.io.File;
 import java.util.*;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import KylinException.KylinRuntimeException;
@@ -121,7 +120,7 @@ public class KyLinRuntime {
 
                 KyLinFunction kylinFunction = new KyLinFunction(name);
                 kylinFunction.isPublic = isPublic;
-                kylinFunction.setInput(inputContent.split(","));
+                kylinFunction.setInput(inputContent.split(",") , this);
 
                 ArrayList<String> functionCode = new ArrayList<>();
                 if (code.startsWith("func "))
@@ -156,8 +155,9 @@ public class KyLinRuntime {
                 this.FunctionMap.put(name , kylinFunction);
                 return;
         }
-        else if (KyLinProgramBaseFunction.runProgramBaseFunction(code , this))
+        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code, PublicRuntime))
         {
+            KyLinProgramBaseFunction.runProgramBaseFunction(code , this);
             return;
         }
         else if (code.startsWith("if "))
@@ -290,7 +290,6 @@ public class KyLinRuntime {
         String content = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")")).trim();
 
         if (KyLinExpression.getFunctionFromRuntime(function , this) != null) {
-
             KyLinFunction kylinFunction = KyLinExpression.getFunctionFromRuntime(function , this);
             String[] split = content.split(",(?![^(]*\\))");
             assert kylinFunction != null;
@@ -300,6 +299,14 @@ public class KyLinRuntime {
 
             for (int i = 0; i < inputLength; i++) {
                 String input = kylinFunction.input[i];
+                if (KyLinExpression.getFunctionFromRuntime(split[i].trim(), this) != null) {
+                    //System.out.println(kylinFunction.kylinRuntime.ValueMap);
+                    if (kylinFunction.kylinRuntime.PublicRuntime != null) {
+                        kylinFunction.kylinRuntime.PublicRuntime.FunctionMap.put(input, KyLinExpression.getFunctionFromRuntime(split[i].trim(), this));
+                    }
+                    kylinFunction.kylinRuntime.FunctionMap.put(input, KyLinExpression.getFunctionFromRuntime(split[i].trim(), this));
+                    continue;
+                }
                 KyLinValue kylinValue = new KyLinValue();
                 kylinValue.setName(input);
                 kylinValue.setContent(new KyLinExpression().getExpression(split[i] , this), this);

@@ -17,10 +17,13 @@ public class KyLinFunction {
         kylinRuntime.isFunction = true;
     }
 
-    public void setInput(String[] input) {
+    public void setInput(String[] input , KyLinRuntime runtime) {
         this.input = input;
         for (String s : input)
         {
+            if (KyLinExpression.getFunctionFromRuntime(s, runtime) != null) {
+                this.kylinRuntime.FunctionMap.put(s, KyLinExpression.getFunctionFromRuntime(s, runtime));
+            }
             KyLinValue kylinValue = new KyLinValue();
             kylinValue.setName(s);
             kylinValue.setIs_public(true);
