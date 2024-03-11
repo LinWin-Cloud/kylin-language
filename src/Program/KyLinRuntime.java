@@ -37,6 +37,7 @@ public class KyLinRuntime {
     }
     public boolean isClass = false;
     public boolean isStream = false;
+    public Process process = null;
 
     public void exec(String code, int i) throws Exception
     {
@@ -62,6 +63,13 @@ public class KyLinRuntime {
         if (isFunction && (code.startsWith("return ")))
         {
             this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
+            try {
+                if (isStream) {
+                    process.destroy();
+                }
+            }catch(Exception e) {
+                return;
+            }
             return;
         }
         /**

@@ -38,6 +38,8 @@ public class KyLinProgramBaseFunction {
         "del",
         "start_browser",
         "app_output",
+        "s_out",
+        "exec",
     };
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
@@ -48,6 +50,22 @@ public class KyLinProgramBaseFunction {
         //if (keyword == null) {
         //    keyword = "";
         //}
+        if (function.equals("exec")) {
+            kylinRuntime.exec(new KyLinExpression().getExpression(input, kylinRuntime), 0);
+            return true;
+        }
+        if (function.equals("s_out")) {
+            if (kylinRuntime.isStream) {
+                OutputStream outputStream = kylinRuntime.process.getOutputStream();
+                PrintWriter printWriter = new PrintWriter(outputStream);
+                printWriter.println(new KyLinExpression().getExpression(input, kylinRuntime));
+                printWriter.flush();
+                printWriter.close();
+            } else {
+                throw new Exception("This Runtime is not a stream runtime.");
+            }
+            return true;
+        }
         if (function.equals("app_output")) {
             try {
                 String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -57,21 +75,30 @@ public class KyLinProgramBaseFunction {
                 InputStream inputStream = process.getErrorStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 while (true) {
-                    String line = bufferedReader.readLine();
-                    if (line == null) {
+                    try {
+                        String line = bufferedReader.readLine();
+                        if (line == null) {
+                            break;
+                        }
+                                            //System.out.println(line);
+                                            KyLinFunction kyLinFunction = KyLinExpression.getFunctionFromRuntime(funcName , kylinRuntime);
+                                            assert kyLinFunction != null;
+                                            kyLinFunction.kylinRuntime.isStream = true;
+                                            String get_code_name = kyLinFunction.input[0];
+                                            kyLinFunction.kylinRuntime.process = process;
+                                            kyLinFunction.kylinRuntime.ValueMap.get(get_code_name).setContent(line,kylinRuntime);
+                                            kyLinFunction.kylinRuntime.run();
+                    }catch(Exception e) {
                         break;
                     }
-                    //System.out.println(line);
-                    KyLinFunction kyLinFunction = KyLinExpression.getFunctionFromRuntime(funcName , kylinRuntime);
-                    assert kyLinFunction != null;
-                    kyLinFunction.kylinRuntime.isStream = true;
-                    String get_code_name = kyLinFunction.input[0];
-                    kyLinFunction.kylinRuntime.ValueMap.get(get_code_name).setContent(line,kylinRuntime);
-                    kyLinFunction.kylinRuntime.run();
                 }
-                bufferedReader.close();
-                inputStream.close();
-                process.destroy();
+                try {
+                    bufferedReader.close();
+                    inputStream.close();
+                    process.destroy();
+                }catch(Exception e) {
+                    return true;
+                }
             }catch (Exception exception) {
                 throw new Exception(exception);
             }
