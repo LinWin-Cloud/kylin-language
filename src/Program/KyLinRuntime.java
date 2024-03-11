@@ -160,6 +160,10 @@ public class KyLinRuntime {
             KyLinProgramBaseFunction.runProgramBaseFunction(code , this);
             return;
         }
+        else if (KyLinUseFunction.isUseFunction(code , this)) {
+            KyLinUseFunction.UseFunction(code , this);
+            return;
+        }
         else if (code.startsWith("if "))
         {
             this.isIf = true;

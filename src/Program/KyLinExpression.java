@@ -66,10 +66,6 @@ public class KyLinExpression{
                         throw new Exception("string error.");
                     }
                 }
-                else if (KyLinExpression.getFunctionFromRuntime(s , kylinRuntime) != null) {
-                    stringBuffer.append(s);
-                    continue;
-                }
                 else if (this.isList(code , kylinRuntime)) {
                     try {
                         String function = code.substring(0 , code.indexOf("[")).trim();

@@ -45,6 +45,8 @@ public class KyLinUseFunction {
             "isnumber",                 // 25
             "http_requests",            // 26
             "is_app_install",           // 27
+            "get_func_pointer",         // 28
+            "toFunc",                   // 29
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -80,6 +82,19 @@ public class KyLinUseFunction {
 
         KyLinValue value = new KyLinValue();
         switch (funcName) {
+            case "toFunc":
+                value.setIs_public(true);
+                KyLinFunction fn = mainApp.all_kylin_function_pointer.get(new KyLinExpression().getExpression(content , kylinRuntime));
+                fn.kylinRuntime.run();
+                value.setContent(
+                        fn.kylinRuntime.getResult()
+                        ,kylinRuntime);
+                return value;
+            case "get_func_pointer":
+                value.setIs_public(true);
+                value.setType("string");
+                value.setContent(Objects.requireNonNull(KyLinExpression.getFunctionFromRuntime(content, kylinRuntime)).pointer,kylinRuntime);
+                return value;
             case "is_app_install":
                 value.setIs_public(true);
                 try {

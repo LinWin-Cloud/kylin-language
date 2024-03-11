@@ -71,8 +71,7 @@ public class KyLinProgramBaseFunction {
             try {
                 //System.out.println(kylinRuntime.FunctionMap);;
                 String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-                String func = getIn[1].trim();
-                String funcName = func.substring(0,func.indexOf("(")).trim();
+                String func_pointer = new KyLinExpression().getExpression(getIn[1].trim() , kylinRuntime);
                 Process process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(getIn[0] , kylinRuntime));
                 InputStream inputStream = process.getErrorStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -82,13 +81,13 @@ public class KyLinProgramBaseFunction {
                         if (line == null) {
                             break;
                         }
-                                            KyLinFunction kyLinFunction = KyLinExpression.getFunctionFromRuntime(funcName , kylinRuntime);
-                                            assert kyLinFunction != null;
-                                            kyLinFunction.kylinRuntime.isStream = true;
-                                            String get_code_name = kyLinFunction.input[0];
-                                            kyLinFunction.kylinRuntime.process = process;
-                                            kyLinFunction.kylinRuntime.ValueMap.get(get_code_name).setContent(line,kylinRuntime);
-                                            kyLinFunction.kylinRuntime.run();
+                        KyLinFunction kyLinFunction = mainApp.all_kylin_function_pointer.get(func_pointer);
+                        assert kyLinFunction != null;
+                        kyLinFunction.kylinRuntime.isStream = true;
+                        String get_code_name = kyLinFunction.input[0];
+                        kyLinFunction.kylinRuntime.process = process;
+                        kyLinFunction.kylinRuntime.ValueMap.get(get_code_name).setContent(line,kylinRuntime);
+                        kyLinFunction.kylinRuntime.run();
                     }catch(Exception e) {
                         break;
                     }
@@ -336,7 +335,9 @@ public class KyLinProgramBaseFunction {
     }
     public static boolean isProgramBaseFunction(String code , KyLinRuntime kylinRuntime) {
         try {
-            return runProgramBaseFunction(code, kylinRuntime);
+            String funcname = code.substring(0,code.indexOf("(")).trim();
+            String content = code.substring(code.indexOf("(")+1,code.lastIndexOf(")")).trim();
+            return Arrays.asList(base).contains(funcname);
         }catch (Exception exception) {
             return false;
         }
