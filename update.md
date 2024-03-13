@@ -1,4 +1,18 @@
 
+# Kylin 4.4
+- 优化正则式处理，采用预编译，性能提高 10% 左右
+- app_output 内置函数,允许与外部应用程序通讯
+- s_out 内置函数,允许通过流的形式与外部程序发送消息
+- exec 内置执行kylin代码的函数
+
+# Kylin 4.3
+- http反向代理库: http_proxy，专门用于反向代理网站和服务器，用于隐秘渗透测试
+- DDOS库: kylin实现，可以对目标进行dos攻击，配合着多台计算机可以实现ddos.
+- is_app_install("python3")函数api: 检查指定命令行程序时候安装
+- kpt包管理系统
+- base_physics:基础物理公式库
+- file api更新: 支持创建文件和目录等.
+
 # Kylin 4.0
 ### bug修复
 - 修复for内置函数BUG
