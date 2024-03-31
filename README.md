@@ -8,7 +8,7 @@
 
 - Kylin编程语言的目标就是吸取各个编程语言的优点，快速高效的实现```自动化计算机操作```，```计算机编程快速教学```. ```计算机编程语言实现教学```.
 
-#### 发行版 https://gitee.com/LinwinSoft/kylin-language/releases (下载务必到这个链接)
+#### 发行版 https://gitee.com/LinWin-Cloud/kylin-language/releases (下载务必到这个链接)
 
 #### 硬性设计要求
 - 设计每个类库用户开发时间要控制在3分钟以内.
