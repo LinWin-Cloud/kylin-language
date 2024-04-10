@@ -38,6 +38,49 @@ public class KyLinExpression{
         s = s.replace("\\n", "\n");
         return s;
     }
+    public KyLinValue getObjectExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
+        try {
+            Matcher matcher = mainApp.pattern_split_expression.matcher(code);
+            String[] tokens = matcher.pattern().split(code);
+            if (tokens.length >= 2) {
+                String s = this.getExpression(code , kylinRuntime);
+                KyLinValue value = new KyLinValue();
+                value.setType("object");
+                value.setIs_public(true);
+                value.setContent(s , kylinRuntime);
+                return value;
+            }else {
+                if (this.isList(code , kylinRuntime)) {
+                    try {
+                        String function = code.substring(0 , code.indexOf("[")).trim();
+                        String input = code.substring(code.indexOf("[")+1 , code.lastIndexOf("]")).trim();
+                        KyLinValue value = getValueFromRuntime(function , kylinRuntime);
+                        KyLinValue v = new KyLinValue();
+                        try {
+                            assert value != null;
+                            KyLinList kyLinList = (KyLinList) value.getContent();
+                            return  kyLinList.arrayList.get(Integer.parseInt(this.getExpression(input,kylinRuntime)));
+                        }catch (Exception exception) {
+                            String list_string = value.getContent().toString();
+                            String s = list_string.substring(1 , list_string.length()-1).split(",")[Integer.parseInt(this.getExpression(input,kylinRuntime))];
+                            v.setType("object");
+                            v.setIs_public(true);
+                            v.setContent(s , kylinRuntime);
+                            return v;
+                        }
+                    }catch (Exception e) {
+                        //e.printStackTrace();
+                        throw new Exception(e);
+                    }
+                }
+                else {
+                    return null;
+                }
+            }
+        }catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
     public String getExpression(String code , KyLinRuntime kylinRuntime) throws Exception {
         try {
             // ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)"

@@ -17,10 +17,10 @@ public class KyLinRuntime {
     public Map<String , KyLinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
     public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
     public boolean isFunction = false;                                          // 本运行环境是否是 函数
-    private String result = "";                                 
+    private KyLinValue result;
     public KyLinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
     public int codeLine = 0;
-    public String getResult() {
+    public KyLinValue getResult() {
         return this.result;
     }
     public Map<String , String> defined_keyword = new HashMap<>();              // 定义的关键字hashmap
@@ -61,7 +61,7 @@ public class KyLinRuntime {
         }
         if (isFunction && (code.startsWith("return ")))
         {
-            this.result = new KyLinExpression().getExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
+            this.result = new KyLinExpression().getObjectExpression(code.substring(code.indexOf("return ")+"return ".length()).trim(), this);
             try {
                 if (isStream) {
                     process.destroy();
@@ -283,7 +283,7 @@ public class KyLinRuntime {
         try {
             String function = code.substring(0,code.indexOf("(")).trim();
             String content = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
-            return this.FunctionMap.containsKey(function);
+            return KyLinExpression.getFunctionFromRuntime(function , this) != null;
         }catch (Exception exception) {
             //exception.printStackTrace();
             return false;
