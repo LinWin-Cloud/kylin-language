@@ -47,6 +47,7 @@ public class KyLinUseFunction {
             "is_app_install",           // 27
             "get_func_pointer",         // 28
             "toFunc",                   // 29
+            "split",                    // 30
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -82,6 +83,22 @@ public class KyLinUseFunction {
 
         KyLinValue value = new KyLinValue();
         switch (funcName) {
+            case "split":
+                value.setIs_public(true);
+                String str = new KyLinExpression().getExpression(split[0] , kylinRuntime);
+                String split_charset = new KyLinExpression().getExpression(split[1] , kylinRuntime);
+                KyLinList kyLinList = new KyLinList();
+                kyLinList.arrayList = new ArrayList<>();
+                String[] split_str = str.split((split_charset));
+                for (String string : split_str) {
+                    KyLinValue v = new KyLinValue();
+                    v.setContent(string,kylinRuntime);
+                    v.setType("string");
+                    kyLinList.arrayList.add(v);
+                }
+                value.setContent(kyLinList,kylinRuntime);
+                value.setType("list");
+                return value;
             case "toFunc":
                 value.setIs_public(true);
                 KyLinFunction fn = mainApp.all_kylin_function_pointer.get(new KyLinExpression().getExpression(content , kylinRuntime));

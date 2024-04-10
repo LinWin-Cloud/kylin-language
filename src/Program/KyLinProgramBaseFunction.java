@@ -41,6 +41,45 @@ public class KyLinProgramBaseFunction {
         "s_out",
         "exec",
     };
+    public static void usingShell(String command) {
+        // 创建ProcessBuilder对象
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        // 设置命令
+        processBuilder.command("bash", "-c", command);
+
+        try {
+            Process process = processBuilder.start();
+
+            // 获取输出流，用于向bash脚本发送输入
+            OutputStream outputStream = process.getOutputStream();
+            // 获取输入流，用于读取bash脚本的输出
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            // 获取错误流，用于读取bash脚本的错误输出
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+            String line;
+            // 读取并打印bash脚本的输出
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            // 读取并打印bash脚本的错误输出
+            while ((line = errorReader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // 等待进程执行完毕
+            int exitCode = process.waitFor();
+            System.out.println("\nExited with code: " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.contains("win");
+    }
     public static boolean runProgramBaseFunction(String code , KyLinRuntime kylinRuntime) throws Exception {
         //System.out.println(code);
         String input = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).trim();
@@ -262,22 +301,7 @@ public class KyLinProgramBaseFunction {
             return true;
         }
         if (function.equals("shell")) {
-            String os = System.getProperty("os.name");
-            // 执行Shell命令
-            Process process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(input , kylinRuntime));
-            // 获取命令输出流
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            // 获取命令错误流
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            // 读取输出
-            String outputLine;
-            while ((outputLine = stdInput.readLine()) != null) {
-                System.out.println(outputLine);
-            }
-            // 读取错误输出
-            while ((outputLine = stdError.readLine()) != null) {
-                System.out.println("Error: " + outputLine);
-            }
+            usingShell(new KyLinExpression().getExpression(input,kylinRuntime));
             return true;
         }
         if (function.equals("exception") || function.equals("except")) {

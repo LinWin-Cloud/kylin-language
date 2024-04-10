@@ -7,10 +7,7 @@ import Program.KyLinValue;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.*;
 
@@ -103,7 +100,7 @@ public class mainApp {
                     }
 
                     catch (Exception exception) {
-                        (exception).printStackTrace();
+                        //(exception).printStackTrace();
                         KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0,false);
                         kylinRuntimeException.PrintErrorMessage(main);
                     }

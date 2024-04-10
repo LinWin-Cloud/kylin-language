@@ -81,13 +81,8 @@ public class KyLinExpression{
 
                             stringBuffer.append(kyLinList.arrayList.get(Integer.parseInt(this.getExpression(input,kylinRuntime))).getContent());
                         }catch (Exception exception) {
-                            KyLinList sObject = (KyLinList) Objects.requireNonNull(getValueFromRuntime(function, kylinRuntime)).getContent();
-                            int i = (int) Double.parseDouble(this.getExpression(input,kylinRuntime));
-                            if (i >= sObject.arrayList.size()) {
-                                stringBuffer.append("null");
-                                return stringBuffer.toString();
-                            }
-                            stringBuffer.append(sObject.arrayList.get(i));
+                            String list_string = value.getContent().toString();
+                            stringBuffer.append(list_string.substring(1 , list_string.length()-1).split(",")[Integer.parseInt(this.getExpression(input,kylinRuntime))]);
                         }
                     }catch (Exception e) {
                         //e.printStackTrace();
@@ -168,6 +163,7 @@ public class KyLinExpression{
             throw new Exception(exception.getMessage());
         }
     }
+
     public boolean isNumber(String s) {
         try {
             Double.parseDouble(s);
