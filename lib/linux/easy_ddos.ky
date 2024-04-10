@@ -1,0 +1,5 @@
+
+func start_easy_ddos() public
+    var boot = java_runtime(),"/../lib/linux/easy_ddos"
+    shell(boot)
+end_func
