@@ -23,9 +23,9 @@ public class mainApp {
     public static HashMap<String , String> import_lib_value = new HashMap<>();
     public static HashMap<String , KyLinValue> all_kylin_value_pointer = new HashMap<>();
     public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
-    public static double version = 4.4;
+    public static double version = 4.5;
     public static HashMap<String , KyLinFunction> all_kylin_function_pointer = new HashMap<>();
-    public static String version_type = "Public";
+    public static String version_type = "Beta";
 
     static {
         try {
