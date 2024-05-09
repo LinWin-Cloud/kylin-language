@@ -40,10 +40,10 @@ public class KptMain {
     }
     public static void main(String[] args) {
         try {
-            if (args[0].equals("-version")) {
+            if ("-version".equals(args[0])) {
                 System.out.println(version);
             }
-            else if (args[0].equals("-n")) {
+            else if ("-n".equals(args[0])) {
                 String name = args[1];
                 new File(name).mkdir();
                 FileWriter fileWriter = new FileWriter(name+"/info.json");
@@ -57,15 +57,15 @@ public class KptMain {
                 fileWriter.close();
                 System.out.println("Create Package: "+name);
             }
-            else if (args[0].equals("-i")) {
+            else if ("-i".equals(args[0])) {
                 unzip(args[1] , jarDirectory+"/../lib/");
             }
-            else if (args[0].equals("-list")) {
+            else if ("-list".equals(args[0])) {
                 System.out.println(" [Package] ==>");
                 File[] files = new File(jarDirectory+"/../lib_info/").listFiles();
                 StringBuilder stringBuilder = new StringBuilder();
                 for (File i : files) {
-                    if (getLastName(i.getName()).equals("json")) {
+                    if ("json".equals(getLastName(i.getName()))) {
                         stringBuilder.append(" - ");
                         stringBuilder.append(getLastName(getName(i.getName())));
                         stringBuilder.append("\n");
@@ -96,7 +96,7 @@ public class KptMain {
                 String filePath = destDirPath + File.separator + entry.getName();
                 System.out.println("[INFO] INSTALL: "+entry.getName()+".");
                 if (!entry.isDirectory()) {
-                    if (entry.getName().equals("info.json")) {
+                    if ("info.json".equals(entry.getName())) {
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipIn));
                         StringBuilder stringBuilder = new StringBuilder();
                         while (true) {

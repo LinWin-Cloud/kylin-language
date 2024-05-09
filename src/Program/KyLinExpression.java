@@ -179,7 +179,7 @@ public class KyLinExpression{
                         double math = this.evaluateExpression(s , kylinRuntime);
                         stringBuffer.append(math);
                     }catch (Exception exception) {
-                        if (s.equals("true") || s.equals("false")) {
+                        if ("true".equals(s) || "false".equals(s)) {
                             stringBuffer.append(s);
                         }else {
                             throw new Exception("Error Syntax: '"+ s +"' in "+code);

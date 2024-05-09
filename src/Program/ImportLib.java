@@ -11,14 +11,14 @@ public class ImportLib {
     {
         //System.out.println(mainApp.jarDirectory);
         String path = main.mainApp.jarDirectory + "/../lib/";
-        if (expression.equals("httpserver")) {
+        if ("httpserver".equals(expression)) {
             path += "net/http/linwinshs/";
         }
         
         File result = searchFile(path, expression.replace(".","/") , kylinRuntime);
         if (result != null) {
             KyLinRuntime import_kylin = new KyLinRuntime(result.getName());
-            import_kylin.code = baseFunction.getScript(result.getAbsolutePath()); //把代码加载进入运行环境
+            import_kylin.code = baseFunction.getScript(result.getAbsolutePath());
             import_kylin.code_file = result;
             import_kylin.run();
             for (KyLinFunction kylinFunction : import_kylin.FunctionMap.values()) {

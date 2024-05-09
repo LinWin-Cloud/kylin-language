@@ -22,10 +22,10 @@ public class KyLinBoolean {
             String[] operands = expression.split("==");
             return new KyLinExpression().getExpression(operands[0].trim() , kyLinRuntime).equals(new KyLinExpression().getExpression(operands[1].trim(),kyLinRuntime));
         }
-        else if (expression.equalsIgnoreCase("ture")) {
+        else if ("ture".equalsIgnoreCase(expression)) {
             return true;
         }
-        else if (expression.equalsIgnoreCase("false")) {
+        else if ("false".equalsIgnoreCase(expression)) {
             return false;
         }
         else if (expression.contains("!=")) {

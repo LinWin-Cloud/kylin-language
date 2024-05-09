@@ -21,7 +21,7 @@ public class bootOpenProxy {
                     //only read the json file.
                     //String fileLastName = files[i].getName().substring(files[i].getName().lastIndexOf("."), files.length);
                     String fileLastName = files[i].getName().substring(files[i].getName().lastIndexOf("."),files[i].getName().length());
-                    if (fileLastName.equals(".json")) {
+                    if (".json".equals(fileLastName)) {
                         //is json file. read it.
                         try {
                             int I = i;

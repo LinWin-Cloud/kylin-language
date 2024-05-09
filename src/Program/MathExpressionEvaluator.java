@@ -5,10 +5,10 @@ import java.util.Stack;
 public class MathExpressionEvaluator {
 
     public static double evaluateExpression(String expression) {
-        expression = expression.replaceAll(" ", ""); // 去除空格
-        String[] tokens = expression.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)"); // 切割表达式成数字和操作符
-        Stack<Double> operandStack = new Stack<>(); // 操作数栈
-        Stack<Character> operatorStack = new Stack<>(); // 操作符栈
+        expression = expression.replaceAll(" ", "");
+        String[] tokens = expression.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
+        Stack<Double> operandStack = new Stack<>();
+        Stack<Character> operatorStack = new Stack<>();
 
         for (String token : tokens) {
             if (token.length() == 0) {

@@ -13,24 +13,24 @@ import main.mainApp;
 public class KyLinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
-    public ConcurrentHashMap<String , KyLinValue> ValueMap = new ConcurrentHashMap<>();                 // 储存本运行环境的变量
-    public Map<String , KyLinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
-    public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
-    public boolean isFunction = false;                                          // 本运行环境是否是 函数
+    public ConcurrentHashMap<String , KyLinValue> ValueMap = new ConcurrentHashMap<>();
+    public Map<String , KyLinFunction> FunctionMap = new HashMap<>();
+    public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();
+    public boolean isFunction = false;
     private KyLinValue result;
-    public KyLinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
+    public KyLinRuntime PublicRuntime;
     public int codeLine = 0;
     public KyLinValue getResult() {
         return this.result;
     }
-    public Map<String , String> defined_keyword = new HashMap<>();              // 定义的关键字hashmap
-    public Map<String , String> defined_func = new HashMap<>();                 // 定义的函数关键字，例如 out("hello world") 可以定义为 print("hello world"),kylin3.0废除该标准
-    public String name;                                                         // 本运行环境名字
-    private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
-    private boolean IF_OK = false;                                              // if语句是否结束
-    public Map<String , KyLinClass> classMap = new HashMap<>();                 // 本运行环境下的 类 储存
+    public Map<String , String> defined_keyword = new HashMap<>();
+    public Map<String , String> defined_func = new HashMap<>();
+    public String name;
+    private boolean isIf = false;
+    private boolean IF_OK = false;
+    public Map<String , KyLinClass> classMap = new HashMap<>();
     public boolean OnErrorExit = true;
-    public File code_file = null;                                               // 该运行环境的文件
+    public File code_file = null;
     public KyLinRuntime(String name) {
         this.name = name;
     }
@@ -127,7 +127,7 @@ public class KyLinRuntime {
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line = this.code.get(j).trim();
-                        if ((line.equals("end_func"))) {
+                        if (("end_func".equals(line))) {
                             this.codeLine = j;
                             break;
                         }
@@ -140,7 +140,7 @@ public class KyLinRuntime {
                     for (int j = i+1 ; j < this.code.size() ;j++)
                     {
                         String line = this.code.get(j).trim();
-                        if ((line.equals("e_f"))) {
+                        if (("e_f".equals(line))) {
                             this.codeLine = j;
                             break;
                         }
@@ -204,7 +204,7 @@ public class KyLinRuntime {
             for (int j = i+1 ; j < this.code.size() ;j++)
             {
                 String line = this.code.get(j).trim();
-                if ((line.equals("e_err")))
+                if (("e_err".equals(line)))
                 {
                     this.codeLine = j;
                     break;
@@ -240,7 +240,7 @@ public class KyLinRuntime {
                 {
                     continue;
                 }
-                if (line.equals("end_class"))
+                if ("end_class".equals(line))
                 {
                     this.codeLine = j;
                     break;
@@ -501,7 +501,7 @@ public class KyLinRuntime {
                 this.PublicRuntime.ValueMap.put(name , kylinValue);
             }
         }
-        if (content.equals("null")) {
+        if ("null".equals(content)) {
             KyLinValue kylinValue = new KyLinValue();
             kylinValue.setContent(null,this);
             kylinValue.setName(name);

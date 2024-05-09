@@ -7,10 +7,10 @@ public class StringParser {
     public static Pattern pattern_eval_math = Pattern.compile("((?<=\\+)|(?=\\+))|((?<=-)|(?=-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\)))");
 
     public static double evaluateExpression(String expression) {
-        expression = expression.replaceAll(" ", ""); // Remove whitespace
-        String[] tokens = pattern_eval_math.split(expression); // Split expression into numbers and operators
-        Stack<Double> operandStack = new Stack<>(); // Operand stack
-        Stack<Character> operatorStack = new Stack<>(); // Operator stack
+        expression = expression.replaceAll(" ", "");
+        String[] tokens = pattern_eval_math.split(expression);
+        Stack<Double> operandStack = new Stack<>();
+        Stack<Character> operatorStack = new Stack<>();
 
         for (String token : tokens) {
             if (token.isEmpty()) {

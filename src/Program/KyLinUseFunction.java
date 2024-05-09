@@ -17,37 +17,37 @@ import java.util.*;
 
 public class KyLinUseFunction {
     public static String[] KylinKeyWord ={
-            "getTime",                  // 0
-            "input",                    // 1
-            "get_os",                   // 2
-            "get_path",                 // 3
-            "long_time",                // 4
-            "bool",                     // 5
-            "typeof",                   // 6
-            "file_exists",              // 7
-            "get_file_content",         // 8
-            "java_runtime",             // 9
-            "length",                   // 10
-            "pow",                      // 11
-            "sub",                      // 12
-            "index",                    // 13
-            "lastindex",                // 14
-            "delete",                   // 15
-            "get_pointer",              // 16
-            "toVal",                    // 17
-            "shell_output",             // 18
-            "new_thread",               // 19
-            "get_mouse_point",          // 20
-            "toInt",                    // 21
-            "rm",                       // 22
-            "randomInt",                // 23
-            "index_list",               // 24
-            "isnumber",                 // 25
-            "http_requests",            // 26
-            "is_app_install",           // 27
-            "get_func_pointer",         // 28
-            "toFunc",                   // 29
-            "split",                    // 30
+            "getTime",                  
+            "input",                    
+            "get_os",                   
+            "get_path",                 
+            "long_time",
+            "bool",
+            "typeof",
+            "file_exists",
+            "get_file_content",
+            "java_runtime",
+            "length",
+            "pow",
+            "sub",
+            "index",
+            "lastindex",
+            "delete",
+            "get_pointer",
+            "toVal",
+            "shell_output",
+            "new_thread",
+            "get_mouse_point",
+            "toInt",
+            "rm",
+            "randomInt",
+            "index_list",
+            "isnumber",
+            "http_requests",
+            "is_app_install",
+            "get_func_pointer",
+            "toFunc",
+            "split",
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
@@ -115,7 +115,7 @@ public class KyLinUseFunction {
             case "is_app_install":
                 value.setIs_public(true);
                 try {
-                    if (OperatingSystemCheck.getOperatingSystem().equals("Windows")) {
+                    if ("Windows".equals(OperatingSystemCheck.getOperatingSystem())) {
                         File f = new File(new KyLinExpression().getExpression(content , kylinRuntime));
                         value.setContent(f.exists() , kylinRuntime);
                     }
@@ -225,7 +225,7 @@ public class KyLinUseFunction {
                 return value;
             case "length":
                 String type = TypeOf.typeOf(content, kylinRuntime);
-                if (type.equals("list")) {
+                if ("list".equals(type)) {
                     //System.out.println(Arrays.toString(baseFunction.getValueContent(content, kylinRuntime).toString().split(",(?![^(]*\\))")));
                     ArrayList<KyLinValue> arrayList = ((KyLinList) baseFunction.getValueContent(content, kylinRuntime)).arrayList;
                     value.setType("list");

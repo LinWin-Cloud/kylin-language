@@ -13,6 +13,7 @@ import java.util.Random;
 import java.lang.Object;
 
 public class baseFunction {
+
     public static ArrayList<String> getScript(String path) throws Exception {
         FileReader fileReader = new FileReader(path);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -29,15 +30,17 @@ public class baseFunction {
         fileReader.close();
         return arrayList;
     }
+
     public static boolean isPublic(String expression) throws Exception {
-        if (expression.toLowerCase().equals("public")) {
+        if ("public".equalsIgnoreCase(expression)) {
             return true;
-        }else if(expression.toLowerCase().equals("private")) {
+        } else if("private".equalsIgnoreCase(expression)) {
             return false;
-        }else {
+        } else {
             throw new Exception("Syntax Error");
         }
     }
+
     public static String getTime() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -55,39 +58,38 @@ public class baseFunction {
         stringBuffer.append(second);
         return stringBuffer.toString();
     }
+
     public static String input(String text) {
         System.out.print(text);
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
+
     public static void include(String code , KyLinRuntime kylinRuntime) throws Exception {
         String in = code.substring(code.indexOf("<")+1,code.lastIndexOf(">"));
         in = in.replace("{head}", mainApp.jarDirectory+"/../head");
         File file = new File(in);
-        if (file.isFile() && file.canRead()) {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (true) {
-                String line = bufferedReader.readLine();
-                if (line == null) {
-                    break;
-                }
-                line = line.trim();
-                if (line.equals("")) {
-                    continue;
-                }
-                String[] words = line.split(" ");
-                String keyword = kylinRuntime.defined_keyword.get(words[0]);
-                if (keyword == null) {
-                    keyword = "";
-                } else {
-                    throw new Exception("Target head file syntax error: "+line);
-                }
+        if (!file.isFile() || !file.canRead()) {
+            throw new Exception("Cannot find or read the target head file at path: " + in);
+        }
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        while (true) {
+            String line = bufferedReader.readLine();
+            if (line == null) {
+                break;
             }
-        }else {
-            throw new Exception("Can not find target head file.");
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            String[] words = line.split(" ");
+            String keyword = kylinRuntime.defined_keyword.get(words[0]);
+            if (keyword != null) {
+                throw new Exception("Target head file syntax error: "+line);
+            }
         }
     }
+
     public static String getLastName(String str) {
         try {
             return str.substring(0,str.lastIndexOf("."));
@@ -95,6 +97,7 @@ public class baseFunction {
             return str;
         }
     }
+
     public static Object getValueContent(String value_name , KyLinRuntime kyLinRuntime) throws Exception {
         if (kyLinRuntime.ValueMap.containsKey(value_name))
         {
@@ -108,9 +111,11 @@ public class baseFunction {
             throw new Exception("No Value: "+value_name);
         }
     }
+
     public static long getRandomLong() {
         Random random = new Random();
 
         return random.nextLong();
     }
+
 }

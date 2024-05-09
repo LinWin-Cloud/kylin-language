@@ -46,7 +46,7 @@ public class mainApp {
         else {
             PathLoader pathLoader = new PathLoader();
             pathLoader.LoadNewPath();
-	        if(args[0].equals("-r")) {
+	        if("-r".equals(args[0])) {
                 //System.out.println(args[0]);
                 //System.out.println(args[1]);
 	    	    try {
@@ -59,7 +59,7 @@ public class mainApp {
 		        }
                 return;
 	        }
-            if (args[0].equals("-console")) {
+            if ("-console".equals(args[0])) {
                 /**
                  * 参数是 -console , 进入调试控制台，不过这里不允许加入函数
                  */
@@ -81,7 +81,7 @@ public class mainApp {
                     }
                 }
             }
-            else if (args[0].equals("-version")) {
+            else if ("-version".equals(args[0])) {
                 System.out.println(version+" "+version_type);
                 System.exit(0);
             }
@@ -94,10 +94,8 @@ public class mainApp {
                     main.code_file = new File(target.getAbsolutePath());
                     try {
                         //long s = System.currentTimeMillis();
-                        main.code = baseFunction.getScript(target.getAbsolutePath()); //把代码加载进入运行环境
-                        main.run(); //运行代码
-                        //long e = System.currentTimeMillis();
-                        //System.out.println(e - s);
+                        main.code = baseFunction.getScript(target.getAbsolutePath());
+                        main.run();
                     }
 
                     catch (Exception exception) {

@@ -91,11 +91,11 @@ public class KyLinProgramBaseFunction {
         //if (keyword == null) {
         //    keyword = "";
         //}
-        if (function.equals("exec")) {
+        if ("exec".equals(function)) {
             kylinRuntime.exec(new KyLinExpression().getExpression(input, kylinRuntime), 0);
             return true;
         }
-        if (function.equals("s_out")) {
+        if ("s_out".equals(function)) {
             if (kylinRuntime.isStream) {
                 OutputStream outputStream = kylinRuntime.process.getOutputStream();
                 PrintWriter printWriter = new PrintWriter(outputStream);
@@ -107,7 +107,7 @@ public class KyLinProgramBaseFunction {
             }
             return true;
         }
-        if (function.equals("app_output")) {
+        if ("app_output".equals(function)) {
             try {
                 //System.out.println(kylinRuntime.FunctionMap);;
                 String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -146,12 +146,12 @@ public class KyLinProgramBaseFunction {
             }
             return true;
         }
-        if (function.equals("out") || function.equals("print")) {
+        if ("out".equals(function) || "print".equals(function)) {
             printStream.println(new KyLinExpression().getExpression(input , kylinRuntime));
             printStream.flush();
             return true;
         }
-        if (function.equals("start_browser")) {
+        if ("start_browser".equals(function)) {
             String url = new KyLinExpression().getExpression(input, kylinRuntime);
             java.net.URI uri = java.net.URI.create(url);
             java.awt.Desktop dp = java.awt.Desktop.getDesktop();
@@ -161,7 +161,7 @@ public class KyLinProgramBaseFunction {
             }
             return true;
         }
-        if (function.equals("del")) {
+        if ("del".equals(function)) {
             String pointer = new KyLinExpression().getExpression(input , kylinRuntime);
             KyLinValue value = mainApp.all_kylin_value_pointer.get(pointer);
             value = null;
@@ -169,7 +169,7 @@ public class KyLinProgramBaseFunction {
             mainApp.all_kylin_value_pointer.remove(pointer);
             return true;
         }
-        if (function.equals("while")) {
+        if ("while".equals(function)) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             try {
                 String con = getIn[0].trim();
@@ -186,24 +186,24 @@ public class KyLinProgramBaseFunction {
                 return false;
             }
         }
-        if (function.equals("enterKey")) {
+        if ("enterKey".equals(function)) {
             String key = new KyLinExpression().getExpression(input , kylinRuntime);
             RobotOptions.enterKey(key);
             return true;
         }
-        if (function.equals("kill_thread")) {
+        if ("kill_thread".equals(function)) {
             String pointer = new KyLinExpression().getExpression(input , kylinRuntime);
             mainApp.all_kylin_thread_map.get(pointer).interrupt();
             mainApp.all_kylin_thread_map.remove(pointer);
             return true;
         }
-        if (function.equals("list_rm")) {
+        if ("list_rm".equals(function)) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String list_object = getIn[0].trim();
             int rm_object = (int) Double.parseDouble(new KyLinExpression().getExpression(getIn[1].trim() , kylinRuntime));
             String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
             KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
-            if (k.getType().equals("list")) {
+            if ("list".equals(k.getType())) {
                 KyLinList kyLinList = (KyLinList) k.getContent();
                 kyLinList.arrayList.remove(rm_object);
                 k.setContent(kyLinList , kylinRuntime);
@@ -213,7 +213,7 @@ public class KyLinProgramBaseFunction {
                 throw new RuntimeException("TypeError");
             }
         }
-        if (function.equals("list_add")) {
+        if ("list_add".equals(function)) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String list_object = getIn[0].trim();
             String add_object = getIn[1].trim();
@@ -221,7 +221,7 @@ public class KyLinProgramBaseFunction {
             //System.out.println(list_object+";"+add_object+";");
             String address = KyLinUseFunction.getAddress(list_object , kylinRuntime).toString();
             KyLinValue k = mainApp.all_kylin_value_pointer.get(address);
-            if (k.getType().equals("list")) {
+            if ("list".equals(k.getType())) {
                 KyLinList kyLinList = (KyLinList) k.getContent();
                 KyLinValue n_var = new KyLinValue();
                 n_var.setName(String.valueOf(baseFunction.getRandomLong()));
@@ -237,11 +237,11 @@ public class KyLinProgramBaseFunction {
                 throw new RuntimeException("TypeError");
             }
         }
-        if (function.equals("gc")) {
+        if ("gc".equals(function)) {
             System.gc();
             return true;
         }
-        if (function.equals("for")) {
+        if ("for".equals(function)) {
             String[] getIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             try {
                 String func = getIn[0];
@@ -263,7 +263,7 @@ public class KyLinProgramBaseFunction {
                     return true;
                 }
                 else if (length == 3) {
-                    boolean fast = new KyLinExpression().getExpression(getIn[2] , kylinRuntime).equalsIgnoreCase("true");
+                    boolean fast = "true".equalsIgnoreCase(new KyLinExpression().getExpression(getIn[2] , kylinRuntime));
                     if (fast) {
                         ExecutorService executorService = Executors.newFixedThreadPool(100);
                         Future<Integer> future = null;
@@ -293,7 +293,7 @@ public class KyLinProgramBaseFunction {
                 throw new Exception(exception.getMessage());
             }
         }
-        if (function.equals("clear")) {
+        if ("clear".equals(function)) {
             String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
                 Runtime.getRuntime().exec("cls");
@@ -303,11 +303,11 @@ public class KyLinProgramBaseFunction {
             }
             return true;
         }
-        if (function.equals("shell")) {
+        if ("shell".equals(function)) {
             usingShell(new KyLinExpression().getExpression(input,kylinRuntime));
             return true;
         }
-        if (function.equals("exception") || function.equals("except")) {
+        if ("exception".equals(function) || "except".equals(function)) {
             String[] splitIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String func = splitIn[0].trim();
             String err = splitIn[1].trim();
@@ -336,7 +336,7 @@ public class KyLinProgramBaseFunction {
             }
             return true;
         }
-        if (function.equals("write")) {
+        if ("write".equals(function)) {
             String[] splitIn = input.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
             String path = new KyLinExpression().getExpression(splitIn[0], kylinRuntime);
             String content = new KyLinExpression().getExpression(splitIn[1] , kylinRuntime);
@@ -344,10 +344,10 @@ public class KyLinProgramBaseFunction {
             new Write().write(path,content,isCover);
             return true;
         }
-        if (function.equals("throw_error")) {
+        if ("throw_error".equals(function)) {
             throw new Exception(new KyLinExpression().getExpression(input,kylinRuntime));
         }
-        if (function.equals("exit")) {
+        if ("exit".equals(function)) {
             if (input.isEmpty()) {
                 System.exit(0);
             }
