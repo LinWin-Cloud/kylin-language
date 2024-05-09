@@ -1,5 +1,7 @@
 package Program;
 
+import KylinException.KylinRuntimeException;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +11,8 @@ public class KyLinBoolean {
         try {
             return evaluateBooleanExpression(str , kylinRuntime);
         }catch (Exception exception) {
-            exception.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine , true);
+            kylinRuntimeException.setStackTrace(exception.getStackTrace());
             return false;
         }
     }

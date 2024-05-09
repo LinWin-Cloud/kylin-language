@@ -1,6 +1,8 @@
 
 
 
+import KylinException.KylinRuntimeException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,7 +35,8 @@ public class bootOpenProxy {
                                         //using system command to start the multi server.
                                         Process process = Runtime.getRuntime().exec("/usr/LinWinHttp/sys/BootMultiProxyVM.sh "+getServerDir+" "+getServerPort);
                                     } catch (IOException e) {
-                                        e.printStackTrace();
+                                        KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
+                                        kylinRuntimeException.setStackTrace(e.getStackTrace());
                                     }
                                 }
                             });
@@ -41,7 +44,8 @@ public class bootOpenProxy {
                             System.out.println("[!] Boot Server: "+thread.getName());
 
                         }catch (Exception exception){
-                            exception.printStackTrace();
+                            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(),0,true);
+                            kylinRuntimeException.setStackTrace(exception.getStackTrace());
                         }
                     }
                 }
@@ -50,7 +54,8 @@ public class bootOpenProxy {
                 System.out.println("Start error.");
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(),0,true);
+            kylinRuntimeException.setStackTrace(exception.getStackTrace());
         }
     }
     public static String readJson(String filePath,String value) {
@@ -87,7 +92,8 @@ public class bootOpenProxy {
             return jsonContent;
 
         }catch (Exception exception) {
-            exception.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(),0,true);
+            kylinRuntimeException.setStackTrace(exception.getStackTrace());
             return null;
         }
     }

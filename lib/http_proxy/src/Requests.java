@@ -7,7 +7,6 @@ import java.net.URL;
 
 public class Requests {
 
-    private URL url;
     private int code;
     private Socket socket;
     private PrintWriter printWriter;
@@ -19,8 +18,8 @@ public class Requests {
         HttpURLConnection httpURLConnection = null;
         try
         {
-            this.url = new URL(url);
-            httpURLConnection = (HttpURLConnection) this.url.openConnection();
+            URL url1 = new URL(url);
+            httpURLConnection = (HttpURLConnection) url1.openConnection();
 
             httpURLConnection.setRequestMethod(this.httpMethod);
             httpURLConnection.setInstanceFollowRedirects(true);

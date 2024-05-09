@@ -1,7 +1,3 @@
-/**
- * 本代码 ChatGPT 编写
- */
-
 package Program;
 
 public class BooleanExpressionEvaluator {

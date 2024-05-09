@@ -1,5 +1,7 @@
 
 
+import KylinException.KylinRuntimeException;
+
 import java.io.*;
 import java.net.URISyntaxException;
 import java.io.File;
@@ -122,7 +124,8 @@ public class KptMain {
             }
             System.out.println("[FINISH] Install OK.");
         } catch (IOException e) {
-            e.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
+            kylinRuntimeException.setStackTrace(e.getStackTrace());
         }
     }
     // 解压文件到指定路径

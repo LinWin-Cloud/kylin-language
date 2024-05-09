@@ -53,7 +53,8 @@ public class mainApp {
 			        KyLinRuntime main = new KyLinRuntime("main");
                     main.exec(args[1] , 0);
 		        }catch(Exception e) {
-			        e.printStackTrace();
+                    KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
+                    kylinRuntimeException.setStackTrace(e.getStackTrace());
                     System.out.println("[ERR] Must input kylin code.");
 		        }
                 return;

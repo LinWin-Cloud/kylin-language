@@ -72,7 +72,8 @@ public class KyLinProgramBaseFunction {
             System.out.println("\nExited with code: " + exitCode);
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
+            kylinRuntimeException.setStackTrace(e.getStackTrace());
         }
     }
 
@@ -139,7 +140,8 @@ public class KyLinProgramBaseFunction {
                     return true;
                 }
             }catch (Exception exception) {
-                exception.printStackTrace();
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(),0,true);
+                kylinRuntimeException.setStackTrace(exception.getStackTrace());
                 throw new Exception(exception);
             }
             return true;
@@ -254,7 +256,8 @@ public class KyLinProgramBaseFunction {
                         }
                     }
                     catch (Exception exception) {
-                        exception.printStackTrace();
+                        KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine+1,true);
+                        kylinRuntimeException.PrintErrorMessage(kylinRuntime);
                         throw new Exception(exception);
                     }
                     return true;

@@ -28,4 +28,18 @@ public class KylinRuntimeException {
             System.exit(1);
         }
     }
+
+    public void setStackTrace(StackTraceElement[] stackTrace) {
+        System.out.println();
+        System.out.println("\u001B[31m" + "KylinRuntimeException: `"+this.ErrMessage+"`" + "\u001B[0m");
+        System.out.println("\u001B[31m" + "    At line: "+(this.line+1) + "\u001B[0m");
+        System.out.println("\u001B[31m" + "    At Runtime: "+mainApp.file.getName() + "\u001B[0m");
+        System.out.println("\u001B[31m" + "    At Time: "+main.baseFunction.getTime() + "\u001B[0m");
+        System.out.println("\u001B[31m" + "    Boot File: "+ mainApp.file.getAbsolutePath() + "\u001B[0m");
+        System.out.println();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            System.out.println("\u001B[31m" + "    At: "+stackTraceElement + "\u001B[0m");
+        }
+        System.exit(1);
+    }
 }
