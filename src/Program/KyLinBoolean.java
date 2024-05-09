@@ -2,12 +2,8 @@ package Program;
 
 import KylinException.KylinRuntimeException;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class KyLinBoolean {
-    public boolean isBool(String str , KyLinRuntime kylinRuntime) throws Exception
-    {
+    public boolean isBool(String str , KyLinRuntime kylinRuntime) {
         try {
             return evaluateBooleanExpression(str , kylinRuntime);
         }catch (Exception exception) {

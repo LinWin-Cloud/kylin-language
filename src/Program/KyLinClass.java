@@ -3,8 +3,10 @@ package Program;
 import main.baseFunction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+/**
+ * @author arisu
+ */
 public class KyLinClass {
     public String name;
     public boolean isPublic = false;
@@ -23,7 +25,7 @@ public class KyLinClass {
         {
             String line = this.code.get(i);
             String[] words = line.split(" ");
-            if ("".equals(line))
+            if (line.isEmpty())
             {
                 continue;
             }
@@ -35,22 +37,11 @@ public class KyLinClass {
             }
             if ("public".equals(words[0])) {
                 kyLinRuntime.new_value(line , true);
-                continue;
             }
             else if ("private".equals(words[0])) {
                 kyLinRuntime.new_value(line , false);
-                continue;
             }
             else if ("func".equals(words[0]) || "f".equals(words[0])) {
-                /**
-                 * func func_name (a ,b) public
-                 *      return <a + b>
-                 * end_func
-                 *
-                 * f func_name()
-                 *      return "hello world"
-                 * e_f
-                 */
                 String name = line.substring(line.indexOf(" ")+1,line.indexOf("(")).trim();
                 String inputContent = line.substring(line.indexOf("(")+1 , line.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
@@ -103,9 +94,7 @@ public class KyLinClass {
     }
     public void run_init_() throws Exception {
         KyLinFunction kyLinFunction = this.kyLinRuntime.FunctionMap.get("__init__");
-        if (kyLinFunction == null) {
-            return;
-        }else {
+        if (kyLinFunction != null) {
             kyLinFunction.kylinRuntime.run();
         }
     }

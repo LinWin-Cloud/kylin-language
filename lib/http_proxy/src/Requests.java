@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Objects;
 
 public class Requests {
 
@@ -43,7 +44,7 @@ public class Requests {
             OutputStream outputStream = this.outputStream;
 
             byte[] bytes = new byte[1024];
-            int length = 0;
+            int length;
 
             while ((length = inputStream.read(bytes)) != -1)
             {
@@ -67,12 +68,12 @@ public class Requests {
                 this.printWriter.println("openLinwin/"+ProxyService.version);
                 this.printWriter.flush();
 
-                httpURLConnection.disconnect();
+                Objects.requireNonNull(httpURLConnection).disconnect();
                 this.socket.close();
             }
             catch (Exception exception1)
             {
-                exception.printStackTrace();
+                System.out.println("[ERR] "+exception1.getLocalizedMessage());
             }
         }
     }

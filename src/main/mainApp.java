@@ -12,20 +12,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.*;
 
 public class mainApp {
-    public static PrintStream printStream = new PrintStream(System.out);
-    public static String MyHelpInformation = "\n" +
-            "Kylin Programming Language.\n" + "" +
+    public static final PrintStream printStream = new PrintStream(System.out);
+    public static final String MyHelpInformation = "\n" +
+            "Kylin Programming Language.\n" +
             "   -version            Show the version information.\n" +
 	        "   -r [kylin code]	    Run the kylin code.\n" +
             "   -console            Enter into the kylin console.\n" + "kylin [resource file]";
-    public static String jarDirectory = null;
-    public static Pattern pattern_split_expression = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
-    public static HashMap<String , String> import_lib_value = new HashMap<>();
-    public static HashMap<String , KyLinValue> all_kylin_value_pointer = new HashMap<>();
-    public static ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
-    public static double version = 4.5;
-    public static HashMap<String , KyLinFunction> all_kylin_function_pointer = new HashMap<>();
-    public static String version_type = "Beta";
+    public static final String jarDirectory;
+    public static final Pattern pattern_split_expression = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
+    public static final HashMap<String , String> import_lib_value = new HashMap<>();
+    public static final HashMap<String , KyLinValue> all_kylin_value_pointer = new HashMap<>();
+    public static final ConcurrentHashMap<String , Thread> all_kylin_thread_map = new ConcurrentHashMap<>();
+    public static final double version = 4.5;
+    public static final HashMap<String , KyLinFunction> all_kylin_function_pointer = new HashMap<>();
+    public static final String version_type = "Beta";
 
     static {
         try {
@@ -37,78 +37,90 @@ public class mainApp {
     }
     public static File file;
 
-    public static void main(String[] args) throws Exception {
-        //System.out.println(jarDirectory);
+    public static void main(String[] args) {
         int length = args.length;
         if (length == 0) {
-            System.out.println(MyHelpInformation);
-        }
-        else {
+            printHelpInformation();
+        } else {
             PathLoader pathLoader = new PathLoader();
             pathLoader.LoadNewPath();
-	        if("-r".equals(args[0])) {
-                //System.out.println(args[0]);
-                //System.out.println(args[1]);
-	    	    try {
-			        KyLinRuntime main = new KyLinRuntime("main");
-                    main.exec(args[1] , 0);
-		        }catch(Exception e) {
-                    KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
-                    kylinRuntimeException.setStackTrace(e.getStackTrace());
-                    System.out.println("[ERR] Must input kylin code.");
-		        }
-                return;
-	        }
-            if ("-console".equals(args[0])) {
-                /**
-                 * 参数是 -console , 进入调试控制台，不过这里不允许加入函数
-                 */
-                Scanner scanner = new Scanner(System.in);
-                KyLinRuntime kyLinRuntime = new KyLinRuntime("main");
-                kyLinRuntime.OnErrorExit = false;
-                int i = 0;
-                while (true) {
-                    try {
-                        System.out.print("Kylin> ");
-                        String exec_code = scanner.nextLine();
-                        i++;
-                        ArrayList<String> a = new ArrayList<>();
-                        a.add(exec_code);
-                        kyLinRuntime.code = a;
-                        kyLinRuntime.run();
-                    }catch (Exception exception) {
-                        continue;
-                    }
-                }
-            }
-            else if ("-version".equals(args[0])) {
-                System.out.println(version+" "+version_type);
-                System.exit(0);
-            }
-            else {
-                File target = new File(args[0]);
-                file = target;
-                if (target.exists() && target.isFile() && target.canRead()) {
-                    //设置新的运行环境 main
-                    KyLinRuntime main = new KyLinRuntime("main");
-                    main.code_file = new File(target.getAbsolutePath());
-                    try {
-                        //long s = System.currentTimeMillis();
-                        main.code = baseFunction.getScript(target.getAbsolutePath());
-                        main.run();
-                    }
-
-                    catch (Exception exception) {
-                        //(exception).printStackTrace();
-                        KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0,false);
-                        kylinRuntimeException.PrintErrorMessage(main);
-                    }
-                }
-                else {
-                    System.out.println("[ERR] Can not start resource file: "+args[0]);
-                    Runtime.getRuntime().exit(1);
-                }
+            switch (args[0]) {
+                case "-r":
+                    runKylinCode(args);
+                    break;
+                case "-console":
+                    enterConsole();
+                    break;
+                case "-version":
+                    printVersion();
+                    break;
+                default:
+                    startResourceFile(args[0]);
+                    break;
             }
         }
     }
+
+    private static void printHelpInformation() {
+        System.out.println(MyHelpInformation);
+    }
+
+    private static void runKylinCode(String[] args) {
+        try {
+            KyLinRuntime main = new KyLinRuntime("main");
+            main.exec(args[1], 0);
+        } catch (Exception e) {
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(), 0, true);
+            kylinRuntimeException.setStackTrace(e.getStackTrace());
+            System.out.println("[ERR] Must input kylin code.");
+        }
+    }
+
+    private static void enterConsole() {
+        Scanner scanner = new Scanner(System.in);
+        KyLinRuntime kyLinRuntime = new KyLinRuntime("main");
+        kyLinRuntime.OnErrorExit = false;
+        int i = 0;
+        while (true) {
+            try {
+                System.out.print("Kylin> ");
+                String exec_code = scanner.nextLine();
+                if ("exit".equals(exec_code)) {
+                    break;
+                }
+                i++;
+                ArrayList<String> a = new ArrayList<>();
+                a.add(exec_code);
+                kyLinRuntime.code = a;
+                kyLinRuntime.run();
+            } catch (Exception exception) {
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), i, false);
+                kylinRuntimeException.setStackTrace(exception.getStackTrace());
+            }
+        }
+    }
+
+    private static void printVersion() {
+        System.out.println(version + " " + version_type);
+    }
+
+    private static void startResourceFile(String filePath) {
+        File target = new File(filePath);
+        file = target;
+        if (target.exists() && target.isFile() && target.canRead()) {
+            KyLinRuntime main = new KyLinRuntime("main");
+            main.code_file = new File(target.getAbsolutePath());
+            try {
+                main.code = baseFunction.getScript(target.getAbsolutePath());
+                main.run();
+            } catch (Exception exception) {
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0, false);
+                kylinRuntimeException.PrintErrorMessage(main);
+            }
+        } else {
+            System.out.println("[ERR] Can not start resource file: " + filePath);
+            Runtime.getRuntime().exit(1);
+        }
+    }
+
 }

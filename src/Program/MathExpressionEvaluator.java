@@ -11,7 +11,7 @@ public class MathExpressionEvaluator {
         Stack<Character> operatorStack = new Stack<>();
 
         for (String token : tokens) {
-            if (token.length() == 0) {
+            if (token.isEmpty()) {
                 continue;
             }
             char c = token.charAt(0);

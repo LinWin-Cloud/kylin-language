@@ -11,12 +11,12 @@ Kylin 是一款基于Jvm的直译式编程语言，是一款解释性编程语�
 - Linux or Mac
 > touch hello.ky
 
-2. 执行kylin脚本
+1. 执行kylin脚本
 - Windows(进入源代码目录): 
 > ./kylin.bat ./hello.ky  
 
 - Linux or Mac (安装完成的设计)
 > kylin ./hello.ky
 
-3. 你的第一个kylin程序: Hello World
+1. 你的第一个kylin程序: Hello World
 > print("Hello World")

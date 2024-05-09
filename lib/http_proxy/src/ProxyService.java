@@ -1,14 +1,16 @@
 
 
+import KylinException.KylinRuntimeException;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ProxyService {
-    private static Init_ProxyService init_proxyService = new Init_ProxyService();
+    private static final Init_ProxyService init_proxyService = new Init_ProxyService();
     private static int BootNum = 0;
 
-    public static ProxyService proxyService = new ProxyService();
+    public static final ProxyService proxyService = new ProxyService();
     public static String ProxyUrl = "";
     public static int ProxyPort = 0;
     public static String version = "";
@@ -22,35 +24,29 @@ public class ProxyService {
 
             if (proxyService.bootServerSocket())
             {
-                ServerSocket serverSocket = new ServerSocket(ProxyService.ProxyPort);
-                for (int i=0 ;i<5 ;i++)
-                {
-                    Thread thread = new Thread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            while (true)
-                            {
-                                try
-                                {
+                try (ServerSocket serverSocket = new ServerSocket(ProxyService.ProxyPort)) {
+                    for (int i = 0; i < 5; i++) {
+                        Thread thread = new Thread(() -> {
+                            while (true) {
+                                try {
                                     Socket socket = serverSocket.accept();
                                     proxyService.ProxyServer(socket);
-                                }
-                                catch (Exception exception)
-                                {
-                                    exception.printStackTrace();
+                                } catch (Exception exception) {
+                                    KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(), 0, true);
+                                    kylinRuntimeException.setStackTrace(exception.getStackTrace());
                                 }
                             }
-                        }
-                    });
-                    thread.start();
+                        });
+                        thread.start();
+                    }
                 }
             }
         }catch (Exception exception){
-            exception.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage(),0,true);
+            kylinRuntimeException.setStackTrace(exception.getStackTrace());
         }
     }
+    @SuppressWarnings("BusyWait")
     public Boolean bootServerSocket() throws InterruptedException {
         while (true)
         {
@@ -65,8 +61,12 @@ public class ProxyService {
             catch (Exception exception)
             {
                 Thread.sleep(200);
+                if (ProxyService.BootNum > 5)
+                {
+                    System.out.println("[ERR] Start Port Error.");
+                    return false;
+                }
                 System.gc();
-                continue;
             }
         }
         return true;
@@ -74,14 +74,10 @@ public class ProxyService {
     public void ProxyServer(Socket socket)
     {
         try {
-            /**
-             * All the value must get.
-             * From the socket TCP requests.
-             */
-            OutputStream outputStream = null;
-            InputStream inputStream = null;
-            PrintWriter printWriter = null;
-            BufferedReader bufferedReader = null;
+            OutputStream outputStream;
+            InputStream inputStream;
+            PrintWriter printWriter;
+            BufferedReader bufferedReader;
 
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
@@ -89,9 +85,6 @@ public class ProxyService {
             printWriter = new PrintWriter(outputStream);
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            /**
-             * get the Really string text of the url , and deal with the Http Proxy
-             */
             String requests = bufferedReader.readLine();
 
             String getHttpMethod = requests.substring(0,requests.indexOf(" "));
@@ -106,6 +99,8 @@ public class ProxyService {
 
             requestsDom.RequestsUrl(ProxyUrl);
         }
-        catch (Exception exception) {}
+        catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }

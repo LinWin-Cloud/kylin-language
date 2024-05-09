@@ -11,12 +11,12 @@ import main.mainApp;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class KyLinUseFunction {
-    public static String[] KylinKeyWord ={
+    public static final String[] KylinKeyWord ={
             "getTime",                  
             "input",                    
             "get_os",                   
@@ -51,15 +51,10 @@ public class KyLinUseFunction {
     };
     public static boolean isUseFunction(String expression , KyLinRuntime kylinRuntime) {
         try {
-            /**
-             * [注释补充]
-             * 判断是否是可调用的 函数
-             *
-             */
             //System.out.println(1);
             String funcName = expression.substring(0,expression.indexOf("(")).trim();
             boolean is = false;
-            for (String s : new HashSet<String>(Arrays.asList(KylinKeyWord))) {
+            for (String s : new HashSet<>(Arrays.asList(KylinKeyWord))) {
                 if (s.equals(funcName))
                 {
                     is = true;
@@ -72,11 +67,6 @@ public class KyLinUseFunction {
         }
     }
     public static KyLinValue UseFunction(String expression , KyLinRuntime kylinRuntime) throws Exception {
-        /**
-         * [注释补充]
-         * 调用的 函数
-         * 就是调用这些函数，这些都是内置的.
-         */
         String funcName = expression.substring(0, expression.indexOf("(")).trim();
         String content = expression.substring(expression.indexOf("(") + 1, expression.lastIndexOf(")")).trim();
         String[] split = content.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)(?=([^\\(]*\\([^\\)]*\\))*[^\\)]*$)");
@@ -133,15 +123,14 @@ public class KyLinUseFunction {
                 return value;
             case "isnumber":
                 value.setIs_public(true);
-                boolean content_3 = false;
+                boolean content_3;
                 try {
                     double d = Double.parseDouble(new KyLinExpression().getExpression(content, kylinRuntime));
-                    int a_3 = (int) d;
-                    content_3 = true;
+                    int a3 = (int) d;
                 }catch (Exception exception) {
-                    content_3 = false;
+                    throw new RuntimeException(exception);
                 }
-                value.setContent(content_3 , kylinRuntime);
+                value.setContent(true, kylinRuntime);
                 return value;
             case "index_list":
                 KyLinList list = (KyLinList) Objects.requireNonNull(KyLinExpression.getValueFromRuntime(split[0].trim(), kylinRuntime)).getContent();
@@ -205,7 +194,7 @@ public class KyLinUseFunction {
                 return value;
             case "typeof":
                 value.setType("string");
-                value.setContent(KyLinExpression.getValueFromRuntime(content, kylinRuntime).getType(), kylinRuntime);
+                value.setContent(Objects.requireNonNull(KyLinExpression.getValueFromRuntime(content, kylinRuntime)).getType(), kylinRuntime);
                 value.setIs_public(true);
                 return value;
             case "file_exists":
@@ -230,14 +219,12 @@ public class KyLinUseFunction {
                     ArrayList<KyLinValue> arrayList = ((KyLinList) baseFunction.getValueContent(content, kylinRuntime)).arrayList;
                     value.setType("list");
                     value.setContent(arrayList.size(), kylinRuntime);
-                    value.setIs_public(true);
-                    return value;
                 } else {
                     value.setType("num");
                     value.setContent(new KyLinExpression().getExpression(content, kylinRuntime).length(), kylinRuntime);
-                    value.setIs_public(true);
-                    return value;
                 }
+                value.setIs_public(true);
+                return value;
             case "pow":
                 double a_1 = Double.parseDouble(new KyLinExpression().getExpression(split[0], kylinRuntime));
                 double b_1 = Double.parseDouble(new KyLinExpression().getExpression(split[1], kylinRuntime));
@@ -272,15 +259,10 @@ public class KyLinUseFunction {
                 value.setIs_public(true);
                 return value;
             case "delete":
+            case "rm":
                 File file = new File(new KyLinExpression().getExpression(split[0], kylinRuntime));
                 value.setType("string");
                 value.setContent(String.valueOf(file.delete()), kylinRuntime);
-                value.setIs_public(true);
-                return value;
-            case "rm":
-                File frm = new File(new KyLinExpression().getExpression(split[0], kylinRuntime));
-                value.setType("string");
-                value.setContent(String.valueOf(frm.delete()), kylinRuntime);
                 value.setIs_public(true);
                 return value;
             case "get_pointer":
@@ -297,22 +279,8 @@ public class KyLinUseFunction {
                 value.setIs_public(true);
                 // 执行Shell命令
                 Process process = Runtime.getRuntime().exec(new KyLinExpression().getExpression(content, kylinRuntime));
-                // 获取命令输出流
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                // 获取命令错误流
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                // 读取输出
-                String outputLine;
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((outputLine = stdInput.readLine()) != null) {
-                    stringBuilder.append(outputLine);
-                    stringBuilder.append("\n");
-                }
-                // 读取错误输出
-                while ((outputLine = stdError.readLine()) != null) {
-                    stringBuilder.append(outputLine);
-                    stringBuilder.append("\n");
-                }
+                StringBuilder stringBuilder;
+                stringBuilder = getStringBuilder(process);
                 value.setContent(stringBuilder.toString(), kylinRuntime);
                 return value;
             case "new_thread":
@@ -323,9 +291,8 @@ public class KyLinUseFunction {
                     try {
                         new KyLinExpression().getExpression(content, kylinRuntime);
                     } catch (Exception e) {
-                        KylinRuntimeException kylinRuntimeException =
-                                new KylinRuntimeException(e.getMessage(), 0, true);
-                        kylinRuntimeException.PrintErrorMessage(null);
+                        KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(), 0, true);
+                        kylinRuntimeException.setStackTrace(e.getStackTrace());
                     }
                 });
                 t.start();
@@ -375,6 +342,26 @@ public class KyLinUseFunction {
                 return null;
         }
     }
+
+    private static StringBuilder getStringBuilder(Process process) throws IOException {
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        // 获取命令错误流
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        // 读取输出
+        String outputLine;
+        StringBuilder stringBuilder = new StringBuilder();
+        while ((outputLine = stdInput.readLine()) != null) {
+            stringBuilder.append(outputLine);
+            stringBuilder.append("\n");
+        }
+        // 读取错误输出
+        while ((outputLine = stdError.readLine()) != null) {
+            stringBuilder.append(outputLine);
+            stringBuilder.append("\n");
+        }
+        return stringBuilder;
+    }
+
     public static KyLinValue getAddress(String content , KyLinRuntime kylinRuntime) throws Exception {
         KyLinValue value = new KyLinValue();
         value.setType("string");

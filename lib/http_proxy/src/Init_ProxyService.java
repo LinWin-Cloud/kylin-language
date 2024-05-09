@@ -18,15 +18,15 @@ public class Init_ProxyService {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line;
-            String tmp = "";
+            StringBuilder tmp = new StringBuilder();
 
             while ((line = bufferedReader.readLine()) != null)
             {
-                tmp = tmp + line;
+                tmp.append(line);
             }
             bufferedReader.close();
             fileReader.close();
-            return tmp;
+            return tmp.toString();
         }
         catch (Exception exception)
         {

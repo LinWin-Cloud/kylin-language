@@ -49,14 +49,12 @@ public class baseFunction {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(year);
-        stringBuffer.append(month);
-        stringBuffer.append(day);
-        stringBuffer.append(hour);
-        stringBuffer.append(minute);
-        stringBuffer.append(second);
-        return stringBuffer.toString();
+        return String.valueOf(year) +
+                month +
+                day +
+                hour +
+                minute +
+                second;
     }
 
     public static String input(String text) {

@@ -4,7 +4,7 @@ import java.util.Stack;
 import java.util.regex.Pattern;
 
 public class StringParser {
-    public static Pattern pattern_eval_math = Pattern.compile("((?<=\\+)|(?=\\+))|((?<=-)|(?=-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\)))");
+    public static final Pattern pattern_eval_math = Pattern.compile("((?<=\\+)|(?=\\+))|((?<=-)|(?=-))|((?<=\\*)|(?=\\*))|((?<=/)|(?=/))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\)))");
 
     public static double evaluateExpression(String expression) {
         expression = expression.replaceAll(" ", "");
@@ -28,7 +28,7 @@ public class StringParser {
                 while (operatorStack.peek() != '(') {
                     processAnOperator(operandStack, operatorStack);
                 }
-                operatorStack.pop(); // Pop '('
+                operatorStack.pop(); // Pop
             } else {
                 operandStack.push(Double.parseDouble(token));
             }

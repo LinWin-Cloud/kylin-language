@@ -4,9 +4,9 @@ import Program.KyLinRuntime;
 import main.mainApp;
 
 public class KylinRuntimeException {
-    private String ErrMessage;
-    private boolean isExit;
-    private int line;
+    private final String ErrMessage;
+    private final boolean isExit;
+    private final int line;
     public KylinRuntimeException(String message , int line , boolean exit) {
         this.ErrMessage = message;
         this.isExit = exit;

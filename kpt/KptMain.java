@@ -4,18 +4,21 @@ import KylinException.KylinRuntimeException;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@SuppressWarnings("ALL")
 public class KptMain {
-    public static String info = " Kpt:\n" +
+    public static final String info = " Kpt:\n" +
             " -n [name]              Create a new package.\n" +
             " -i [package path]      Install a package on system.\n" +
             " -version               Show the version information.\n" +
             " -list                  List all the install package.";
-    public static String version = "1.0";
-    public static String jarDirectory = null;
+    public static final String VERSION = "1.0";
+    public static final String jarDirectory = null;
     static {
         try {
             //获取jar包的位置
@@ -64,14 +67,14 @@ public class KptMain {
                 System.out.println(" [Package] ==>");
                 File[] files = new File(jarDirectory+"/../lib_info/").listFiles();
                 StringBuilder stringBuilder = new StringBuilder();
-                for (File i : files) {
+                for (File i : Objects.requireNonNull(files)) {
                     if ("json".equals(getLastName(i.getName()))) {
                         stringBuilder.append(" - ");
                         stringBuilder.append(getLastName(getName(i.getName())));
                         stringBuilder.append("\n");
                     }
                 }
-                System.out.println(stringBuilder.toString());
+                System.out.println(stringBuilder);
             }
         }catch (Exception e) {
             System.out.println(info);
@@ -89,7 +92,7 @@ public class KptMain {
         if (!destDir.exists()) {
             destDir.mkdirs();
         }
-        try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath))) {
+        try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)))) {
             ZipEntry entry = zipIn.getNextEntry();
             // 遍历ZIP文件中的每一个条目
             while (entry != null) {
@@ -129,11 +132,13 @@ public class KptMain {
         }
     }
     // 解压文件到指定路径
+    @SuppressWarnings("IOStreamConstructor")
     private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         //System.out.println(filePath);
+        //noinspection IOStreamConstructor
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath))) {
             byte[] bytesIn = new byte[4096];
-            int read = 0;
+            int read;
             while ((read = zipIn.read(bytesIn)) != -1) {
                 bos.write(bytesIn, 0, read);
             }

@@ -31,7 +31,7 @@ public class BooleanExpressionEvaluator {
                 value |= nextValue;
             } else if (operator == '<') {
                 value = compareValues(value, nextValue, true);
-            } else if (operator == '>') {
+            } else {
                 value = compareValues(value, nextValue, false);
             }
         }
@@ -73,7 +73,7 @@ public class BooleanExpressionEvaluator {
         try {
             return Double.parseDouble(sb.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number: " + sb.toString());
+            throw new IllegalArgumentException("Invalid number: " + sb);
         }
     }
 

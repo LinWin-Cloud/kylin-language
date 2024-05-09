@@ -4,13 +4,13 @@ import main.baseFunction;
 import main.mainApp;
 
 public class KyLinFunction {
-    public String name;
+    public final String name;
     public String[] input;
     public boolean isPublic = true;
     public boolean isException = false;
     public String err_code;
-    public KyLinRuntime kylinRuntime = new KyLinRuntime("");
-    public String pointer = null;
+    public final KyLinRuntime kylinRuntime = new KyLinRuntime("");
+    public final String pointer;
 
     public KyLinFunction(String name) {
         this.name = name;

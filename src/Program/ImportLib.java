@@ -1,7 +1,7 @@
 package Program;
 
 import main.baseFunction;
-import main.mainApp;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
@@ -34,34 +34,12 @@ public class ImportLib {
     
 
     public static File searchFile(String basePath, String searchString , KyLinRuntime runtime) {
-    	/**
-	     * 这段代码是ChatGPT写的，我大概检查了一下，确实可以运行
-	     *
-	     * The ChatGPT was written these code and these code can run very well.
-	     */
-        File code_file = runtime.code_file;
-        if (code_file != null) {
-            Path currentRelativePath = Paths.get(code_file.getAbsolutePath());
-            Path absolutePath = currentRelativePath.toAbsolutePath().normalize();
-            File lib_file = new File(get_file_folder(absolutePath.toString())+"/"+searchString+".ky");
-            //System.out.println(lib_file.getAbsolutePath());
-            if (lib_file.isFile()) {
-                return lib_file;
-            } else {
-                File file = new File(basePath+searchString+".ky");
-                if (file.isFile()) {
-                    return file;
-                }else {
-                    return null;
-                }
-            }
-        } else {
-            File file = new File(basePath+searchString+".ky");
-            if (file.isFile()) {
-                return file;
-            }else {
-                return null;
-            }
+        File code_file = null;
+        File file = new File(basePath + searchString + ".ky");
+        if (file.isFile()) {
+            return file;
+        }else {
+            return null;
         }
     }
 

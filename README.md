@@ -93,13 +93,13 @@ Kylin>
 print("hello world")
 ```
 
-2. 数学解析式程序
+1. 数学解析式程序
 ```dtd
 var a = 1
 print(1 + 1 * (10 / 100) * a)
 ```
 
-3. 函数
+1. 函数
 ```dtd
 f main()
     print("hello world")
@@ -110,11 +110,11 @@ func main() public
     print("hello world")
 end_func
 ```
-4. http api
+1. http api
 ```dtd
 http_requests("https://www.baidu.com/")
 ```
-5. class类，下面演示的是内置httpserver库的使用
+1. class类，下面演示的是内置httpserver库的使用
 ```dtd
 import "httpserver"
 var http = new(Httpserver)

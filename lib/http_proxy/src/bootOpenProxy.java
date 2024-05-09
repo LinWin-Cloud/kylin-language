@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class bootOpenProxy {
     public static void main(String[] args) {
@@ -17,30 +18,14 @@ public class bootOpenProxy {
             if (file.isDirectory()&&file.exists()) {
                 //read all the json file of the multi open proxy config.
                 File[] files = file.listFiles();
-                for (int i =0;i < files.length;i++) {
+                for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
                     //only read the json file.
                     //String fileLastName = files[i].getName().substring(files[i].getName().lastIndexOf("."), files.length);
-                    String fileLastName = files[i].getName().substring(files[i].getName().lastIndexOf("."),files[i].getName().length());
+                    String fileLastName = files[i].getName().substring(files[i].getName().lastIndexOf("."));
                     if (".json".equals(fileLastName)) {
                         //is json file. read it.
                         try {
-                            int I = i;
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String getServerPort = bootOpenProxy.readJson(files[I].getAbsolutePath(),"Server-Port");
-                                    String getServerDir = bootOpenProxy.readJson(files[I].getAbsolutePath(),"ProxyUrl");
-                                    //System.out.println(getServerDir+" "+getServerPort);
-                                    try {
-                                        //using system command to start the multi server.
-                                        Process process = Runtime.getRuntime().exec("/usr/LinWinHttp/sys/BootMultiProxyVM.sh "+getServerDir+" "+getServerPort);
-                                    } catch (IOException e) {
-                                        KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
-                                        kylinRuntimeException.setStackTrace(e.getStackTrace());
-                                    }
-                                }
-                            });
-                            thread.start();
+                            Thread thread = getThread(i, files);
                             System.out.println("[!] Boot Server: "+thread.getName());
 
                         }catch (Exception exception){
@@ -58,6 +43,24 @@ public class bootOpenProxy {
             kylinRuntimeException.setStackTrace(exception.getStackTrace());
         }
     }
+
+    private static Thread getThread(int i, File[] files) {
+        Thread thread = new Thread(() -> {
+            String getServerPort = bootOpenProxy.readJson(files[i].getAbsolutePath(),"Server-Port");
+            String getServerDir = bootOpenProxy.readJson(files[i].getAbsolutePath(),"ProxyUrl");
+            //System.out.println(getServerDir+" "+getServerPort);
+            try {
+                //using system command to start the multi servlet.
+                Process process = Runtime.getRuntime().exec("/usr/LinWinHttp/sys/BootMultiProxyVM.sh "+getServerDir+" "+getServerPort);
+            } catch (IOException e) {
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(e.getMessage(),0,true);
+                kylinRuntimeException.setStackTrace(e.getStackTrace());
+            }
+        });
+        thread.start();
+        return thread;
+    }
+
     public static String readJson(String filePath,String value) {
         //read and get the json files content.
         try {
@@ -71,17 +74,17 @@ public class bootOpenProxy {
             while ((line=bufferedReader.readLine())!=null) {
                 list.add(line);
             }
-            String[] listJSON = list.toArray(new String[list.size()]);
-            for (int i=0;i < listJSON.length;i++) {
-                String dealCode = bootOpenProxy.replaceSpace(listJSON[i]);
+            String[] listJSON = list.toArray(new String[0]);
+            for (String s : listJSON) {
+                String dealCode = bootOpenProxy.replaceSpace(s);
                 if (dealCode != null) {
                     //System.out.println(dealCode);
-                    String defaultValue = dealCode.substring(0,dealCode.indexOf("\""));
+                    String defaultValue = dealCode.substring(0, dealCode.indexOf("\""));
                     //System.out.println(defaultValue);
                     if (defaultValue.equals(value)) {
                         //return the config json files content and deal .
                         //boot the Http server.
-                        String getContent =bootOpenProxy.getValueContent(listJSON[i]);
+                        String getContent = bootOpenProxy.getValueContent(s);
                         if (getContent != null) {
                             jsonContent = getContent;
                             break;
@@ -100,8 +103,8 @@ public class bootOpenProxy {
     public static String replaceSpace(String code) {
         String space = "";
         for (int i=0; i < code.length();i++) {
-            if (code.indexOf("\"") != -1) {
-                space = code.substring(code.indexOf("\"")+1,code.length());
+            if (code.contains("\"")) {
+                space = code.substring(code.indexOf("\"")+1);
                 break;
             }
             else {
@@ -113,8 +116,8 @@ public class bootOpenProxy {
     public static String getValueContent(String code) {
         String content = "";
         for (int i = 0; i< code.length();i++) {
-            if (code.indexOf(":") != -1) {
-                String tmpCode = code.substring(code.indexOf(":")+1,code.length());
+            if (code.contains(":")) {
+                String tmpCode = code.substring(code.indexOf(":")+1);
                 content = tmpCode.substring(tmpCode.indexOf("\"")+1,tmpCode.lastIndexOf("\""));
                 break;
             }else {
