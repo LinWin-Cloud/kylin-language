@@ -15,7 +15,7 @@ map.add("张三" , 13)
 map.add("李四" , 14)
 ```
 
-2. get(key) 方法
+1. get(key) 方法
 从 map中获取 张三
 ```
 import "basemap"
@@ -27,7 +27,7 @@ map.add("李四" , 14)
 print(map.get("张三"))
 ```
 
-3. to_str() 方法
+1. to_str() 方法
 将 basemap 数据结构转换成字符串
 ```
 import "basemap"
@@ -42,7 +42,7 @@ print(map.to_str())
 # {张三=13 , 李四=14}
 ```
 
-4. to_json() 方法
+1. to_json() 方法
 将 basemap 数据结构转换成 json
 ```
 import "basemap"

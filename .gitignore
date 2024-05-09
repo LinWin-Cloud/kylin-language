@@ -1,2 +1,5 @@
-# 项目排除路径
-#/out/
+out/
+.idea/
+.vscode/
+*.iml
+*.log

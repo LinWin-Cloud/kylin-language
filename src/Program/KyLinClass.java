@@ -3,8 +3,10 @@ package Program;
 import main.baseFunction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+/**
+ * @author arisu
+ */
 public class KyLinClass {
     public String name;
     public boolean isPublic = false;
@@ -23,7 +25,7 @@ public class KyLinClass {
         {
             String line = this.code.get(i);
             String[] words = line.split(" ");
-            if (line.equals(""))
+            if (line.isEmpty())
             {
                 continue;
             }
@@ -33,29 +35,18 @@ public class KyLinClass {
                 // 这条是处理注释，是注释的直接过去
                 continue;
             }
-            if (words[0].equals("public")) {
+            if ("public".equals(words[0])) {
                 kyLinRuntime.new_value(line , true);
-                continue;
             }
-            else if (words[0].equals("private")) {
+            else if ("private".equals(words[0])) {
                 kyLinRuntime.new_value(line , false);
-                continue;
             }
-            else if (words[0].equals("func") || words[0].equals("f")) {
-                /**
-                 * func func_name (a ,b) public
-                 *      return <a + b>
-                 * end_func
-                 *
-                 * f func_name()
-                 *      return "hello world"
-                 * e_f
-                 */
+            else if ("func".equals(words[0]) || "f".equals(words[0])) {
                 String name = line.substring(line.indexOf(" ")+1,line.indexOf("(")).trim();
                 String inputContent = line.substring(line.indexOf("(")+1 , line.lastIndexOf(")")).replace(" ","");
                 boolean isPublic;
 
-                if (words[0].equals("func"))
+                if ("func".equals(words[0]))
                 {
                     isPublic = baseFunction.isPublic(line.substring(line.lastIndexOf(")")+1).trim());
                 }else
@@ -68,11 +59,11 @@ public class KyLinClass {
                 kylinFunction.setInput(inputContent.split(","),kyLinRuntime);
 
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (words[0].equals("func"))
+                if ("func".equals(words[0]))
                 {
                     for (int j = i+1 ; j < this.code.size() ;j++) {
                         String line_1 = this.code.get(j).trim();
-                        if ((line_1.equals("end_func"))) {
+                        if (("end_func".equals(line_1))) {
                             i = j;
                             break;
                         }
@@ -85,7 +76,7 @@ public class KyLinClass {
                     for (int j = i+1 ; j < this.code.size() ;j++)
                     {
                         String line_1 = this.code.get(j).trim();
-                        if ((line_1.equals("e_f"))) {
+                        if (("e_f".equals(line_1))) {
                             i = j;
                             break;
                         }
@@ -103,9 +94,7 @@ public class KyLinClass {
     }
     public void run_init_() throws Exception {
         KyLinFunction kyLinFunction = this.kyLinRuntime.FunctionMap.get("__init__");
-        if (kyLinFunction == null) {
-            return;
-        }else {
+        if (kyLinFunction != null) {
             kyLinFunction.kylinRuntime.run();
         }
     }

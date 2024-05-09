@@ -25,7 +25,7 @@ public class KyLinType {
         }
         catch (Exception ignored) {
         }
-        if (content.equalsIgnoreCase("true") || content.equalsIgnoreCase("false")) {
+        if ("true".equalsIgnoreCase(content) || "false".equalsIgnoreCase(content)) {
             return "bool";
         }
         return "string";

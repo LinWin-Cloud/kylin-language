@@ -1,15 +1,14 @@
 package Program;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import KylinException.KylinRuntimeException;
 
 public class KyLinBoolean {
-    public boolean isBool(String str , KyLinRuntime kylinRuntime) throws Exception
-    {
+    public boolean isBool(String str , KyLinRuntime kylinRuntime) {
         try {
             return evaluateBooleanExpression(str , kylinRuntime);
         }catch (Exception exception) {
-            exception.printStackTrace();
+            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException(exception.getMessage() , kylinRuntime.codeLine , true);
+            kylinRuntimeException.setStackTrace(exception.getStackTrace());
             return false;
         }
     }
@@ -19,10 +18,10 @@ public class KyLinBoolean {
             String[] operands = expression.split("==");
             return new KyLinExpression().getExpression(operands[0].trim() , kyLinRuntime).equals(new KyLinExpression().getExpression(operands[1].trim(),kyLinRuntime));
         }
-        else if (expression.equalsIgnoreCase("ture")) {
+        else if ("ture".equalsIgnoreCase(expression)) {
             return true;
         }
-        else if (expression.equalsIgnoreCase("false")) {
+        else if ("false".equalsIgnoreCase(expression)) {
             return false;
         }
         else if (expression.contains("!=")) {

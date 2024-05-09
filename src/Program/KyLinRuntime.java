@@ -13,24 +13,24 @@ import main.mainApp;
 public class KyLinRuntime {
     public ArrayList<String> code;
     public boolean isError = false;
-    public ConcurrentHashMap<String , KyLinValue> ValueMap = new ConcurrentHashMap<>();                 // 储存本运行环境的变量
-    public Map<String , KyLinFunction> FunctionMap = new HashMap<>();           // 存储本运行环境的函数
-    public Map<String , KyLinFunction> ExceptionMap = new HashMap<>();          // 储存本运行环境的异常处理函数
-    public boolean isFunction = false;                                          // 本运行环境是否是 函数
+    public final ConcurrentHashMap<String , KyLinValue> ValueMap = new ConcurrentHashMap<>();
+    public final Map<String , KyLinFunction> FunctionMap = new HashMap<>();
+    public final Map<String , KyLinFunction> ExceptionMap = new HashMap<>();
+    public boolean isFunction = false;
     private KyLinValue result;
-    public KyLinRuntime PublicRuntime;                                          // 本运行环境的公共运行环境，如果是局部运行环境，那么这个是存在的，如果不是就是 null.
+    public KyLinRuntime PublicRuntime;
     public int codeLine = 0;
     public KyLinValue getResult() {
         return this.result;
     }
-    public Map<String , String> defined_keyword = new HashMap<>();              // 定义的关键字hashmap
-    public Map<String , String> defined_func = new HashMap<>();                 // 定义的函数关键字，例如 out("hello world") 可以定义为 print("hello world"),kylin3.0废除该标准
-    public String name;                                                         // 本运行环境名字
-    private boolean isIf = false;                                               // 上一次是否存在if语句，如果存在，那么允许else语句存在
-    private boolean IF_OK = false;                                              // if语句是否结束
-    public Map<String , KyLinClass> classMap = new HashMap<>();                 // 本运行环境下的 类 储存
+    public final Map<String , String> defined_keyword = new HashMap<>();
+    public Map<String , String> defined_func = new HashMap<>();
+    public String name;
+    private boolean isIf = false;
+    private final boolean IF_OK = false;
+    public final Map<String , KyLinClass> classMap = new HashMap<>();
     public boolean OnErrorExit = true;
-    public File code_file = null;                                               // 该运行环境的文件
+    public final File code_file = null;
     public KyLinRuntime(String name) {
         this.name = name;
     }
@@ -67,211 +67,172 @@ public class KyLinRuntime {
                     process.destroy();
                 }
             }catch(Exception e) {
-                return;
+                throw new RuntimeException(e);
             }
-            return;
-        }
-        /**
-         *  在 kylin 编程语言 3.0 中删除对 #func 和 #defined 的支持，因为这些特性用处不大而且极大地拖慢了 kylin vm的运行速度.
-         *         else if (code.startsWith("#func") || keyword.equals("#func"))
-         *         {
-         *             String key = words[1];
-         *             String value = words[2];
-         *             this.defined_func.put(value , key);
-         *             return;
-         *         }
-         */
-        else if (code.startsWith("ref ")) {
-            /**
-             * 该标准在 kylin3.2 发布，用于共享指针和对象，就是两个变量用的是一个指针
-             * var a = 1
-             * ref b = a
-             *
-             * val b = 2
-             * print(a)         //输出 a 为 2
-             */
+        } else if (code.startsWith("ref ")) {
             this.new_ref(code , true);
         }
         else if (code.startsWith("val ")) {
             new KyLinVal().Val(code,this);
-            return;
         }
-        else if (code.startsWith("func ") || code.startsWith("f ")) {
-            /**
-             * func func_name (a ,b) public
-             *      return <a + b>
-             * end_func
-             * 
-             * f func_name() 
-             *      return "hello world"
-             * e_f
-             */
-                String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
-                String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
+        else {
+            final String substring = code.substring(code.indexOf(" ") + 1, code.indexOf("("));
+            final String replace = code.substring(code.indexOf("(") + 1, code.lastIndexOf(")")).replace(" ", "");
+            if (code.startsWith("func ") || code.startsWith("f ")) {
+                String name = substring.trim();
                 boolean isPublic;
-
-                if (code.startsWith("func"))
+    
+                    if (code.startsWith("func"))
+                    {
+                        isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
+                    }else
+                    {
+                        isPublic = false;
+                    }
+    
+                    KyLinFunction kylinFunction = new KyLinFunction(name);
+                    kylinFunction.isPublic = isPublic;
+                    kylinFunction.setInput(replace.split(",") , this);
+    
+                    ArrayList<String> functionCode = new ArrayList<>();
+                    if (code.startsWith("func "))
+                    {
+                        for (int j = i+1 ; j < this.code.size() ;j++) {
+                            String line = this.code.get(j).trim();
+                            if (("end_func".equals(line))) {
+                                this.codeLine = j;
+                                break;
+                            }
+                            if (line.isEmpty()) {
+                                continue;
+                            }
+                            functionCode.add(line);
+                        }
+                    }else{
+                        for (int j = i+1 ; j < this.code.size() ;j++)
+                        {
+                            String line = this.code.get(j).trim();
+                            if (("e_f".equals(line))) {
+                                this.codeLine = j;
+                                break;
+                            }
+                            if (line.isEmpty()) {
+                                continue;
+                            }
+                            functionCode.add(line);
+                        }
+                    }
+                    kylinFunction.kylinRuntime.code = functionCode;
+                    kylinFunction.kylinRuntime.PublicRuntime = this;
+                    this.FunctionMap.put(name , kylinFunction);
+            }
+            else if (KyLinProgramBaseFunction.isProgramBaseFunction(code, PublicRuntime))
+            {
+                KyLinProgramBaseFunction.runProgramBaseFunction(code , this);
+            }
+            else if (KyLinUseFunction.isUseFunction(code , this)) {
+                KyLinUseFunction.UseFunction(code , this);
+            }
+            else if (code.startsWith("if "))
+            {
+                this.isIf = true;
+                String[] splitArray = code.split("\\)\\s");
+    
+                String IF = splitArray[0].trim();
+                String func = splitArray[1].trim();
+    
+                String IF_DO = IF.substring(IF.indexOf("(")+1);
+                boolean isTrue = new KyLinBoolean().isBool(IF_DO,this);
+    
+                if (isTrue)
                 {
-                    isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(")")+1).trim());
-                }else
-                {
-                    isPublic = false;
+                    this.IF_OK = true;
+                    new KyLinExpression().getExpression(func,this);
                 }
-
+            }
+            else if (code.startsWith("else ") && this.isIf && !this.IF_OK)
+            {
+                this.isIf = false;
+                String func = code.substring(code.indexOf(" ")+1);
+                new KyLinExpression().getExpression(func,this);
+            }
+            else if (code.startsWith("err "))
+            {
+                //定义异常处理函数
+                String name = substring.trim();
+                boolean isPublic = false;
+    
                 KyLinFunction kylinFunction = new KyLinFunction(name);
                 kylinFunction.isPublic = isPublic;
-                kylinFunction.setInput(inputContent.split(",") , this);
-
+    
                 ArrayList<String> functionCode = new ArrayList<>();
-                if (code.startsWith("func "))
+                for (int j = i+1 ; j < this.code.size() ;j++)
                 {
-                    for (int j = i+1 ; j < this.code.size() ;j++) {
-                        String line = this.code.get(j).trim();
-                        if ((line.equals("end_func"))) {
-                            this.codeLine = j;
-                            break;
-                        }
-                        if (line.isEmpty()) {
-                            continue;
-                        }
-                        functionCode.add(line);
-                    }
-                }else{
-                    for (int j = i+1 ; j < this.code.size() ;j++)
+                    String line = this.code.get(j).trim();
+                    if (("e_err".equals(line)))
                     {
-                        String line = this.code.get(j).trim();
-                        if ((line.equals("e_f"))) {
-                            this.codeLine = j;
-                            break;
-                        }
-                        if (line.isEmpty()) {
-                            continue;
-                        }
-                        functionCode.add(line);
+                        this.codeLine = j;
+                        break;
                     }
+                    if (line.isEmpty())
+                    {
+                        continue;
+                    }
+                    functionCode.add(line);
                 }
                 kylinFunction.kylinRuntime.code = functionCode;
                 kylinFunction.kylinRuntime.PublicRuntime = this;
-                this.FunctionMap.put(name , kylinFunction);
-                return;
-        }
-        else if (KyLinProgramBaseFunction.isProgramBaseFunction(code, PublicRuntime))
-        {
-            KyLinProgramBaseFunction.runProgramBaseFunction(code , this);
-            return;
-        }
-        else if (KyLinUseFunction.isUseFunction(code , this)) {
-            KyLinUseFunction.UseFunction(code , this);
-            return;
-        }
-        else if (code.startsWith("if "))
-        {
-            this.isIf = true;
-            String[] splitArray = code.split("\\)\\s");
-
-            String IF = splitArray[0].trim();
-            String func = splitArray[1].trim();
-
-            String IF_DO = IF.substring(IF.indexOf("(")+1);
-            boolean isTrue = new KyLinBoolean().isBool(IF_DO,this);
-
-            if (isTrue)
-            {
-                this.IF_OK = true;
-                //System.out.println(func);
-                //System.out.println(this.FunctionMap.keySet());
-                new KyLinExpression().getExpression(func,this);
+                kylinFunction.isException = true;
+                kylinFunction.err_code = replace +".message";
+                KyLinValue kylinValue = new KyLinValue();
+                kylinValue.setName(replace +".message");
+                kylinFunction.kylinRuntime.ValueMap.put(replace +".message",kylinValue);
+                this.ExceptionMap.put(name , kylinFunction);
             }
-            return;
-        }
-        else if (code.startsWith("else ") && this.isIf && !this.IF_OK)
-        {
-            this.isIf = false;
-            String func = code.substring(code.indexOf(" ")+1);
-            new KyLinExpression().getExpression(func,this);
-        }
-        else if (code.startsWith("err "))
-        {
-            //定义异常处理函数
-            String name = code.substring(code.indexOf(" ")+1,code.indexOf("(")).trim();
-            String inputContent = code.substring(code.indexOf("(")+1 , code.lastIndexOf(")")).replace(" ","");
-            boolean isPublic = false;
-
-            KyLinFunction kylinFunction = new KyLinFunction(name);
-            kylinFunction.isPublic = isPublic;
-
-            ArrayList<String> functionCode = new ArrayList<>();
-            for (int j = i+1 ; j < this.code.size() ;j++)
+            else if (code.startsWith("class "))
             {
-                String line = this.code.get(j).trim();
-                if ((line.equals("e_err")))
+                String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
+                boolean isPublic = baseFunction.isPublic(code.substring(code.lastIndexOf(":")+1).trim());
+    
+                KyLinClass kyLinClass = new KyLinClass(name);
+                kyLinClass.isPublic = isPublic;
+    
+                for (int j = i + 1 ; j < this.code.size() ; j++)
                 {
-                    this.codeLine = j;
-                    break;
+                    String line = this.code.get(j).trim();
+                    if (line.isEmpty())
+                    {
+                        continue;
+                    }
+                    if ("end_class".equals(line))
+                    {
+                        this.codeLine = j;
+                        break;
+                    }
+                    kyLinClass.code.add(line);
                 }
-                if (line.isEmpty())
-                {
-                    continue;
-                }
-                functionCode.add(line);
+                kyLinClass.init_class();
+                this.classMap.put(name , kyLinClass);
             }
-            kylinFunction.kylinRuntime.code = functionCode;
-            kylinFunction.kylinRuntime.PublicRuntime = this;
-            kylinFunction.isException = true;
-            kylinFunction.err_code = inputContent+".message";
-            KyLinValue kylinValue = new KyLinValue();
-            kylinValue.setName(inputContent+".message");
-            kylinFunction.kylinRuntime.ValueMap.put(inputContent+".message",kylinValue);
-            this.ExceptionMap.put(name , kylinFunction);
-            return;
-        }
-        else if (code.startsWith("class "))
-        {
-            String name = code.substring(code.indexOf(" ")+1,code.indexOf(":")).trim();
-            boolean isPublic = main.baseFunction.isPublic(code.substring(code.lastIndexOf(":")+1).trim());
-
-            KyLinClass kyLinClass = new KyLinClass(name);
-            kyLinClass.isPublic = isPublic;
-
-            for (int j = i + 1 ; j < this.code.size() ; j++)
+            else if (code.startsWith("import "))
             {
-                String line = this.code.get(j).trim();
-                if (line.isEmpty())
-                {
-                    continue;
-                }
-                if (line.equals("end_class"))
-                {
-                    this.codeLine = j;
-                    break;
-                }
-                kyLinClass.code.add(line);
+                String lib = new KyLinExpression().getExpression(code.substring(7) , this);
+                String lib_path = PathLoader.getLibName(lib);
+                ImportLib.lib_import(lib_path,this);
             }
-            kyLinClass.init_class();
-            this.classMap.put(name , kyLinClass);
-            return;
-        }
-        else if (code.startsWith("import "))
-        {
-            String lib = new KyLinExpression().getExpression(code.substring(7) , this);
-            String lib_path = PathLoader.getLibName(lib);
-            ImportLib.lib_import(lib_path,this);
-            return;
-        }
-        else if (code.startsWith("#include "))
-        {
-            main.baseFunction.include(code , this);
-            return;
-        }
-        else if (isFunction(code))
-        {
-            runFunction(code);
-            return;
-        }
-        else {
-            KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,OnErrorExit);
-            kylinRuntimeException.PrintErrorMessage(this);
-            //new KyLinExpression().getExpression(code,this);
+            else if (code.startsWith("#include "))
+            {
+                baseFunction.include(code , this);
+            }
+            else if (isFunction(code))
+            {
+                runFunction(code);
+            }
+            else {
+                KylinRuntimeException kylinRuntimeException = new KylinRuntimeException("code error.",this.codeLine,OnErrorExit);
+                kylinRuntimeException.PrintErrorMessage(this);
+                //new KyLinExpression().getExpression(code,this);
+            }
         }
     }
     public void run() throws Exception {
@@ -318,23 +279,8 @@ public class KyLinRuntime {
             }
             kylinFunction.kylinRuntime.run();
         }
-        /*
-        else if (this.PublicRuntime != null && this.PublicRuntime.FunctionMap.containsKey(function)) {
-            KyLinFunction kylinFunction = this.PublicRuntime.FunctionMap.get(function);
-            kylinFunction.kylinRuntime.PublicRuntime = this;
-            String[] split = content.split(",(?![^(]*\\))");
-            int inputLength = kylinFunction.input.length;
-            for (int i = 0; i < inputLength; i++) {
-                String input = kylinFunction.input[i];
-                KyLinValue kylinValue = new KyLinValue();
-                kylinValue.setName(input);
-                kylinValue.setContent(new KyLinExpression().getExpression(split[i] , this), this);
-                kylinFunction.kylinRuntime.ValueMap.put(input,kylinValue);
-            }
-            kylinFunction.kylinRuntime.run();
-        }
-         */
     }
+
     public void new_ref(String code , boolean isPublic) throws Exception {
         String name = code.substring(code.indexOf(" ")+1,code.indexOf("=")).trim();
         String content = code.substring(code.indexOf("=")+1).trim();
@@ -383,9 +329,6 @@ public class KyLinRuntime {
                 value.setContent(kyLinRuntime.classMap.get(new_class) , this);
                 value.setType(new_class);
                 value.setIs_public(isPublic);
-                /**
-                 * Init a new class.
-                 */
                 KyLinClass tmp = kyLinRuntime.classMap.get(new_class);
                 KyLinClass kyLinClass = new KyLinClass(tmp.name);
                 kyLinClass.code = tmp.code;
@@ -501,7 +444,7 @@ public class KyLinRuntime {
                 this.PublicRuntime.ValueMap.put(name , kylinValue);
             }
         }
-        if (content.equals("null")) {
+        if ("null".equals(content)) {
             KyLinValue kylinValue = new KyLinValue();
             kylinValue.setContent(null,this);
             kylinValue.setName(name);
